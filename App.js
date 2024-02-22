@@ -9,6 +9,7 @@ import { ThemeProvider, createTheme } from '@rneui/themed';
 import theme from "./Styles/theme";
 import HomeScreen from './Screens/Home';
 import NewsScreen from './Screens/News';
+import MachesScreen from './Screens/Matches';
 
 
 
@@ -91,8 +92,9 @@ export default function App() {
         }}
         >
         <Tab.Navigator>
-          <Tab.Screen name="Home" component={HomeScreen} options={navigationOptions("home", "")} />
-          <Tab.Screen name="News" component={NewsScreen} options={navigationOptions("news", "News")} />
+          <Tab.Screen name="Matches" component={MachesScreen} options={navigationOptions("home", "MachesScreen")} />
+          <Tab.Screen name="News" component={NewsScreen} options={navigationOptions("globe", "News")} />
+          <Tab.Screen name="Home" component={HomeScreen} options={navigationOptions("home", "Home")} />
           
         </Tab.Navigator>
       </NavigationContainer>
