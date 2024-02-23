@@ -3,7 +3,7 @@
   "version": 1,
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "npx expo start",
+    "start": "npx expo start --tunnel",
     "android": "npx expo start --android",
     "ios": "npx expo start --ios",
     "web": "npx expo start --web"
@@ -16,11 +16,12 @@
     "@rneui/themed": "^4.0.0-rc.8",
     "expo": "^50.0.6",
     "expo-status-bar": "~1.11.1",
+    "expo-updates": "~0.24.11",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "0.73.4",
-    "react-native-essential-tools": "file:C:/Users/im.el-kholti/Documents/react-native-essential-tools",
-    "react-native-vector-icons": "^10.0.1",
+    "react-native-essential-tools": "^0.0.9",
+    "react-native-vector-icons": "^10.0.3",
     "react-native-web": "~0.19.6"
   },
   "devDependencies": {

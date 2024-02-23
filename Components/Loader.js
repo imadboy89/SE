@@ -8,11 +8,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flex:1,
     width:"100%",
-    backgroundColor:theme.background_color_default
+    backgroundColor:"#0000001f"
   },
   horizontal: {
-    //flexDirection: 'row',
-    //justifyContent: 'space-around',
     alignContent:"center",
     alignSelf:"center",
     alignItems:"center",

@@ -1,7 +1,6 @@
+import React from "react";
 import { StyleSheet, View } from 'react-native';
-import { Text, Button, Card } from '@rneui/themed';
-import M1 from "./m1";
-import Matches from "../Components/matches2";
+import ListCustom from "../Components/list";
 
 const list = [
     {id:1,is_done:1,home_team:"Real Madrid",away_team:"FC Barca",home_team_status:"w",away_team_status:"l",time_played:10,home_team_score:10,away_team_score:1,time:20},
@@ -12,21 +11,38 @@ const list = [
       time_played:10,home_team_score:10,away_team_score:1,time:20,
       home_team_score_penalties:4,
       away_team_score_penalties:5,
+      home_events:[{"type":"yellow","time":"65",},{"type":"goal","time":"23"}],
+      away_events:[{"type":"red","time":"90",},{"type":"goal","time":"91"}]
     },
     {id:3,home_team:"madrid",away_team:"barca",home_team_status:"w",away_team_status:"l",time_played:10,home_team_score:10,away_team_score:1,time:20},
     {id:4,home_team:"madrid",away_team:"barca",home_team_status:"w",away_team_status:"l",time_played:10,home_team_score:10,away_team_score:1,time:95}];
-export default function App() {
-    return (
-      <View style={styles.container}>
 
-        <Matches 
-          loading={false} 
-          list={list} 
-          key_="home_team" key_key="id"
-            />      
-            
-            </View>
-    );
+  export default class MatchesScreen extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = {
+          list:[],
+          loading:true,
+      };
+    }
+    onclick = (item)=>{
+      this.props.navigation.navigate('Match',item);
+    }
+    
+    render(){
+  
+      return (<View style={styles.container}>
+  
+      <ListCustom 
+        loading={false} 
+        list={list} 
+        onclick={this.onclick}
+        type="matches" 
+        id="id"
+          />  
+                </View>);
+  
+    }
   }
 
   const styles = StyleSheet.create({

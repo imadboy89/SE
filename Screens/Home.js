@@ -1,7 +1,6 @@
 import { StyleSheet, View } from 'react-native';
 import { Text, Button, Card } from '@rneui/themed';
-import M1 from "./m1";
-import Matches from "../Components/matches2";
+import Matches from "../Components/list";
 
 //const matches = [{id:1,homeTeam:{logo:"",name:"barca"},awayTeam:{logo:"",name:"madrid"}},];
 const list = [{home_team:"madrid",away_team:"barca",home_team_status:"w",away_team_status:"l",time_played:10}];

@@ -3,13 +3,12 @@ import {  View, TouchableOpacity, Image, ImageBackground  } from 'react-native';
 import { SafeAreaView, FlatList, Dimensions,TouchableHighlight, Text } from 'react-native';
 import Loader from "./Loader";
 import styles_list from "../Styles/matches";
-import styles_matches from "../Styles/matches2";
-import {_isMobile,isBigScreen, isWeb} from "../Styles/general";
+import styles_news from "../Styles/news";
 
+import {_isMobile,isBigScreen, isWeb} from "../Styles/general";
 import {img_domain} from "../libs/config";
-function parse_details(){
-  return ;
-}
+import render_match  from './render_match';
+
 class ItemsList extends React.Component {
   constructor(props) {
     super(props);
@@ -72,53 +71,6 @@ class ItemsList extends React.Component {
     }
     return true;
   } 
-  render_match(item, time_status,home_team_name,away_team_name,league_img,home_team_style ,away_team_style ){
-    const shadow_style = isWeb ? styles_matches.shadow_3  : styles_matches.shadow_1;
-    console.log(item.away_team_logo)
-    const logo_placeholder = "https://guessthefootballplayer.com/Js/placeholder3.png";
-    item.home_team_logo = item.home_team_logo ? item.home_team_logo : logo_placeholder;
-    item.away_team_logo = item.away_team_logo ? item.away_team_logo : logo_placeholder;
-    return (
-      <View style={[styles_matches.matche_container,shadow_style]}>
-        <View style={styles_matches.teams_and_score_view}>
-
-          <View style={styles_matches.home_team_view}>
-            <View style={styles_matches.matche_team_logo_view}>
-              { item.home_team_logo ? <Image style={styles_matches.matche_team_logo_image} source={{uri: item.home_team_logo}} /> : <Text>...</Text>}
-            </View>
-            <View style={styles_matches.home_team_name_view}>
-              <Text style={styles_matches.team_name_text}>{home_team_name}</Text>
-            </View>
-            <View style={styles_matches.home_team_score_view}>
-              <Text style={styles_matches.team_score_text}>{item.home_team_score}</Text>
-              <Text style={[styles_matches.home_team_score_text_penalties, styles_matches.matche_team_scor_text]} noFonts={true}>{item.home_team_score_penalties ? item.home_team_score_penalties : ""}</Text>
-            </View>
-          </View>
-
-          <View style={styles_matches.home_team_view}>
-            <View style={styles_matches.matche_team_logo_view}>
-              { item.away_team_logo ? <Image style={styles_matches.matche_team_logo_image} source={{uri: item.away_team_logo}} /> : <Text>...</Text>}
-            </View>
-            <View style={styles_matches.home_team_name_view}>
-              <Text style={styles_matches.team_name_text}>{away_team_name}</Text>
-            </View>
-            <View style={styles_matches.home_team_score_view}>
-            <Text style={[styles_matches.away_team_score_text_penalties, styles_matches.matche_team_scor_text]} noFonts={true}>{item.away_team_score_penalties ? item.away_team_score_penalties : ""}</Text>
-              <Text style={styles_matches.team_score_text}>{item.away_team_score}</Text>
-            </View>
-          </View>
-        </View>
-
-        <View style={styles_matches.extra_details_view}>
-          <View style={styles_matches.matche_team_time_view}></View>
-          <View style={styles_matches.matche_team_time_view}>
-            <Text style={styles_list.matche_team_time_text} noFonts={true}>{item.time}"</Text>
-          </View>
-          <View style={styles_matches.matche_team_time_view}>{time_status}</View>
-        </View>
-      </View>
-      );
-  }
   render_match2(item, time_status,home_team_name,away_team_name,league_img,home_team_style ,away_team_style ){
     const shadow_style = isWeb ? styles_list.shadow_3  : styles_list.shadow_1;
     return (
@@ -159,62 +111,27 @@ class ItemsList extends React.Component {
       </View>
       );
   }
-  get_item(item,col_key){
-    
-    const style_small = {}
-    let home_team_name = item["home_team_ar"] ? item["home_team_ar"] : item["home_team"];
-    let away_team_name = item["away_team_ar"] ? item["away_team_ar"] : item["away_team"];
-    if(home_team_name==undefined || away_team_name==undefined ){
-      return null;
-    }
-    let home_team_style = {};
-    let away_team_style = {};
-    const max_lenght = parseInt(this.windowWidth/19) ;
-    if(home_team_name.length>max_lenght){ home_team_style={fontSize:17}; }
-    if(away_team_name.length>max_lenght){ away_team_style={fontSize:17}; }
-    
-    if(item.home_team_status && item.home_team_status.toLowerCase()=="w"){ 
-      home_team_style["color"]=styles_list.team_name_winner; 
-    }
-    if(item.away_team_status && item.away_team_status.toLowerCase()=="w"){ 
-      away_team_style["color"]=styles_list.team_name_winner; 
-    }
-    if(item.home_team_status && item.home_team_status.toLowerCase()=="l"){ 
-      home_team_style["color"]=styles_list.team_name_drawer; 
-    }
-    if(item.away_team_status && item.away_team_status.toLowerCase()=="l"){ 
-      away_team_style["color"]=styles_list.team_name_drawer; 
-    }
+  get_item(item){
+    if(this.props.type=="matches"){
 
-    const league_img = item.league_img ? item.league_img : null;
-    let time_style={};
-    const game_nbr  ={color:"#8fa2ff", fontSize:12};
-    try {
-      time_style = JSON.parse(JSON.stringify(styles_list.matche_team_time_live));
-    } catch (error) {}
-    if(item.time_played=="Pen"){
-      time_style["color"]="#ff5252";
-    }else if(item.is_done){
-      time_style["color"]="#8fa2ff";
-      time_style["fontSize"]=16;
-    }
-    let time_played= item.time_played>0?item.time_played+"'": item.time_played;
-    const match_details = parse_details(item.details);
-    let match_nbr = 0;
-    if(match_details && match_details.mn && match_details.mn.length>0 && match_details.mn[0].length>0){
-      match_nbr = match_details.mn[0][1];
-    }
-    const time_status = <>{item.is_done==true ? 
-      <Text style={time_style}>{"Finished"}</Text> 
-    : null}
-    {item.live==1 ? 
-      <Text style={time_style}  noFonts={true}>{time_played}</Text>
-    : null}
-    {match_nbr!==0 ? 
-      <Text style={game_nbr}  noFonts={true}>M {match_nbr}</Text>
-    : null}</>;
+      return render_match(item,this.windowWidth);
 
-    return this.render_match(item, time_status,home_team_name,away_team_name,league_img);
+    }else if(this.props.type=="news"){
+
+      return (
+        <View style={[styles_news.container]}>
+          <ImageBackground style={styles_news.img_background} source={{uri: item.img}} imageStyle={styles_news.image_style}>
+            { item.date ? <Text style={{backgroundColor:"#00000091",color:"#fff",width:90,textAlign:"center",}}>{item.date}</Text> : null}
+            <View style={styles_news.news_img_v}>
+            </View>
+            <View style={styles_news.news_title_v}>
+              <Text style={styles_news.news_title_t} numberOfLines={1}>{item.title_news}</Text>
+            </View>
+          </ImageBackground>
+        </View>
+        );
+
+    }
   }
 
 
@@ -226,7 +143,7 @@ class ItemsList extends React.Component {
       onPress={ () => {this.props.onclick(item) }} 
       onLongPress={ () => {this.props.onLongPress?this.props.onLongPress(item):null; }} >
       <View style={{flexDirection:'row', flexWrap:'wrap',width:"100%",justifyContent: 'center',alignItems:"center",alignContent:"center",marginHorizontal:3,}}>
-        {this.get_item(item,this.props.key_)}
+        {this.get_item(item)}
       </View>
     </TouchableOpacity>);
     return item2render;
@@ -339,7 +256,7 @@ class ItemsList extends React.Component {
               onEndReached = {this.props.onEndReached}
               refreshControl={this.props.refreshControl}
               data={final_list}
-              keyExtractor={(item, index) => {return item[this.props.key_key]+""}} 
+              keyExtractor={(item, index) => {return item[this.props.id]+""}} 
               renderItem={this._render_item}
               renderSectionHeader={this._render_header}
 
