@@ -16,10 +16,14 @@ const styles_news = StyleSheet.create({
       borderWidth:1,
       borderColor:"#5e5e698a",
       color:theme.article_body_color,
-      backgroundColor:theme.article_body_backgroundColor,
+      backgroundColor:theme.background_color_default,
       padding:10,
       
     },
+    xsub_container:{
+      flex:1,
+      width:"99%"
+  },
     sub_container:{
         flex:1,
         width:"99%"

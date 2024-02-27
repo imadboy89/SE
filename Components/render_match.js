@@ -6,7 +6,7 @@ import styles_matches from "../Styles/matches";
 function parse_details(){
     return ;
   }
-  
+
 const render_match=(item,windowWidth)=>{
     let home_team_name = item["home_team_ar"] ? item["home_team_ar"] : item["home_team"];
     let away_team_name = item["away_team_ar"] ? item["away_team_ar"] : item["away_team"];
@@ -65,16 +65,18 @@ const render_match=(item,windowWidth)=>{
 
 const render=(item, time_status,home_team_name,away_team_name,league_img,home_team_style ,away_team_style )=>{
     const shadow_style = isWeb ? styles_matches.shadow_3  : styles_matches.shadow_1;
-    const logo_placeholder = "https://guessthefootballplayer.com/Js/placeholder3.png";
-    item.home_team_logo = item.home_team_logo ? item.home_team_logo : logo_placeholder;
-    item.away_team_logo = item.away_team_logo ? item.away_team_logo : logo_placeholder;
+
+    //https://img.kooora.com/?i=mohd1%2fbaladialogo.jpg
+    const palceholder_logo = require('../assets/placeholder.png');
+    const home_team_logo = item.home_team_logo ? {uri: item.home_team_logo} : palceholder_logo;
+    const away_team_logo = item.away_team_logo ? {uri: item.away_team_logo} : palceholder_logo;
     return (
       <View style={[styles_matches.matche_container,shadow_style]}>
         <View style={styles_matches.teams_and_score_view}>
 
           <View style={styles_matches.home_team_view}>
             <View style={styles_matches.matche_team_logo_view}>
-              { item.home_team_logo ? <Image style={styles_matches.matche_team_logo_image} source={{uri: item.home_team_logo}} /> : <Text>...</Text>}
+              { home_team_logo ? <Image style={styles_matches.matche_team_logo_image} source={home_team_logo} /> : <Text>-</Text>}
             </View>
             <View style={styles_matches.home_team_name_view}>
               <Text style={styles_matches.team_name_text}>{home_team_name}</Text>
@@ -87,7 +89,7 @@ const render=(item, time_status,home_team_name,away_team_name,league_img,home_te
 
           <View style={styles_matches.home_team_view}>
             <View style={styles_matches.matche_team_logo_view}>
-              { item.away_team_logo ? <Image style={styles_matches.matche_team_logo_image} source={{uri: item.away_team_logo}} /> : <Text>...</Text>}
+              { away_team_logo ? <Image style={styles_matches.matche_team_logo_image} source={away_team_logo} /> : <Text>-</Text>}
             </View>
             <View style={styles_matches.home_team_name_view}>
               <Text style={styles_matches.team_name_text}>{away_team_name}</Text>

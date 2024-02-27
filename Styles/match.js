@@ -25,6 +25,15 @@ const styles_home = StyleSheet.create({
       flexDirection:'row', 
       
     },
+    title_view:{
+      width:"99%",
+      textAlign:"center",
+      alignItems:'center',
+
+    },
+    title_text:{
+      fontSize:20,
+    },
     stats_sides_view:{
       flex:1,
       padding:20,
@@ -39,6 +48,35 @@ const styles_home = StyleSheet.create({
     },
     stats_right_text:{
       textAlign:"right",
+    },
+    general_info_container:{
+      margin:5,
+      backgroundColor: theme.matche_container_backgroundColor,
+      padding:20,
+      flex:1,
+    },
+    general_info_row:{
+      height:50,
+      flex:1,
+      flexDirection:"row",
+    },
+    general_info_label_text:{
+      height:50,
+      padding:5,
+      flex:1,
+
+      textAlign:"right",
+      alignItems:'right',
+
+
+    },
+    general_info_value_text:{
+      height:50,
+      padding:5,
+      flex:1,
+      textAlign:"left",
+      alignItems:'left',
+
     },
   });
 

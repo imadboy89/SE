@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, View } from 'react-native';
 import ListCustom from "../Components/list";
+import styles_news from "../Styles/news";
 
 const list = [
     {id:1,is_done:1,home_team:"Real Madrid",away_team:"FC Barca",home_team_status:"w",away_team_status:"l",time_played:10,home_team_score:10,away_team_score:1,time:20},
@@ -24,6 +25,15 @@ const list = [
           list:[],
           loading:true,
       };
+      
+
+    }
+
+    componentDidMount(){ 
+      _API.get_matches(new Date()).then(data =>{
+        console.log(data);
+        this.setState({loading:false,list:data})
+      });
     }
     onclick = (item)=>{
       this.props.navigation.navigate('Match',item);
@@ -31,11 +41,11 @@ const list = [
     
     render(){
   
-      return (<View style={styles.container}>
+      return (<View style={styles_news.root_container}>
   
       <ListCustom 
         loading={false} 
-        list={list} 
+        list={this.state.list} 
         onclick={this.onclick}
         type="matches" 
         id="id"

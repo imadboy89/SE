@@ -32,46 +32,40 @@ class Matchcreen extends React.Component {
   componentDidMount(){
     this.state.matche_details = this.state.matche_details && this.state.matche_details!="-" ? this.state.matche_details : undefined;
     //console.log("componentDidMount",this.props.route.params.match_item.id);
-    this.id = this.state.matche_details && this.state.matche_details.id ? this.state.matche_details.id : this.props.route.params.id ;
-
-    //this.get_Match(this.id);
-    
+    this.id = this.state.matche_details && this.state.matche_details.id ? this.state.matche_details.id : this.props.route.params.id ;    
     this.render_header();
-    this.setState({loading:false})
-    /*
-    this.interval_refresh = setInterval(()=>{
-      if(this.state.matche_details && this.state.matche_details.live){
-        this.get_Match(this.id)
+
+    this.didBlurSubscription = this.props.navigation.addListener(
+      'focus',
+      payload => {
+          this.is_focused = true;
+          if(this._isMounted==false){
+          return;
+          }
+          this.state.matche_details = this.props.route.params&&this.props.route.params.id ? this.props.route.params : undefined;
+          this.id = this.state.matche_details && this.state.matche_details.id ? this.state.matche_details.id : this.props.route.params.id ;
+          this.get_Match(this.id);
       }
-    }, 40000);
-    */
+      );
   }
   render_header=()=>{
     let title_str = "";
     let title = "";
   }
   get_Match(id){
-    //console.log("get_Match",id,this.state.matche_details);
-    if(this.props.route.params.match_item && this.props.route.params.match_item.is_kora_star){
-      this.setState({matche_details:this.props.route.params.match_item,loading:false});
-      return ;
+    if(this.id==undefined){
+      return;
     }
-    if(this.state.matche_details==undefined || this.state.matche_details.is_koora){
-      this.is_k = true;
-      this.get_head2head(id);
-      return this.get_Match_k(id);
-    }
-    this.state.matche_details
-    API_.get_match(id).then(resp=>{
+    _API.get_match(id).then(resp=>{
+      console.log(resp);
       if(resp && resp["data"] && resp["data"][0] ){
-        
         this.state.matche_details = resp["data"][0];
         this.home_team_ar = this.state.matche_details.home_team_ar ? this.state.matche_details.home_team_ar : this.state.matche_details.home_team;
         this.away_team_ar = this.state.matche_details.away_team_ar ? this.state.matche_details.away_team_ar : this.state.matche_details.away_team; 
         this.render_header();
         API_.setTitleWeb(this.home_team_ar +" - "+ this.away_team_ar);
-        this.setState({loading:false});
       }
+      this.setState({loading:false});
     });
   }
 
@@ -80,23 +74,6 @@ class Matchcreen extends React.Component {
     this.state.matche_details.channels = this.state.matche_details.channels.sort((a,b)=>{return ( this.state.favorite.indexOf(a.en_name)>=this.state.favorite.indexOf(b.en_name))?-1:1;});
     this.state.matche_details.channels = this.state.matche_details.channels.sort((a,b)=>{return (a.commentator!=undefined && this.state.favorite.indexOf(b.en_name)==-1  )?-1:0;});
     
-    let channels = this.state.matche_details.channels ?
-      this.state.matche_details.channels.map(ch => { 
-        const key_ch = ch.id;
-        const commentator = ch.commentator;
-        const ch_name_ = API_.fix_channel_name(ch.en_name);
-
-        ch = API_.channels_dict && ch_name_ in API_.channels_dict ? API_.channels_dict[ch_name_]  : ch ;
-        const ch_style = ch.is_koora==undefined ? {backgroundColor: global_theme.fav_background} : {};
-        return (
-        <View style={[{margin:1,flex:1},ch_style]} key={key_ch}>
-            <TouchableOpacity style={[{flexDirection:'row', flexWrap:'wrap',width:"100%",marginLeft:10,justifyContent:"center"},]} onPress={()=>this.onmt_clicked(ch)}>
-              {this.get_fav_icon(ch)}
-              <Text style={[{flex:1,backgroundColor:global_theme.background_color_default,color:global_theme.text_color_default,paddingVertical:4},ch_style]} >{ch.en_name}{commentator!=""?" - "+commentator:""}</Text>
-            </TouchableOpacity>
-        </View>
-      )})
-    : null;
     if(this.state.matche_details=={}) {return null;}
 
     this.state.matche_details.status       = this.state.matche_details.status ? this.state.matche_details.status : "-";
@@ -243,7 +220,71 @@ class Matchcreen extends React.Component {
     subs = subs.sort((a,b)=>{return a.time<b.time?-1:1;});
     return subs;
   }
+  get_info(){
+    this.state.matche_details.status       = this.state.matche_details.status ? this.state.matche_details.status : "-";
+    this.state.matche_details.league       = this.state.matche_details.league ? this.state.matche_details.league : "-";
+    this.state.matche_details.phase        = this.state.matche_details.phase ? this.state.matche_details.phase : "-";
+    this.state.matche_details.group        = this.state.matche_details.group ? this.state.matche_details.group : "-";
+    this.state.matche_details.round        = this.state.matche_details.round ? this.state.matche_details.round : "-";
+    this.state.matche_details.retour_score = this.state.matche_details.retour_score ? this.state.matche_details.retour_score : "-";
+    this.state.matche_details.stadium      = this.state.matche_details.stadium ? this.state.matche_details.stadium : "-";
+    this.state.matche_details.desc         = this.state.matche_details.desc ? this.state.matche_details.desc : "-";
+    this.state.matche_details.match_status = this.state.matche_details.match_status ? this.state.matche_details.match_status : "OK";
+    return(
+      <>
+      <View style={styles_match.title_view}><Text style={styles_match.title_text}>Match details : </Text></View>
+      <View style={styles_match.general_info_container}>
+        <View style={styles_match.general_info_row}>
+          <Text style={styles_match.general_info_label_text}>League : </Text>
+          <Text style={styles_match.general_info_value_text}>{this.state.matche_details.league}</Text>
+        </View>
+        <View style={styles_match.general_info_row}>
+          <Text style={styles_match.general_info_label_text}>Phase : </Text>
+          <Text style={styles_match.general_info_value_text}>{this.state.matche_details.phase}</Text>
+        </View>
+        <View style={styles_match.general_info_row}>
+          <Text style={styles_match.general_info_label_text}>Group : </Text>
+          <Text style={styles_match.general_info_value_text}>{this.state.matche_details.group}</Text>
+        </View>
+        <View style={styles_match.general_info_row}>
+          <Text style={styles_match.general_info_label_text}>Round : </Text>
+          <Text style={styles_match.general_info_value_text}>{this.state.matche_details.round}</Text>
+        </View>
+        <View style={styles_match.general_info_row}>
+          <Text style={styles_match.general_info_label_text}>Status : </Text>
+          <Text style={styles_match.general_info_value_text}>{this.state.matche_details.status}</Text>
+        </View>
+        <View style={styles_match.general_info_row}>
+          <Text style={styles_match.general_info_label_text}>1st leg results : </Text>
+          <Text style={styles_match.general_info_value_text}>{this.state.matche_details.retour_score}</Text>
+        </View>
+        <View style={styles_match.general_info_row}>
+          <Text style={styles_match.general_info_label_text}>Stadium : </Text>
+          <Text style={styles_match.general_info_value_text}>{this.state.matche_details.stadium}</Text>
+        </View>
+        <View style={styles_match.general_info_row}>
+          <Text style={styles_match.general_info_label_text}>Description : </Text>
+          <Text style={styles_match.general_info_value_text}>{this.state.matche_details.desc}</Text>
+        </View>
+        <View style={styles_match.general_info_row}>
+          <Text style={styles_match.general_info_label_text}>Match status : </Text>
+          <Text style={styles_match.general_info_value_text}>{this.state.matche_details.match_status}</Text>
+        </View>
 
+      </View>
+      </>
+    );
+  }
+  get_eventsLine(){
+    return (        <View style={styles_match.stats_view}>
+      <View style={[styles_match.stats_sides_view, styles_match.stats_left_view]}>
+        <Text>test 1</Text>
+      </View>
+      <View style={[styles_match.stats_sides_view, styles_match.stats_right_view]}>
+        <Text style={styles_match.stats_right_text}>test2</Text>
+      </View>
+    </View>);
+  }
   get_scores(type_="home"){
     if(type_=="home"){this.scorers_h =[];this.assist_h =[];}
     else{this.scorers_a =[];this.assist_a =[];}
@@ -341,25 +382,17 @@ class Matchcreen extends React.Component {
     //render_match(item, time_status,home_team_name,away_team_name,league_img)
     return (
       <ScrollView style={styles_match.container}
-      refreshControl={
-        <RefreshControl
-          refreshing={this.state.loading}
-          onRefresh={()=>this.get_Match(this.id)}
-        />}
+        refreshControl={
+          <RefreshControl
+            refreshing={this.state.loading}
+            onRefresh={()=>this.get_Match(this.id)}
+          />}
       >
-        {this.state.loading ? <Loading /> : null}
         <View style={{height:200}}>
           {render_match(this.state.matche_details, this.windowWidth)}
         </View>
-        <View style={styles_match.stats_view}>
-          <View style={[styles_match.stats_sides_view, styles_match.stats_left_view]}>
-            <Text>test 1</Text>
-          </View>
-          <View style={[styles_match.stats_sides_view, styles_match.stats_right_view]}>
-            <Text style={styles_match.stats_right_text}>test2</Text>
-          </View>
-        </View>
-
+        {this.state.loading ? <Loading /> : null}
+        {this.get_info()}
       </ScrollView>
     );
   }

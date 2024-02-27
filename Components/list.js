@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {  View, TouchableOpacity, Image, ImageBackground  } from 'react-native';
+import {  ScrollView, View, TouchableOpacity, Image, ImageBackground  } from 'react-native';
 import { SafeAreaView, FlatList, Dimensions,TouchableHighlight, Text } from 'react-native';
 import Loader from "./Loader";
 import styles_list from "../Styles/matches";
@@ -116,8 +116,8 @@ class ItemsList extends React.Component {
 
       return render_match(item,this.windowWidth);
 
-    }else if(this.props.type=="news"){
-
+    }else if(this.props.type=="news" || this.props.type=="live" ){
+      const title = this.props.type=="news" ? item.title_news : item.title;
       return (
         <View style={[styles_news.container]}>
           <ImageBackground style={styles_news.img_background} source={{uri: item.img}} imageStyle={styles_news.image_style}>
@@ -125,7 +125,7 @@ class ItemsList extends React.Component {
             <View style={styles_news.news_img_v}>
             </View>
             <View style={styles_news.news_title_v}>
-              <Text style={styles_news.news_title_t} numberOfLines={1}>{item.title_news}</Text>
+              <Text style={styles_news.news_title_t} numberOfLines={1}>{title}</Text>
             </View>
           </ImageBackground>
         </View>
@@ -282,14 +282,14 @@ class ItemsList extends React.Component {
       return null;
     }*/
     
-    return (<View style={styles_list.container}>
+    return (<ScrollView style={styles_list.container}>
       {this.props.loading && (this.props.refreshControl==undefined || isWeb || this.props.list==undefined || this.props.list.length == 0)  
       ? <>
         {this.props.ListHeaderComponent!=undefined ? this.props.ListHeaderComponent : null}
         <Loader/>
         {this.props.ListFooterComponent!=undefined ? this.props.ListFooterComponent : null}
       </> : this.render_list()}
-    </View>);
+    </ScrollView>);
   }
 }
 

@@ -12,35 +12,37 @@ class ArticleScreen extends React.Component {
     this.state = {
         list:[],
         loading:true,
-        article:this.props.route.params.article && this.props.route.params.article!="-" ? this.props.route.params.article : undefined,
+        article:{},
         
     };
     if(this.state.article && this.state.article.img){
       this.state.article.img = this.state.article.img.split("&")[0];
     }
-    this.id = this.state.article && this.state.article.link ? this.state.article.link : "n="+this.props.route.params.id;
-    this.source = this.state.article && this.state.article.source ? this.state.article.source : 1;
-    //this.get_article(); 
-    this.state.article={
-        img:"//img.kooora.com/?i=mhmed_aziz%2fjanuary%2f1%2f1%2f2019_january_koo_1%2fibrahim_samir_koo_%2fmohamed+boudrega.jpg&z=320|240&c=0|0|738|417&h=8828",
-        link:"//domain.com",
-        title_news:"title 1111",
-        body:"adadad body htadad",
-        author_cc:"ma",
-        author:"imad",
-    }
-    
+    this.is_focused=false;
   }
   componentDidMount(){
+    this._isMounted=true;
     let short_title = this.state.article && this.state.article.title_news ? this.state.article.title_news:"-";
     short_title = short_title.length > 0 ? short_title.slice(0,30)+"..." : short_title;
     this.props.navigation.setOptions({title: <Text>{short_title}</Text>})
     this.render_header();
-    setTimeout(() => {
-        this.setState({loading:false});
-    }, 2000);
-  }
+    this.didBlurSubscription = this.props.navigation.addListener(
+    'focus',
+    payload => {
+        this.is_focused = true;
+        if(this._isMounted==false){
+        return;
+        }
+        this.state.article = this.props.route.params&&this.props.route.params.link ? this.props.route.params : undefined;
+        this.id = this.state.article && this.state.article.link ? this.state.article.link+"" : undefined;
+        this.get_article();
+    }
+    );
 
+  }
+  componentWillUnmount(){
+    this._isMounted=false
+  }
   render_header=()=>{
     let title = this.state.article && this.state.article.title_news ? this.state.article.title_news : "";
     this.props.navigation.setOptions({title: title,
@@ -52,7 +54,7 @@ class ArticleScreen extends React.Component {
   }
   get_article(){
     //this.state.article.date =  this.state.article && this.state.article.date ? API_.get_date2(new Date(this.state.article.date.replace("#","") * 1000)) : "";
-    API_.get_article(this.id, this.source)
+    _API.get_article(this.id)
     .then(article =>{
       if(article.constructor == Object){
         this.state.article = this.state.article?this.state.article:{};
@@ -80,8 +82,8 @@ class ArticleScreen extends React.Component {
       }else{
         this.state.article.body = article;
       }
-      this.setState({loading:false});
-      API_.setTitleWeb(this.state.article.title_news);
+      this.setState({loading:false,});
+      //API_.setTitleWeb(this.state.article.title_news);
     });
   }
 

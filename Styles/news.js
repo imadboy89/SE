@@ -3,7 +3,13 @@ import {  StyleSheet, Dimensions} from 'react-native';
 import {theme,maxWidth,_isMobile,isWeb  } from "../Styles/general";
 
 const styles_news = StyleSheet.create({
+    root_container:{
+      flex: 1,
+      backgroundColor: theme.background_color_default,
+      alignItems: 'center',
+      justifyContent: 'center',
 
+    },
     container:{
       backgroundColor: theme.matche_container_backgroundColor,
       width:"98%",

@@ -37,7 +37,7 @@ textAlign:"center",
 const bottomTab = {
     colors: {
         primary: "green",
-        background: "yellow",
+        background: theme.background_color_default,
         card: theme.headerStyle_backgroundColor,
         text: theme.headerTintColor,
       },
