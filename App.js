@@ -5,6 +5,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { ThemeProvider, createTheme } from '@rneui/themed';
+import React from 'react';
 
 import {tabBarOptions, headerTitleStyle, header_styler, tarballLabel_style, bottomTab} from "./Styles/app";
 import {screenOptions, screen_baricon_secondary, screen_baricon_main, screen_option} from "./Styles/app";
@@ -20,7 +21,7 @@ import API from './libs/API';
 import LiveScreen from './Screens/Live';
 import LiveLinkScreen from './Screens/LiveLink';
 
-
+console.log('staaaaaart')
 global.isWeb = Platform.OS == 'web';
 global.isIOS = Platform.OS == 'ios';
 global._API   = new API();
@@ -62,7 +63,7 @@ const MatchesStack = createNativeStackNavigator();
 function MatchesStackScreen() {
   return (
     <MatchesStack.Navigator>
-      <MatchesStack.Screen name="Matches" component={MachesScreen} options={screen_option}  />
+      <MatchesStack.Screen name="MatchesList" component={MachesScreen} options={screen_option}  />
       <MatchesStack.Screen name="Match" component={Matchcreen} options={screen_option} />
     </MatchesStack.Navigator>
   );
@@ -80,7 +81,7 @@ const xStack = createNativeStackNavigator();
 function LiveStackScreen() {
   return (
     <xStack.Navigator>
-      <xStack.Screen name="Live" component={LiveScreen} options={screen_option} />
+      <xStack.Screen name="LiveList" component={LiveScreen} options={screen_option} />
       <xStack.Screen name="LiveLink" component={LiveLinkScreen} options={screen_option} />
     </xStack.Navigator>
   );
@@ -88,46 +89,49 @@ function LiveStackScreen() {
 
 const Tab = createBottomTabNavigator();
 
-/*
-export default function App() {
-  return (
-    <ThemeProvider theme={theme} >
-      <NavigationContainer
-        theme={bottomTab}
-        >
-        <Tab.Navigator screenOptions={{ headerShown: false }}>
-          <Tab.Screen  name="Matches" component={MatchesStackScreen} options={navigationOptions("home", "MachesScreen")} />
-          <Tab.Screen name="News"   component={NewsStackScreen} options={navigationOptions("globe", "News")} />
-          <Tab.Screen name="Live" component={LiveStackScreen} options={navigationOptions("tv", "Live")} />
+
+export default class App extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+        loading:true,
+        allow_live:false,
+    };
+  }
+  componentDidMount(){
+    setTimeout(() => {
+      console.log('---------show live');
+      this.setState({allow_live:true})
+    }, 2000);
+
+  }
+  render(){
+    return (
+      <NavigationContainer>
+        <StatusBar animated={true} backgroundColor="#5856D6" />
+        <Tab.Navigator
+          screenOptions={screenOptions}>
+          <Tab.Screen
+            name="Matches"
+            component={MatchesStackScreen}
+            options={screen_baricon_secondary("home")}
+          />
+          {this.state.allow_live==true ? 
+          
+          <Tab.Screen
+            name="Live"
+            component={LiveStackScreen}
+            options={screen_baricon_main("tv")}
+          />
+          :null}
+          <Tab.Screen
+            name="News"
+            component={NewsStackScreen}
+            options={screen_baricon_secondary("globe")}
+          />
         </Tab.Navigator>
       </NavigationContainer>
-    </ThemeProvider>
-  );
-}
-*/
-
-export default function App() {
-  return (
-    <NavigationContainer>
-      <StatusBar animated={true} backgroundColor="#5856D6" />
-      <Tab.Navigator
-        screenOptions={screenOptions}>
-        <Tab.Screen
-          name="Matches"
-          component={MatchesStackScreen}
-          options={screen_baricon_secondary("home")}
-        />
-        <Tab.Screen
-          name="Live"
-          component={LiveStackScreen}
-          options={screen_baricon_main("tv")}
-        />
-        <Tab.Screen
-          name="News"
-          component={NewsStackScreen}
-          options={screen_baricon_secondary("globe")}
-        />
-      </Tab.Navigator>
-    </NavigationContainer>
-  );
+    );
+  }
 }

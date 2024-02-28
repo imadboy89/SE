@@ -9,16 +9,19 @@ const styles_home = StyleSheet.create({
       //paddingTop: Constants.statusBarHeight,
       backgroundColor: theme.background_color_default,
       color : "#fff",
+      
+    },
+    list_container:{
     },
     matche_container:{
       backgroundColor: theme.matche_container_backgroundColor,
       width:"98%",
-      marginLeft:5,
-      marginVertical:5,
       flexWrap:'wrap',
+      marginVertical:10,
+      marginHorizontal:6,
+      
       flex: 1 ,
       height: isWeb ? 150 : 135,
-      marginRight:5,
       //marginLeft:5,
       borderRadius:10,
       //borderWidth:1,
@@ -52,11 +55,11 @@ const styles_home = StyleSheet.create({
       color:theme.match_name_color
     },
     home_team_score_text_penalties:{
-      justifyContent: 'left',
-      alignItems:'left',
+      justifyContent: 'flex-start',
+      alignItems:'flex-start',
     },
     away_team_score_text_penalties:{
-      alignItems:'right',
+      alignItems:'flex-end',
     },
     home_team_view:{
       flex:1,
@@ -76,6 +79,7 @@ const styles_home = StyleSheet.create({
     },
     home_team_name_view:{
       flex:1,
+      height:35,
     },
 
     team_name_text:{
@@ -84,9 +88,8 @@ const styles_home = StyleSheet.create({
       color: theme.match_name_color,
       paddingLeft:5,
       paddingRight:5,
-      paddingTop: isWeb ? 3 : 10,
       justifyContent: 'center',
-      fontSize:15,
+      fontSize:13,
       lineHeight:25,
       textAlign:"center",
     },

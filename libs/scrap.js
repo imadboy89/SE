@@ -39,7 +39,6 @@ class Scrap extends Scrap_tools{
     article.body           = body;
     article.author_cc      = "";
 
-    console.log(article);
     article.related      = article.related    .map(n=> {return {related_link:n[0],related_title:n[1],url:n[0]} });
     article.related_news = article.related_news.map(n=> {return {related_news_id:n[0],related_news_title:n[1]} });
     article.related_images = article.related_images.map(n=> {return {img_link:n[0].replace(/^\/\//,"https://"),img_desc:n[1]} });
@@ -416,9 +415,7 @@ class Scrap extends Scrap_tools{
             : _time_playerd;
           //time_playerd = live==0 && parseInt(time_playerd)>0 && parseInt(time_playerd)<90 ? 45 : time_playerd;
           //live = (time_playerd+"").toLocaleLowerCase()=="half" || (parseInt(time_playerd)>=-30 && parseInt(time_playerd)<95) ? 1 : live;
-          if(matche["id"]==2924810){
-            console.log(live, time_playerd,_time_playerd,matche[ "time_old" ] );
-          }
+
           if(live==1 && time_playerd!=false && is_done==0){
             matche["time_played"] = matche[ "time_old" ].includes("$p") ? "Pen" :time_playerd;
             matche["live"] = live;

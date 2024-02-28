@@ -65,17 +65,18 @@ const screen_baricon_main = (iconName)=> {
       tabBarIcon: ({focused}) => (
         <View
           style={{
-            top: Platform.OS === 'ios' ? -10 : -20,
+            top: Platform.OS === 'ios' ? -5 : -10,
             width: Platform.OS === 'ios' ? 60 : 70,
             height: Platform.OS === 'ios' ? 60 : 70,
             borderRadius: Platform.OS === 'ios' ? 30 : 35,
+            borderWidth:1,
             backgroundColor: 'white',
             justifyContent: 'center',
             alignItems: 'center'        
           }}>
           <Icon
             name={iconName}
-            size={Platform.OS === 'ios' ? 40 : 50}
+            size={Platform.OS === 'ios' ? 30 : 35}
             color={focused ? '#ff4162' : '#ff748c'}
           />
         </View>

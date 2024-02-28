@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import ListCustom from "../Components/list";
 
 import styles_news from "../Styles/news";
+import IconButton from '../Components/iconBtn';
 
 
 const list = [
@@ -28,14 +29,34 @@ export default class LiveScreen extends React.Component {
         loading:true,
     };
   }
-  componentDidMount(){ 
+  refresh=()=>{
     _API.get_news(new Date()).then(data =>{
       console.log(data);
       this.setState({loading:false,list:data})
     });
+
+    this.setState({loading:true,list:[]});
+  }
+  componentDidMount(){ 
+    this.refresh();
+
+    this.render_header();
+  }
+  render_header=()=>{
+    this.props.navigation.setOptions({
+    "headerRight":()=>(
+      <View style={{flexDirection:"row",margin:5}}>
+        <IconButton
+          name='refresh'
+          onPress={this.refresh}
+
+        />
+    </View>
+    )
+    });
   }
   onclick = (item)=>{
-    this.props.navigation.navigate('xArticle',item);
+    this.props.navigation.navigate('LiveLink',item);
   }
   
   render(){
@@ -43,7 +64,7 @@ export default class LiveScreen extends React.Component {
     return (<View style={styles_news.root_container}>
 
     <ListCustom 
-      loading={false} 
+      loading={this.state.loading} 
       list={list} 
       onclick={this.onclick}
       type="live" 

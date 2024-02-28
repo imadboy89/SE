@@ -3,6 +3,7 @@ import { View, TouchableHighlight, Modal, Text, Switch, TouchableOpacity,Image, 
 import Loading from '../Components/Loader';
 import styles_match from "../Styles/match"
 import render_match  from '../Components/render_match';
+import IconButton from '../Components/iconBtn';
 
 let list = [
 
@@ -44,13 +45,29 @@ class Matchcreen extends React.Component {
           }
           this.state.matche_details = this.props.route.params&&this.props.route.params.id ? this.props.route.params : undefined;
           this.id = this.state.matche_details && this.state.matche_details.id ? this.state.matche_details.id : this.props.route.params.id ;
-          this.get_Match(this.id);
+          this.refresh();
       }
       );
   }
+  refresh=()=>{
+    this.get_Match(this.id);
+  }
   render_header=()=>{
-    let title_str = "";
     let title = "";
+    if(this.state.matche_details){
+      title=`${this.state.matche_details.home_team} VS ${this.state.matche_details.away_team}`;
+    }
+    this.props.navigation.setOptions({title: title,
+    "headerRight":()=>(
+      <View style={{flexDirection:"row",margin:5,}}>
+                <IconButton
+          name='refresh'
+          onPress={this.refresh}
+
+        />
+    </View>
+    )
+    });
   }
   get_Match(id){
     if(this.id==undefined){

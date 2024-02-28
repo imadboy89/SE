@@ -12,7 +12,7 @@ class ArticleScreen extends React.Component {
     this.state = {
         list:[],
         loading:true,
-        article:{},
+        article:this.props.route.params,
         
     };
     if(this.state.article && this.state.article.img){
@@ -47,7 +47,7 @@ class ArticleScreen extends React.Component {
     let title = this.state.article && this.state.article.title_news ? this.state.article.title_news : "";
     this.props.navigation.setOptions({title: title,
     "headerRight":()=>(
-      <View style={{flexDirection:"row",margin:5}}>
+      <View style={{flexDirection:"row",margin:5,}}>
     </View>
     )
     });
@@ -88,7 +88,7 @@ class ArticleScreen extends React.Component {
   }
 
   render() {
-    
+    const article_img = this.state.article && this.state.article.img ? this.state.article.img : null;
     const article_body = this.state.article && this.state.article.body ? this.state.article.body : "";
     const body_composed = article_body && article_body.split ? article_body.split("IMG**").map(o=>{
       if(o.trim()==""){
@@ -115,10 +115,13 @@ class ArticleScreen extends React.Component {
 
         <View style={styles_article.article_img_v}>
         
-          { this.state.article && this.state.article.img ?  
-            <ImageBackground key={"article_backgrnd"} style={styles_article.article_img} source={{uri: this.state.article.img}} resizeMode="contain">
+            <ImageBackground 
+            key={"article_backgrnd"} 
+            style={styles_article.article_img} 
+            source={{uri: article_img}}
+            resizeMode="contain">
             </ImageBackground>
-          : null}
+
         </View>
             
           <View style={styles_article.article_v}>

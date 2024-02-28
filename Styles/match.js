@@ -41,7 +41,7 @@ const styles_home = StyleSheet.create({
     },
     stats_right_view:{
       textAlign:"right",
-      alignItems:'right',
+      alignItems:'flex-end',
     },
     stats_left_view:{
 
@@ -66,7 +66,7 @@ const styles_home = StyleSheet.create({
       flex:1,
 
       textAlign:"right",
-      alignItems:'right',
+      alignItems:'flex-end',
 
 
     },
@@ -75,7 +75,7 @@ const styles_home = StyleSheet.create({
       padding:5,
       flex:1,
       textAlign:"left",
-      alignItems:'left',
+      alignItems:'flex-start',
 
     },
   });

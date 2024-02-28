@@ -5,7 +5,6 @@ import {theme,maxWidth,_isMobile,isWeb  } from "../Styles/general";
 const styles_news = StyleSheet.create({
 
     container:{
-      margin:4,
       flexWrap:'wrap',
       flex: 1 ,
       //marginLeft:5,
@@ -14,14 +13,12 @@ const styles_news = StyleSheet.create({
       borderColor:"#5e5e698a",
       color:theme.article_body_color,
       backgroundColor:theme.article_body_backgroundColor,
-      padding:10,
-      width:"96%",
-      minHeight:500,
+      width:"100%",
+      minHeight:'90%',
 
       
     },
     webview:{
-      backgroundColor:'red',
       borderWidth:1,
       flex:1,
       width:"99%",

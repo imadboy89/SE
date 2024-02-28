@@ -105,7 +105,6 @@ class API {
             url = method=="GET" ? this.proxy_get+_url_enc : this.proxy_post+_url_enc; 
           }
         }
-        console.log("url", url)
         return this.fetch(url, configs)
           .then(response => {
             try {
@@ -193,7 +192,6 @@ class API {
       if(link==undefined || link == null){
         return;
       }
-      console.log("linklink",link)
         const url = this.kooora_article.replace("[article_id]",link);
         return this.http(url,"GET",null,{})
         .then(html=>{

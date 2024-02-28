@@ -121,7 +121,7 @@ class ItemsList extends React.Component {
       return (
         <View style={[styles_news.container]}>
           <ImageBackground style={styles_news.img_background} source={{uri: item.img}} imageStyle={styles_news.image_style}>
-            { item.date ? <Text style={{backgroundColor:"#00000091",color:"#fff",width:90,textAlign:"center",}}>{item.date}</Text> : null}
+            { item.date ? <Text style={styles_news.date_text}>{item.date}</Text> : null}
             <View style={styles_news.news_img_v}>
             </View>
             <View style={styles_news.news_title_v}>
@@ -247,7 +247,6 @@ class ItemsList extends React.Component {
       }
       return (
         <View style={styles_list.list_container}>
-          <SafeAreaView style={styles_list.item_container}>
             <FlatList
               ListHeaderComponent = {this.props.ListHeaderComponent!=undefined ? this.props.ListHeaderComponent : undefined}
               ListFooterComponent = {this.props.ListFooterComponent!=undefined ? this.props.ListFooterComponent : undefined}
@@ -262,13 +261,15 @@ class ItemsList extends React.Component {
 
             
             />
-          </SafeAreaView>
         </View>
       );
 
   }
 
   render() {
+    if(this.props.loading){
+      return <Loader />;
+    }
     if( this.props.loading==false && (this.check_width(false) || styles_list==false || this.props.list==undefined)){
       return (<View style={styles_list.container}>
         {this.props.ListHeaderComponent!=undefined ? this.props.ListHeaderComponent : null}
@@ -282,14 +283,14 @@ class ItemsList extends React.Component {
       return null;
     }*/
     
-    return (<ScrollView style={styles_list.container}>
+    return (<View style={styles_list.container}>
       {this.props.loading && (this.props.refreshControl==undefined || isWeb || this.props.list==undefined || this.props.list.length == 0)  
       ? <>
         {this.props.ListHeaderComponent!=undefined ? this.props.ListHeaderComponent : null}
         <Loader/>
         {this.props.ListFooterComponent!=undefined ? this.props.ListFooterComponent : null}
       </> : this.render_list()}
-    </ScrollView>);
+    </View>);
   }
 }
 

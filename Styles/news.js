@@ -38,12 +38,20 @@ const styles_news = StyleSheet.create({
     },
     news_title_v:{
       //flex:1,
+      height:40,
       padding:5,
       backgroundColor: theme.news_title_backgroundColor,
     },
     news_title_t:{
       flex:1,
       color:theme.news_title_color
+    },
+    date_text:{
+      backgroundColor:"#00000091",
+      color:"#fff",
+      width:90,
+      textAlign:"center",
+      fontSize:10
     },
   });
 
