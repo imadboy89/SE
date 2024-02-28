@@ -18,6 +18,13 @@
       },
       "production": {
         "channel": "1"
+      },
+      "development-simulator": {
+        "developmentClient": true,
+        "distribution": "internal",
+        "ios": {
+          "simulator": true
+        }
       }
     },
     "submit": {

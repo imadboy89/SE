@@ -20,7 +20,7 @@ const list = [
   "link":"https://reactnavigation.org/docs/tab-based-navigation/",
   "img":"https:////img.kooora.com/?i=mhmed_aziz%2fjanuary%2f1%2f1%2f2019_january_koo_1%2fibrahim_samir_koo_%2fmohamed+boudrega.jpg&z=320|240&c=0|0|738|417&h=8828"},
 ];
-export default class xScreen extends React.Component {
+export default class LiveScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

@@ -1,25 +1,24 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, Platform } from 'react-native';
+import { View, Text, Platform } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
-import {Translation} from "react-native-essential-tools";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { ThemeProvider, createTheme } from '@rneui/themed';
 
-import theme from "./Styles/theme";
-import {tabBarOptions, headerTitleStyle, header_styler, tarballLabel_style, bottomTab} from "./Styles/app"
+import {tabBarOptions, headerTitleStyle, header_styler, tarballLabel_style, bottomTab} from "./Styles/app";
+import {screenOptions, screen_baricon_secondary, screen_baricon_main, screen_option} from "./Styles/app";
+
 
 import NewsScreen from './Screens/News';
 import MachesScreen from './Screens/Matches';
 import ArticleScreen from './Screens/Article';
 import Matchcreen from './Screens/Match';
-import { isWeb } from './Styles/general';
+import { isWeb,theme } from './Styles/general';
 import API from './libs/API';
 
-import xlistScreen from './Screens/xlist';
-import xArticleScreen from './Screens/xArticle';
+import LiveScreen from './Screens/Live';
+import LiveLinkScreen from './Screens/LiveLink';
 
 
 global.isWeb = Platform.OS == 'web';
@@ -32,14 +31,6 @@ if(isWeb){
   
 }
 
-global.TXT = {};
-global.Translation_ = new Translation();
-
-Translation_.getTranslation().then(t=>{
-  TXT=t;
-});
-
-
 
 
 const navigationOptions =  (IconName='', routeName='') => {
@@ -50,8 +41,8 @@ const navigationOptions =  (IconName='', routeName='') => {
 
   if (IconName!=""){
     options["tabBarLabel"] =  ({ focused, tintColor }) => {
-      if(!TXT[routeName]) return null;
-      return focused ? null : <Text  color={tintColor} style={tarballLabel_style}>{TXT[routeName]?TXT[routeName]+"":""}</Text>;
+      if(!routeName) return null;
+      return focused ? null : <Text  color={tintColor} style={tarballLabel_style}>{routeName?routeName+"":""}</Text>;
     };
 
     options["tabBarIcon"] =  (({focused, tintColor}) => {
@@ -71,8 +62,8 @@ const MatchesStack = createNativeStackNavigator();
 function MatchesStackScreen() {
   return (
     <MatchesStack.Navigator>
-      <MatchesStack.Screen name="Matches" component={MachesScreen} />
-      <MatchesStack.Screen name="Match" component={Matchcreen} />
+      <MatchesStack.Screen name="Matches" component={MachesScreen} options={screen_option}  />
+      <MatchesStack.Screen name="Match" component={Matchcreen} options={screen_option} />
     </MatchesStack.Navigator>
   );
 }
@@ -80,24 +71,24 @@ const newsStack = createNativeStackNavigator();
 function NewsStackScreen() {
   return (
     <newsStack.Navigator>
-      <newsStack.Screen name="NewsList" component={NewsScreen} />
-      <newsStack.Screen name="Article" component={ArticleScreen} />
+      <newsStack.Screen name="NewsList" component={NewsScreen} options={screen_option} />
+      <newsStack.Screen name="Article" component={ArticleScreen} options={screen_option} />
     </newsStack.Navigator>
   );
 }
 const xStack = createNativeStackNavigator();
-function xStackScreen() {
+function LiveStackScreen() {
   return (
     <xStack.Navigator>
-      <xStack.Screen name="Live" component={xlistScreen} />
-      <xStack.Screen name="xArticle" component={xArticleScreen} />
+      <xStack.Screen name="Live" component={LiveScreen} options={screen_option} />
+      <xStack.Screen name="LiveLink" component={LiveLinkScreen} options={screen_option} />
     </xStack.Navigator>
   );
 }
 
 const Tab = createBottomTabNavigator();
 
-
+/*
 export default function App() {
   return (
     <ThemeProvider theme={theme} >
@@ -107,10 +98,36 @@ export default function App() {
         <Tab.Navigator screenOptions={{ headerShown: false }}>
           <Tab.Screen  name="Matches" component={MatchesStackScreen} options={navigationOptions("home", "MachesScreen")} />
           <Tab.Screen name="News"   component={NewsStackScreen} options={navigationOptions("globe", "News")} />
-          <Tab.Screen name="Live" component={xStackScreen} options={navigationOptions("tv", "Live")} />
+          <Tab.Screen name="Live" component={LiveStackScreen} options={navigationOptions("tv", "Live")} />
         </Tab.Navigator>
       </NavigationContainer>
     </ThemeProvider>
   );
 }
+*/
 
+export default function App() {
+  return (
+    <NavigationContainer>
+      <StatusBar animated={true} backgroundColor="#5856D6" />
+      <Tab.Navigator
+        screenOptions={screenOptions}>
+        <Tab.Screen
+          name="Matches"
+          component={MatchesStackScreen}
+          options={screen_baricon_secondary("home")}
+        />
+        <Tab.Screen
+          name="Live"
+          component={LiveStackScreen}
+          options={screen_baricon_main("tv")}
+        />
+        <Tab.Screen
+          name="News"
+          component={NewsStackScreen}
+          options={screen_baricon_secondary("globe")}
+        />
+      </Tab.Navigator>
+    </NavigationContainer>
+  );
+}

@@ -1,5 +1,5 @@
 import {  StyleSheet, Dimensions, Platform} from 'react-native';
-
+import theme_base from "./theme_2";
 function isMobile(){
   var isMobile = true;
   if(isWeb==false){
@@ -33,19 +33,6 @@ const isBigScreen = Dimensions.get('window').width>900 || Dimensions.get('window
 const maxWidth = window_width<1000 ? "100%" : 1000;
 const modal_maxWidth = window_width<1000 ? window_width*0.9 : 1000;
 
-const theme_base = {
-
-  color_1:"#2a2a2e",//"#4d4dff",
-  color_2:"#3655b3",
-  color_3:"white",//"#d3deff", main background
-  color_4:"#ffb84d",// match background, article backround
-  color_5:"#b38136",
-  color_6:"#041c67",
-  color_7:"#f9f9f942", // semi transparent light
-  color_8:"#00000070", // semi transparent dark
-  color_9:"#fdd9a3",//light
-  noColor:"#00000000", //full transpaent
-}
 const theme = {
     //headerStyle:
   headerStyle_backgroundColor: theme_base.color_1,
@@ -74,10 +61,6 @@ const theme = {
 
 
   match_badge_backgroundColor: theme_base.noColor,
-
-  news_cont_backgroundColor:"#34495e",
-  news_title_backgroundColor:"#00000091",
-  news_title_color:"#000",
 
   article_body_backgroundColor: theme_base.color_4,
   article_body_color : theme_base.color_1,

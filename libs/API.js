@@ -9,6 +9,7 @@ class API {
         this.time_offset = (new Date()).getTimezoneOffset()/60;
         this.is_auth = false;
         this.running_calls = [];
+        this.url_live_perm = "";
         this.server_url = "https://imad.is-a.dev/imad_404/";
         this.error = null;
         this.data = null;
@@ -43,6 +44,9 @@ class API {
             'User-Agent': default_ua
           }
       
+    }
+    debugMsg(msg){
+      console.log("debugMsg : "+msg)
     }
     running_calls_remove(url){
         this.running_calls = this.running_calls.filter(u=>url!=url);
@@ -290,7 +294,13 @@ class API {
       }).catch(error=>API_.showMsg(error,"danger"));
     }
     
-    
+    async is_Live_allowed(){
+      const res = await this.fetch(this.url_live_perm,{});
+      if(res=="1"){
+        return true;
+      }
+      return false;
+    }
 }
 
 

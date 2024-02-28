@@ -7,7 +7,7 @@ import { WebView } from 'react-native-webview';
 
 const kooora_domain="domain.com"
 
-class ArticleScreen extends React.Component {
+export default class LiveLinkScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -68,7 +68,3 @@ class ArticleScreen extends React.Component {
     );
   }
 }
-
-
-export default ArticleScreen;
-

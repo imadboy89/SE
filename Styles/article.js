@@ -5,12 +5,9 @@ import {theme,maxWidth,_isMobile,isWeb  } from "../Styles/general";
 const styles_news = StyleSheet.create({
 
     container:{
-      width:"100%",
-      marginLeft:5,
-      marginVertical:5,
+      margin:5,
       flexWrap:'wrap',
       flex: 1 ,
-      marginRight:5,
       //marginLeft:5,
       borderRadius:10,
       borderWidth:1,
@@ -47,7 +44,6 @@ const styles_news = StyleSheet.create({
 
     article_body_t:{
         padding:10,
-        width:"99%",
         color:theme.article_body_color,
         backgroundColor:theme.article_body_backgroundColor,
     },
