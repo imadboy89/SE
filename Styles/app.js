@@ -70,6 +70,8 @@ const screen_baricon_main = (iconName)=> {
             height: Platform.OS === 'ios' ? 60 : 70,
             borderRadius: Platform.OS === 'ios' ? 30 : 35,
             backgroundColor: 'white',
+            justifyContent: 'center',
+            alignItems: 'center'        
           }}>
           <Icon
             name={iconName}
