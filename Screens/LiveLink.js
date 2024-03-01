@@ -4,7 +4,7 @@ import styles_live from "../Styles/live";
 import Loader from "../Components/Loader";
 import { WebView } from 'react-native-webview';
 import IconButton from '../Components/iconBtn';
-
+import HSL from '../Components/hsl_layer';
 
 const kooora_domain="domain.com"
 
@@ -33,8 +33,8 @@ export default class LiveLinkScreen extends React.Component {
         if(this._isMounted==false){
         return;
         }
-        this.state.live = this.props.route.params&&this.props.route.params.link ? this.props.route.params : undefined;
-        this.link = this.state.live && this.state.live.link ? this.state.live.link+"" : undefined;
+        this.state.live = this.props.route.params&&this.props.route.params.iframe ? this.props.route.params : undefined;
+        this.link = this.state.live && this.state.live.iframe ? this.state.live.iframe+"" : undefined;
         this.setState({link:this.link,loading:false});
         
     }
@@ -51,6 +51,9 @@ export default class LiveLinkScreen extends React.Component {
       this.setState({loading:false})
     }, 400);
   }
+  hsl=()=>{
+    this.setState();
+  }
   render_header=()=>{
     let title = this.state.live && this.state.live.title ? this.state.live.title : "";
     this.props.navigation.setOptions({title: title,
@@ -66,9 +69,8 @@ export default class LiveLinkScreen extends React.Component {
     });
   }
   render() {
-  console.log('LL RENDER', this.state.link)
     return (
-      <ScrollView  style={styles_live.container}>
+      <View  style={styles_live.container}>
         {this.state.link!=undefined  && !this.state.loading?
           <WebView
             originWhitelist={['*']}
@@ -81,7 +83,7 @@ export default class LiveLinkScreen extends React.Component {
           />
           :null}
 
-        </ScrollView >
+        </View >
     );
   }
 }

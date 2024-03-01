@@ -49,6 +49,7 @@ const styles_home = StyleSheet.create({
       flex:1,
       //backgroundColor:"yellow",
       aspectRatio: 1,
+      margin:5
     },
     matche_team_scor_text:{
       paddingHorizontal:10,

@@ -1,37 +1,53 @@
 import React from "react";
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Platform, View } from 'react-native';
 import ListCustom from "../Components/list";
 
 import styles_news from "../Styles/news";
 import IconButton from '../Components/iconBtn';
+import {Interstitial_load, interstitial_addLoadedEvent,interstitial_addClosedEvent} from '../Components/admobs';
 
 
-const list = [
-  {"id":1,
-  "title":"newsxxxssss1 title",
-  "date":"2022-02-22",
-  "img":"//img.kooora.com/?i=mhmed_aziz%2fjanuary%2f1%2f1%2f2019_january_koo_1%2fibrahim_samir_koo_%2fmohamed+boudrega.jpg&z=320|240&c=0|0|738|417&h=8828",
-  "link":"https://www.npmjs.com/package/react-native-webview",
-},
-  {"id":2,
-  "title":"news222 title","date":"2022-02-22",
-  "link":"https://www.zeldadungeon.net/majoras-mask-walkthrough/collection/#c4_2",
-  "img":"https://img.kooora.com/?i=mhmed_aziz%2fjanuary%2f1%2f1%2f2019_january_koo_1%2fibrahim_samir_koo_%2fmohamed+boudrega.jpg&z=320|240&c=0|0|738|417&h=8828"},
-  {"id":3,"title":"news3333 title","date":"2022-02-22",
-  "link":"https://reactnavigation.org/docs/tab-based-navigation/",
-  "img":"https:////img.kooora.com/?i=mhmed_aziz%2fjanuary%2f1%2f1%2f2019_january_koo_1%2fibrahim_samir_koo_%2fmohamed+boudrega.jpg&z=320|240&c=0|0|738|417&h=8828"},
-];
 export default class LiveScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
         list:[],
         loading:true,
+        
     };
+    this.is_interstitial_loaded=false,
+    this.live2open=false;
   }
+  onLoaded=()=>{
+    console.log('-----------ADSLoaded')
+    this.is_interstitial_loaded=true;
+  }
+  onClosed=()=>{
+    console.log('***********ADSCLOSEd')
+    this.is_interstitial_loaded=false;
+    if(this.live2open){
+      this.props.navigation.navigate('LiveHSL',this.live2open);
+    }
+    
+    this.live2open=false;
+    
+  }
+  load_interstitial(){
+    this.interstitial = Interstitial_load(this.onLoaded,this.onClosed);
+   
+
+  }
+  interstitial_showReady = async() => { 
+    if(Platform.OS === 'web'){return true;}
+    try {
+      this.interstitial.show();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  
   refresh=()=>{
-    _API.get_news(new Date()).then(data =>{
-      console.log(data);
+    _API.get_live_list().then(data =>{
       this.setState({loading:false,list:data})
     });
 
@@ -41,6 +57,7 @@ export default class LiveScreen extends React.Component {
     this.refresh();
 
     this.render_header();
+    this.load_interstitial();
   }
   render_header=()=>{
     this.props.navigation.setOptions({
@@ -56,7 +73,11 @@ export default class LiveScreen extends React.Component {
     });
   }
   onclick = (item)=>{
-    this.props.navigation.navigate('LiveLink',item);
+    this.interstitial_showReady();
+    this.live2open=item;
+    if(this.is_interstitial_loaded==false){
+      this.onClosed();
+    }
   }
   
   render(){
@@ -65,10 +86,10 @@ export default class LiveScreen extends React.Component {
 
     <ListCustom 
       loading={this.state.loading} 
-      list={list} 
+      list={this.state.list} 
       onclick={this.onclick}
       type="live" 
-      id="link"
+      id="id"
         />  
               </View>);
 

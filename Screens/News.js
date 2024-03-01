@@ -20,7 +20,6 @@ export default class NewsScreen extends React.Component {
   refresh=()=>{
     this.setState({loading:true,list:[]});
     _API.get_news(new Date()).then(data =>{
-      console.log(data);
       this.setState({loading:false,list:data})
     });
   }

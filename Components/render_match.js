@@ -42,7 +42,7 @@ const render_match=(item,windowWidth)=>{
       time_style["color"]="#ff5252";
     }else if(item.is_done){
       time_style["color"]="#8fa2ff";
-      time_style["fontSize"]=16;
+      time_style["fontSize"]=13;
     }
     let time_played= item.time_played>0?item.time_played+"'": item.time_played;
     const match_details = parse_details(item.details);

@@ -39,6 +39,18 @@
     },
     "updates": {
       "url": "https://u.expo.dev/dea7652b-a878-41ae-ad0a-c141a7937a77"
-    }
+    },
+    "plugins": [
+      [
+        "expo-av",
+        {
+          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone."
+        }
+      ]
+    ]
+  },
+  "react-native-google-mobile-ads": {
+    "android_app_id": "ca-app-pub-5231842333475288~5882719160",
+    "ios_app_id": "ca-app-pub-5231842333475288~5882719160"
   }
 }

@@ -8,6 +8,7 @@ import styles_news from "../Styles/news";
 import {_isMobile,isBigScreen, isWeb} from "../Styles/general";
 import {img_domain} from "../libs/config";
 import render_match  from './render_match';
+import emptyView from  './emptyFooter';
 
 class ItemsList extends React.Component {
   constructor(props) {
@@ -116,8 +117,7 @@ class ItemsList extends React.Component {
 
       return render_match(item,this.windowWidth);
 
-    }else if(this.props.type=="news" || this.props.type=="live" ){
-      const title = this.props.type=="news" ? item.title_news : item.title;
+    }else if(this.props.type=="news"){
       return (
         <View style={[styles_news.container]}>
           <ImageBackground style={styles_news.img_background} source={{uri: item.img}} imageStyle={styles_news.image_style}>
@@ -125,12 +125,25 @@ class ItemsList extends React.Component {
             <View style={styles_news.news_img_v}>
             </View>
             <View style={styles_news.news_title_v}>
-              <Text style={styles_news.news_title_t} numberOfLines={1}>{title}</Text>
+              <Text style={styles_news.news_title_t} numberOfLines={1}>{item.title_news}</Text>
             </View>
           </ImageBackground>
         </View>
         );
 
+    }else if(this.props.type=="live" ){
+      return (
+        <View style={[styles_news.container]}>
+          <ImageBackground style={styles_news.img_background} source={{uri: item.logo}} imageStyle={styles_news.image_style}>
+            { item.date ? <Text style={styles_news.date_text}>{item.date}</Text> : null}
+            <View style={styles_news.news_img_v}>
+            </View>
+            <View style={styles_news.news_title_v}>
+              <Text style={styles_news.news_title_t} numberOfLines={1}>{item.name}</Text>
+            </View>
+          </ImageBackground>
+        </View>
+        );
     }
   }
 
@@ -249,7 +262,7 @@ class ItemsList extends React.Component {
         <View style={styles_list.list_container}>
             <FlatList
               ListHeaderComponent = {this.props.ListHeaderComponent!=undefined ? this.props.ListHeaderComponent : undefined}
-              ListFooterComponent = {this.props.ListFooterComponent!=undefined ? this.props.ListFooterComponent : undefined}
+              ListFooterComponent = {emptyView}
               numColumns={this.state.numColumns} 
               stickySectionHeadersEnabled={false}
               onEndReached = {this.props.onEndReached}

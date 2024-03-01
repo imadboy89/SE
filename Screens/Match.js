@@ -74,7 +74,6 @@ class Matchcreen extends React.Component {
       return;
     }
     _API.get_match(id).then(resp=>{
-      console.log(resp);
       if(resp && resp["data"] && resp["data"][0] ){
         this.state.matche_details = resp["data"][0];
         this.home_team_ar = this.state.matche_details.home_team_ar ? this.state.matche_details.home_team_ar : this.state.matche_details.home_team;

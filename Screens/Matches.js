@@ -33,7 +33,6 @@ const list = [
     refresh=()=>{
       this.setState({loading:true,list:[]})
       _API.get_matches(new Date()).then(data =>{
-        console.log(data);
         this.setState({loading:false,list:data})
       });
 

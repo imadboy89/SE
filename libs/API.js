@@ -9,7 +9,8 @@ class API {
         this.time_offset = (new Date()).getTimezoneOffset()/60;
         this.is_auth = false;
         this.running_calls = [];
-        this.url_live_perm = "";
+        this.url_live_perm = "http://yallashoot.cloud/showiptv.json";
+        this.url_live_list = 'http://yallashoot.cloud/tv.json';
         this.server_url = "https://imad.is-a.dev/imad_404/";
         this.error = null;
         this.data = null;
@@ -292,9 +293,22 @@ class API {
       }).catch(error=>API_.showMsg(error,"danger"));
     }
     
+    async get_live_list(){
+      let res = await this.http(this.url_live_list,"GET",null,{},true);
+      console.log(res)
+      if(res && res.length){
+        let id=1;
+        res = res.map(l=>{
+          l.id = ''+id;
+          id=id+1;
+          return l;
+        });
+      }
+      return res;
+    }
     async is_Live_allowed(){
-      const res = await this.fetch(this.url_live_perm,{});
-      if(res=="1"){
+      const res = await this.http(this.url_live_perm,"GET",null,{},true);
+      if(res && res.length && res[0].display){
         return true;
       }
       return false;

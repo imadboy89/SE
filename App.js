@@ -15,6 +15,9 @@ import NewsScreen from './Screens/News';
 import MachesScreen from './Screens/Matches';
 import ArticleScreen from './Screens/Article';
 import Matchcreen from './Screens/Match';
+import LiveHSLScreen from './Screens/HSL';
+
+
 import { isWeb,theme } from './Styles/general';
 import API from './libs/API';
 
@@ -77,13 +80,15 @@ function NewsStackScreen() {
     </newsStack.Navigator>
   );
 }
-const xStack = createNativeStackNavigator();
+const LiveStack = createNativeStackNavigator();
 function LiveStackScreen() {
   return (
-    <xStack.Navigator>
-      <xStack.Screen name="LiveList" component={LiveScreen} options={screen_option} />
-      <xStack.Screen name="LiveLink" component={LiveLinkScreen} options={screen_option} />
-    </xStack.Navigator>
+    <LiveStack.Navigator>
+      <LiveStack.Screen name="LiveList" component={LiveScreen} options={screen_option} />
+      <LiveStack.Screen name="LiveLink" component={LiveLinkScreen} options={screen_option} />
+      <LiveStack.Screen name="LiveHSL" component={LiveHSLScreen} options={screen_option} />
+
+    </LiveStack.Navigator>
   );
 }
 
@@ -100,10 +105,14 @@ export default class App extends React.Component {
     };
   }
   componentDidMount(){
-    setTimeout(() => {
-      console.log('---------show live');
-      this.setState({allow_live:true})
-    }, 2000);
+    this.showLive();
+  }
+  showLive=async()=>{
+    console.log('-- is_allowed : starttt');
+
+    is_allowed = await _API.is_Live_allowed();
+    console.log('-- is_allowed : ',is_allowed);
+    this.setState({allow_live:is_allowed})
 
   }
   render(){
