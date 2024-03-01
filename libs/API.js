@@ -79,7 +79,7 @@ class API {
           if("AbortError" == err.name){
             throw "There is Issue with Network/Server!";
           }
-          console.log(err);
+          console.log(resource, options,err);
           return err;
         });
         clearTimeout(id);
@@ -275,7 +275,7 @@ class API {
         let img_logo_uri = res && res.team_logo ? res.team_logo : false;
         img_uri = img_uri && img_uri.slice(0,2)=="//" ? img_uri.replace("//","https://") : img_uri;
         img_logo_uri = img_logo_uri && img_logo_uri.slice(0,2)=="//" ? img_logo_uri.replace("//","https://") : img_logo_uri;
-        img_logo_uri=res && res.team_type && res.team_type==2? API_.get_cc_img(res.team_flag) : img_logo_uri;
+        img_logo_uri=res && res.team_type && res.team_type==2? this.get_cc_img(res.team_flag) : img_logo_uri;
         res.team_group_photo = img_uri;
         res.team_logo = img_logo_uri;
         if(img_logo_uri && img_logo_uri.split && img_logo_uri.split("?").length==2){
@@ -290,7 +290,7 @@ class API {
           console.log("not valide",res);
         }
         return res;
-      }).catch(error=>API_.showMsg(error,"danger"));
+      }).catch(error=>this.showMsg(error,"danger"));
     }
     
     async get_live_list(){

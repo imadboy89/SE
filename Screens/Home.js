@@ -1,6 +1,5 @@
 import { StyleSheet, View } from 'react-native';
 import { Text, Button, Card } from '@rneui/themed';
-import Matches from "../Components/list";
 
 //const matches = [{id:1,homeTeam:{logo:"",name:"barca"},awayTeam:{logo:"",name:"madrid"}},];
 const list = [{home_team:"madrid",away_team:"barca",home_team_status:"w",away_team_status:"l",time_played:10}];
@@ -17,18 +16,12 @@ export default function App() {
             <Text>adjective</Text>
             <Text>
                 well meaning and kindly.
-                <br />
                 {'"a benevolent smile"'}
             </Text>
             <Button size="sm" type="clear">
                 Learn More
             </Button>
         </Card>
-        <Matches 
-          loading={false} 
-          list={list} 
-          key_="home_team" key_key="id"
-            />      
             
             </View>
     );

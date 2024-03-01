@@ -22,10 +22,6 @@ export default class LiveLinkScreen extends React.Component {
   }
   componentDidMount(){
     this._isMounted=true;
-    let short_title = this.state.link && this.state.article.title ? this.state.article.title:"-";
-    short_title = short_title.length > 0 ? short_title.slice(0,30)+"..." : short_title;
-    this.props.navigation.setOptions({title: <Text>{short_title}</Text>})
-    this.render_header();
     this.didBlurSubscription = this.props.navigation.addListener(
     'focus',
     payload => {
@@ -34,9 +30,8 @@ export default class LiveLinkScreen extends React.Component {
         return;
         }
         this.state.live = this.props.route.params&&this.props.route.params.iframe ? this.props.route.params : undefined;
-        this.link = this.state.live && this.state.live.iframe ? this.state.live.iframe+"" : undefined;
-        this.setState({link:this.link,loading:false});
-        
+        this.setState({loading:false});
+        this.render_header();
     }
     );
 
@@ -62,7 +57,10 @@ export default class LiveLinkScreen extends React.Component {
         <IconButton
           name='refresh'
           onPress={this.refresh}
-
+        />
+        <IconButton
+          name='tv'
+          onPress={()=>this.props.navigation.navigate('LiveHSL',this.props.route.params)}
         />
     </View>
     )
@@ -71,11 +69,11 @@ export default class LiveLinkScreen extends React.Component {
   render() {
     return (
       <View  style={styles_live.container}>
-        {this.state.link!=undefined  && !this.state.loading?
+        {this.state.live && this.state.live.iframe  && !this.state.loading?
           <WebView
             originWhitelist={['*']}
             style={styles_live.webview}
-            source={{ uri: this.state.link }}
+            source={{ uri: this.state.live.iframe }}
             allowsFullscreenVideo={true}
             javaScriptEnabled={true}
             domStorageEnabled={true}
