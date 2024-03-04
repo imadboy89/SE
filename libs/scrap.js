@@ -586,7 +586,39 @@ class Scrap extends Scrap_tools{
     return head2head_matches;
   }
 
-
+  get_team(html){
+    let infos = {
+      "team_id":"",
+      "team_type":"",
+      "team_name_ar":"",
+      "team_name_en":"",
+      "team_sport":"",
+      "team_class":"",
+      "team_country":"",
+      "team_url":"",
+      "team_flag":"",
+      "team_year_established":"",
+      "team_year_closed":"",
+      "team_team_merged_into":"",
+      "team_logo":"",
+      "team_group_photo":"",
+      "team_dress_home":"",
+      "team_dress_away":"",
+      //"team_info":"",
+      //"team_info2":"",
+      //"comps":"array",
+      //"squad_club":"array",
+      //"news":"array",
+      //"transfers":"array",
+      
+      //"squad_club":"array",
+    }
+    for(let i=0;i<Object.keys(infos).length;i++){
+      const k = Object.keys(infos)[i];
+      infos[k] = infos[k]=="array" ? this.get_var_array(html, k) : this.get_var(html, k);
+    }
+    return infos;
+  }
 }
 
 export default Scrap;

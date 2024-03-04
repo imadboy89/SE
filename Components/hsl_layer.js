@@ -15,8 +15,14 @@ export default class Hsl extends React.Component {
           status:{}
       };
       this.video=null;
+      
+    }
+    pauseVideo=()=>{
+      this.video.current.pauseAsync() ;
     }
     componentDidMount(){
+      //this.willBlurSubscription = this.props.navigation.addListener('willBlur', this.pauseVideo);
+
     }
     statusUpdate=(status)=>{
         this.setState({status:status});
@@ -24,8 +30,6 @@ export default class Hsl extends React.Component {
     videoError=()=>{}
 
     render(){
-        const url='https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4';
-        const url2="https://rmtv.akamaized.net/hls/live/2043154/rmtv-en-web/master.m3u8";
       return (
         <View style={{flex:1,backgroundColor:'black',width:'100%',maxHeight:'80%'}}>
             <Video

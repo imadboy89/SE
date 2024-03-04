@@ -53,7 +53,7 @@ const render_match=(item,windowWidth)=>{
     const time_status = <>{item.is_done==true ? 
       <Text style={time_style}>{"Finished"}</Text> 
     : null}
-    {item.live==1 ? 
+    {item.live==1 && time_played? 
       <Text style={time_style}  noFonts={true}>{time_played}</Text>
     : null}
     {match_nbr!==0 ? 

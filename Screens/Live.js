@@ -61,6 +61,7 @@ export default class LiveScreen extends React.Component {
 
     this.render_header();
     this.load_interstitial();
+
   }
   render_header=()=>{
     this.props.navigation.setOptions({

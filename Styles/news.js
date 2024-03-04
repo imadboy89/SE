@@ -43,6 +43,8 @@ const styles_news = StyleSheet.create({
       backgroundColor: theme.news_title_backgroundColor,
     },
     news_title_t:{
+      fontWeight: 'bold',
+
       flex:1,
       color:theme.news_title_color
     },

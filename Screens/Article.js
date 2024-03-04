@@ -2,6 +2,7 @@ import React from "react";
 import {  View, Dimensions,ScrollView , ImageBackground, Text} from 'react-native';
 import styles_article from "../Styles/article";
 import Loader from "../Components/Loader";
+import EmptyView from  '../Components/emptyFooter';
 
 
 const kooora_domain="domain.com"
@@ -135,7 +136,7 @@ class ArticleScreen extends React.Component {
             <Text style={styles_article.article_title_t}>{this.state.article && this.state.article.title_news ? this.state.article.title_news : ""}</Text>
             
             {this.state.loading ? <Loader/> : body_composed  }
-            
+            <EmptyView />
           </View>
         </View>
         </ScrollView >

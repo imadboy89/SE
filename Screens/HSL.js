@@ -16,8 +16,10 @@ export default class LiveLinkScreen extends React.Component {
         link:undefined,
         
     };
+    this.video_ref=null;
     this.is_focused=false;
   }
+
   componentDidMount(){
     this._isMounted=true;
     this.didBlurSubscription = this.props.navigation.addListener(
@@ -32,6 +34,7 @@ export default class LiveLinkScreen extends React.Component {
         this.render_header();
     }
     );
+
 
   }
   componentWillUnmount(){
@@ -64,6 +67,7 @@ export default class LiveLinkScreen extends React.Component {
         {this.state.live && this.state.live.url  && !this.state.loading?
           <HSL
           link={this.state.live.url}
+          navigation={this.props.navigation}
           />
           :null}
 

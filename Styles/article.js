@@ -62,6 +62,8 @@ const styles_news = StyleSheet.create({
     },
 
     article_title_t:{
+      fontWeight: 'bold',
+
         color:theme.article_title_color,
         backgroundColor:theme.article_title_backgroundColor,
     },
@@ -74,19 +76,6 @@ const styles_news = StyleSheet.create({
     image_style : {
       resizeMode:"stretch",
       width:"100%",
-    },
-    news_img_v:{
-      flex:1
-    },
-    news_title_v:{
-      //flex:1,
-      padding:5,
-      backgroundColor: theme.news_title_backgroundColor,
-    },
-    news_title_t:{
-      flex:1,
-      color:theme.news_title_color,
-      fontSize:18,
     },
   });
 

@@ -54,6 +54,10 @@ class API {
     debugMsg(msg){
       console.log("debugMsg : "+msg)
     }
+    showMsg(msg){
+      console.log("showMsg : "+msg)
+    }
+    
     running_calls_remove(url){
         this.running_calls = this.running_calls.filter(u=>url!=url);
     }
@@ -141,7 +145,6 @@ class API {
             error_msg += "\nUrl : "+url;
             error_msg += "\nOptions : "+JSON.stringify(configs);
             this.debugMsg(error_msg,"warning");
-            console.log('ERROR', error);
             this.error = error;
             return "";
           });
@@ -251,15 +254,12 @@ class API {
         });
     }
     
-    async get_team(team_id,save_db=true,teams_info=undefined,get_fresh=false){
-      if(teams_info==undefined){
-        teams_info = await this.getTeam_logo_k();
-      }
-      if(get_fresh==false && teams_info[team_id]){
-        return teams_info[team_id];
-      }
+
+
+    async get_team(team_id){
       let url = this.kooora_team.replace("[id]", team_id);//"https://m.kooora.com/?team="+team_id+"&arabic";
       url = this.scraping_pages ? "scarp_"+url : url;
+      console.log("url",url);
       return this.http(url,"GET",null,{})
       .then(resp=>{
         let res = [];
@@ -275,7 +275,6 @@ class API {
           scrap.isWeb = this.isWeb;
           res = scrap.get_team(resp);
         }
-  
         let img_uri = res && res.team_group_photo ? res.team_group_photo : false;
         let img_logo_uri = res && res.team_logo ? res.team_logo : false;
         img_uri = img_uri && img_uri.slice(0,2)=="//" ? img_uri.replace("//","https://") : img_uri;
@@ -288,8 +287,7 @@ class API {
         }
         res.team_country;
         if(res && (res.team_name_ar || res.team_name_en) ){
-          //API_.setTeam_logo(res["team_name_ar"], img_logo_uri, this.props.league_name, this.props.league_id,true,true);
-          this.setTeam_logo_k(res,save_db);
+          //this.setTeam_logo_k(res,save_db);
           
         }else{
           console.log("not valide",res);
@@ -300,7 +298,6 @@ class API {
     
     async get_live_list(){
       let res = await this.http(this.url_live_list,"GET",null,{},true);
-      console.log(res)
       if(res && res.length){
         let id=1;
         res = res.map(l=>{
@@ -311,7 +308,17 @@ class API {
       }
       return res;
     }
+    async saving_teams(){
+      const team = await this.get_team(12);
+      console.log(Object.keys(team));
+      return;
+      for (let i = 0; i < 100000; i++) {
+        const team = this.get_team(i);
+        this.fetch()
+      }
+    }
     async is_Live_allowed(){
+      this.saving_teams()
       const res = await this.http(this.url_live_perm,"GET",null,{},true);
       if(res && res.length && res[0].display){
         return true;
