@@ -110,7 +110,7 @@ export default class App extends React.Component {
   showLive=async()=>{
     console.log('-- is_allowed : starttt');
 
-    is_allowed = await _API.is_Live_allowed();
+    const is_allowed = await _API.is_Live_allowed();
     console.log('-- is_allowed : ',is_allowed);
     this.setState({allow_live:is_allowed})
 

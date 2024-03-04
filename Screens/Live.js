@@ -1,10 +1,9 @@
 import React from "react";
 import { StyleSheet, Platform, View } from 'react-native';
 import ListCustom from "../Components/list";
-
 import styles_news from "../Styles/news";
 import IconButton from '../Components/iconBtn';
-import {Interstitial_load, interstitial_addLoadedEvent,interstitial_addClosedEvent} from '../Components/admobs';
+import Constants from 'expo-constants'
 
 
 export default class LiveScreen extends React.Component {
@@ -17,6 +16,8 @@ export default class LiveScreen extends React.Component {
     };
     this.is_interstitial_loaded=false,
     this.live2open=false;
+    // for tests envirenments 
+    this.showAds = Constants.appOwnership != 'expo' && !_API.isWeb;
   }
   onLoaded=()=>{
     console.log('-----------ADSLoaded')
@@ -33,12 +34,14 @@ export default class LiveScreen extends React.Component {
     
   }
   load_interstitial(){
-    this.interstitial = Interstitial_load(this.onLoaded,this.onClosed);
-   
+    if(this.showAds){
+      const admobs = require('../Components/admobs');
+      this.interstitial = admobs.Interstitial_load(this.onLoaded,this.onClosed);
+    }
 
   }
   interstitial_showReady = async() => { 
-    if(Platform.OS === 'web'){return true;}
+    if(!this.showAds){return true;}
     try {
       this.interstitial.show();
     } catch (error) {

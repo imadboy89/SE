@@ -6,12 +6,12 @@ import {Base64} from "react-native-essential-tools";
 
 class API {
     constructor() {
+        alert("v1.01");
         this.time_offset = (new Date()).getTimezoneOffset()/60;
         this.is_auth = false;
         this.running_calls = [];
         this.url_live_perm = "http://yallashoot.cloud/showiptv.json";
         this.url_live_list = 'http://yallashoot.cloud/tv.json';
-        this.server_url = "https://imad.is-a.dev/imad_404/";
         this.error = null;
         this.data = null;
         this.main_domain    = "goalzz.com";
@@ -21,14 +21,19 @@ class API {
         this.kooora_matches = `https://www.${this.main_domain}/?region=-1&area=[area]&dd=`;
         this.kooora_match   = `https://www.${this.main_domain}/?ajax=1&m=[id]&arabic`;
         this.kooora_team    = `https://m.${this.main_domain}/?team=[id]&arabic`;
-        this.proxy_post = `${this.server_url}.proxy2.php?url=`;
-        this.proxy_get  = `${this.server_url}.proxy.php?url=`;
-        this.proxy_scrp = `${this.server_url}scrp.php?url=`;
-        this.cc_url = `https://o.${this.main_domain}/f/big/[cc].png`;
-        this.cc_url_small = `https://o.${this.main_domain}/f/[cc].png`;
         this.usingproxy = Platform.OS == 'web';
         this.isWeb = Platform.OS == 'web';
+        if(this.isWeb){
+          this.server_url = "https://imad.is-a.dev/imad_404/";
+          this.proxy_post = `${this.server_url}.proxy2.php?url=`;
+          this.proxy_get  = `${this.server_url}.proxy.php?url=`;
+          this.proxy_scrp = `${this.server_url}scrp.php?url=`;
+  
+        }
 
+        this.cc_url = `https://o.${this.main_domain}/f/big/[cc].png`;
+        this.cc_url_small = `https://o.${this.main_domain}/f/[cc].png`;
+        this.scraping_pages=false
         this.user_agents = {
             "Windows 10":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.72 Safari/537.36",
             "Windows 7":"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.72 Safari/537.36",
