@@ -23,7 +23,11 @@ import API from './libs/API';
 
 import LiveScreen from './Screens/Live';
 import LiveLinkScreen from './Screens/LiveLink';
+import TEAMS from "./react-native-essential-tools/libs/teams_logos.mjs";
 
+const tm = new TEAMS();
+tm.addTeams(1,"adadssss111")
+tm.get_teams_logo([1,])
 console.log('staaaaaart')
 global.isWeb = Platform.OS == 'web';
 global.isIOS = Platform.OS == 'ios';
