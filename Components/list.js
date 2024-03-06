@@ -163,7 +163,6 @@ class ItemsList extends React.Component {
   }
 
   _render_header=({ section: { title,img,id,is_koora,options } })=>{
-    //console.log(title,img,id);
     const fav_icon = this.get_fav_icon(title,id);
     if(title==undefined || title==""){
       return null;
@@ -250,7 +249,6 @@ class ItemsList extends React.Component {
         _items = _items==undefined ? [this.list[i],] : _items;
         final_list = final_list.concat(_items);
       }
-      console.log("heere");
       //to avoid 'FlatList : Invariant Violation: Changing numColumns on the fly is not supported' error
       if(this.props.loading==false && this.props.list && this.props.list.length == 0){
         return (

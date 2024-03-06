@@ -13,7 +13,6 @@ function is_android(){
   return Platform.OS == "android";
 }
 async function Admob_init(){
-  
   if (__DEV__){
     return ;
   }

@@ -88,7 +88,6 @@ class API {
           if("AbortError" == err.name){
             throw "There is Issue with Network/Server!";
           }
-          console.log(resource, options,err);
           return err;
         });
         clearTimeout(id);
@@ -259,7 +258,6 @@ class API {
     async get_team(team_id){
       let url = this.kooora_team.replace("[id]", team_id);//"https://m.kooora.com/?team="+team_id+"&arabic";
       url = this.scraping_pages ? "scarp_"+url : url;
-      console.log("url",url);
       return this.http(url,"GET",null,{})
       .then(resp=>{
         let res = [];
@@ -310,7 +308,6 @@ class API {
     }
     async saving_teams(){
       const team = await this.get_team(12);
-      console.log(Object.keys(team));
       return;
       for (let i = 0; i < 100000; i++) {
         const team = this.get_team(i);
