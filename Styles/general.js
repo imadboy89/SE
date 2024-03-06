@@ -1,5 +1,5 @@
 import {  StyleSheet, Dimensions, Platform} from 'react-native';
-import theme_base from "./theme_2";
+import theme_base from "./theme_3";
 function isMobile(){
   var isMobile = true;
   if(isWeb==false){
