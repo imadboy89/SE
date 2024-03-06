@@ -24,10 +24,12 @@ import API from './libs/API';
 import LiveScreen from './Screens/Live';
 import LiveLinkScreen from './Screens/LiveLink';
 
-console.log('staaaaaart')
 global.isWeb = Platform.OS == 'web';
 global.isIOS = Platform.OS == 'ios';
 global._API   = new API();
+global.adUnitId_banner_ios = "ca-app-pub-3940256099942544/9214589741";//not used
+global.adUnitId_inters_ios = "ca-app-pub-3940256099942544/1033173712";
+
 if(isWeb){
   try {
     document.getElementById("root").style.overflow = "hidden";
@@ -105,14 +107,17 @@ export default class App extends React.Component {
     };
   }
   componentDidMount(){
-    this.showLive();
+    this.showLive(0);
   }
-  showLive=async()=>{
-    console.log('-- is_allowed : starttt');
-
+  showLive=async(retired=0)=>{
     const is_allowed = await _API.is_Live_allowed();
-    console.log('-- is_allowed : ',is_allowed);
     this.setState({allow_live:is_allowed})
+    if(retired==0 && !is_allowed){
+      //just incase of a network issue or something else, retry to check the dislay after 5seond;
+      setTimeout(() => {
+        this.showLive(1);
+      }, 5000);
+    }
 
   }
   render(){

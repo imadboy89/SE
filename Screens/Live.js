@@ -20,11 +20,9 @@ export default class LiveScreen extends React.Component {
     this.showAds = Constants.appOwnership != 'expo' && !_API.isWeb;
   }
   onLoaded=()=>{
-    console.log('-----------ADSLoaded')
     this.is_interstitial_loaded=true;
   }
   onClosed=()=>{
-    console.log('***********ADSCLOSEd')
     this.is_interstitial_loaded=false;
     if(this.live2open){
       this.props.navigation.navigate('LiveHSL',this.live2open);
