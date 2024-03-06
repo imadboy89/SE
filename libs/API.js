@@ -255,7 +255,7 @@ class API {
 
 
     async get_team(team_id){
-      let url = this.kooora_team.replace("[id]", team_id);//"https://m.kooora.com/?team="+team_id+"&arabic";
+      let url = this.kooora_team.replace("[id]", team_id);
       url = this.scraping_pages ? "scarp_"+url : url;
       return this.http(url,"GET",null,{})
       .then(resp=>{
@@ -314,7 +314,6 @@ class API {
       }
     }
     async is_Live_allowed(){
-      this.saving_teams()
       const res = await this.http(this.url_live_perm,"GET",null,{},true);
       if(res && res.length && res[0].display){
         return true;
