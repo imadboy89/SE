@@ -38,7 +38,12 @@ export default class LiveLinkScreen extends React.Component {
 
   }
   componentWillUnmount(){
+
     this._isMounted=false
+  }
+  go_ifram=()=>{
+    this.setState({live:{}});
+    this.props.navigation.navigate('LiveLink',this.props.route.params);
   }
   render_header=()=>{
     let title = this.state.live && this.state.live.title ? this.state.live.title : "";
@@ -51,7 +56,7 @@ export default class LiveLinkScreen extends React.Component {
         />
         <IconButton
           name='safari'
-          onPress={()=>this.props.navigation.navigate('LiveLink',this.props.route.params)}
+          onPress={this.go_ifram}
         />
     </View>
     )

@@ -8,6 +8,7 @@ const styles_news = StyleSheet.create({
       backgroundColor: theme.background_color_default,
       alignItems: 'center',
       justifyContent: 'center',
+      //backgroundColor:"red"
 
     },
     container:{
@@ -20,17 +21,34 @@ const styles_news = StyleSheet.create({
       marginRight:5,
       //marginLeft:5,
       borderRadius:10,
-      borderWidth:1,
+      borderWidth:4,
       borderColor:"#5e5e698a",
       height:230,
+      //backgroundColor:"red"
+
       
     },
+    live_img_background:{
+      borderRadius:10,
+
+      flex:1,
+      width:"100%"
+
+    },
+    live_image_style : {
+      borderRadius:10,
+      resizeMode:"center",
+      width:"100%",
+    },
     img_background:{
+      borderRadius:10,
+
       flex:1,
       width:"100%"
     },
     image_style : {
-      resizeMode:"stretch",
+      borderRadius:10,
+      resizeMode:"cover",
       width:"100%",
     },
     news_img_v:{

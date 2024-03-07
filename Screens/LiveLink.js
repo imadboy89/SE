@@ -49,6 +49,10 @@ export default class LiveLinkScreen extends React.Component {
   hsl=()=>{
     this.setState();
   }
+  go_iptv=()=>{
+    this.setState({live:{}});
+    this.props.navigation.navigate('LiveHSL',this.props.route.params)
+  }
   render_header=()=>{
     let title = this.state.live && this.state.live.title ? this.state.live.title : "";
     this.props.navigation.setOptions({title: title,
@@ -60,7 +64,7 @@ export default class LiveLinkScreen extends React.Component {
         />
         <IconButton
           name='tv'
-          onPress={()=>this.props.navigation.navigate('LiveHSL',this.props.route.params)}
+          onPress={this.go_iptv}
         />
     </View>
     )

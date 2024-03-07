@@ -26,7 +26,7 @@ const window_height = Dimensions.get('window').height;
 const isWeb = Platform.OS == 'web';
 const isIOS = Platform.OS == 'ios';
 
-const header_height = isIOS? 90 : 50;
+const header_height = isIOS? 80 : 50;
 
 const _isMobile = isMobile();
 const isBigScreen = Dimensions.get('window').width>900 || Dimensions.get('window').height>900

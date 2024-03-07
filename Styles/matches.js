@@ -9,23 +9,24 @@ const styles_home = StyleSheet.create({
       //paddingTop: Constants.statusBarHeight,
       backgroundColor: theme.background_color_default,
       color : "#fff",
+
       
     },
-    list_container:{
-    },
+
     matche_container:{
       backgroundColor: theme.matche_container_backgroundColor,
-      width:"98%",
+      width:"100%",
       flexWrap:'wrap',
-      marginVertical:10,
+      marginVertical:8,
       marginHorizontal:6,
       
       flex: 1 ,
-      height: isWeb ? 150 : 135,
+      height: isWeb ? 150 : 155,
       //marginLeft:5,
       borderRadius:10,
       //borderWidth:1,
       borderColor:"#5e5e698a",
+      
       
     },
     matche_team_logo_view:{
@@ -38,7 +39,7 @@ const styles_home = StyleSheet.create({
     matche_team_time_view:{
       flex:1,
       backgroundColor: theme.match_time_backgroundColor,
-      borderWidth:1,
+      borderTopWidth:1,
       borderColor:"#5e5e698a",
       justifyContent: 'center',
       alignItems:'center',

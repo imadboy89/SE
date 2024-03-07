@@ -92,6 +92,7 @@ export default class LiveScreen extends React.Component {
       onclick={this.onclick}
       type="live" 
       id="id"
+      minWidth={150}
         />  
               </View>);
 

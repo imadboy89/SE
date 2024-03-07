@@ -407,8 +407,8 @@ class Matchcreen extends React.Component {
         <View style={{height:200}}>
           {render_match(this.state.matche_details, this.windowWidth)}
         </View>
-        {this.state.loading ? <Loading /> : null}
-        {this.get_info()}
+        {this.state.loading ? <Loading /> : this.get_info()}
+        
       </ScrollView>
     );
   }

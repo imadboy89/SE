@@ -12,16 +12,20 @@ export default class Hsl extends React.Component {
       this.state = {
           loading:true,
           allow_live:false,
-          status:{}
+          status:{},
       };
       this.video=null;
       
     }
     pauseVideo=()=>{
-      this.video.current.pauseAsync() ;
+      this.video?.pauseAsync() ;
     }
     componentDidMount(){
-      //this.willBlurSubscription = this.props.navigation.addListener('willBlur', this.pauseVideo);
+      this.willBlurSubscription=this.props.navigation.addListener(
+        'blur', payload => {
+          this.pauseVideo();
+        });
+  
 
     }
     statusUpdate=(status)=>{
@@ -33,7 +37,7 @@ export default class Hsl extends React.Component {
       return (
         <View style={{flex:1,backgroundColor:'black',width:'100%',maxHeight:'80%'}}>
             <Video
-            ref={this.video}
+            ref={ref=>{this.video=ref;}}
             style={styles.video}
             source={{
             uri: this.props.link,
@@ -41,7 +45,6 @@ export default class Hsl extends React.Component {
             shouldPlay={true}
             useNativeControls
             resizeMode={ResizeMode.CONTAIN}
-
             isLooping
             onPlaybackStatusUpdate={this.statusUpdate}
         />
