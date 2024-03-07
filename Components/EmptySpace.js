@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 
 
-class Comp extends React.Component {
+class EmptySpace extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
@@ -18,4 +18,4 @@ class Comp extends React.Component {
 }
 
  
-export default Comp;
+export default EmptySpace;

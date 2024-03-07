@@ -58,6 +58,16 @@ export default class Teams {
             }, false);
 
     }
+    async updateTeams(id,logo){
+        const sqlQuery = `INSERT INTO ${this.table_name} VALUES(?,?) ON CONFLICT(id) DO UPDATE SET logo = excluded.logo`;
+        const readOnly = false;
+        return await this.sqlDB.transactionAsync(async tx => {
+            const result = await tx.executeSqlAsync(sqlQuery, [id,logo]);
+            console.log(result);
+            return true
+            }, false);
+
+    }
     async get_teams_logo(ids){
         let result = {}; 
 

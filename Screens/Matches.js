@@ -47,7 +47,6 @@ export default class MatchesScreen extends React.Component {
             })
           })
         }
-        console.log("mactches : ",data.length)
         this.setState({loading:false,list:data})
       });
 
@@ -90,6 +89,7 @@ export default class MatchesScreen extends React.Component {
         onclick={this.onclick}
         type="matches" 
         id="id"
+        navigation={this.props.navigation}
           />  
                 </View>);
   

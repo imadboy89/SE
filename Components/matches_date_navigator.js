@@ -36,9 +36,10 @@ const styles = StyleSheet.create({
   },
   buttons:{
     //backgroundColor:theme.headerStyle_backgroundColor,
-    width:40,
-    height:40,
+    width:60,
+    height:60,
     borderRadius:30,
+    //backgroundColor:"red"
 
     //justifyContent:"center"
   }
@@ -80,7 +81,7 @@ class DateNav extends React.Component {
             <IconButton 
               disabled={this.props.loading}
               name="arrow-circle-left" 
-              size={50} 
+              size={47} 
               style={styles.buttons} 
               onPress={()=>this.previousPage()}  />
             <TouchableOpacity
@@ -94,7 +95,7 @@ class DateNav extends React.Component {
             <IconButton 
               disabled={this.props.loading}
               name="arrow-circle-right" 
-              size={50} 
+              size={47} 
               style={styles.buttons} 
               onPress={()=>this.nextPage()}  
               />

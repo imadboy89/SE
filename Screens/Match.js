@@ -2,7 +2,7 @@ import React from "react";
 import { View, TouchableHighlight, Modal, Text, Switch, TouchableOpacity,Image, Dimensions, ScrollView, RefreshControl} from 'react-native';
 import Loading from '../Components/Loader';
 import styles_match from "../Styles/match"
-import render_match  from '../Components/render_match';
+import MatchCard from '../Components/MatchCard';
 import IconButton from '../Components/iconBtn';
 
 let list = [
@@ -74,10 +74,9 @@ class Matchcreen extends React.Component {
       return;
     }
     _API.get_match(id).then(resp=>{
-
-      console.log("----",resp)
       if(resp ){
-        
+        resp.home_team_logo = this.state.matche_details.home_team_logo;
+        resp.away_team_logo = this.state.matche_details.away_team_logo;
         this.state.matche_details = resp;
         this.state.matche_details.round = this.state.matche_details.round.replace("الأسبوع","Week")
         this.home_team_ar = this.state.matche_details.home_team_ar ? this.state.matche_details.home_team_ar : this.state.matche_details.home_team;
@@ -88,135 +87,12 @@ class Matchcreen extends React.Component {
       this.setState({loading:false});
     });
   }
-
-  get_View_general(){
-    this.state.matche_details.channels = this.state.matche_details.channels ? this.state.matche_details.channels : [];
-    this.state.matche_details.channels = this.state.matche_details.channels.sort((a,b)=>{return ( this.state.favorite.indexOf(a.en_name)>=this.state.favorite.indexOf(b.en_name))?-1:1;});
-    this.state.matche_details.channels = this.state.matche_details.channels.sort((a,b)=>{return (a.commentator!=undefined && this.state.favorite.indexOf(b.en_name)==-1  )?-1:0;});
-    
-    if(this.state.matche_details=={}) {return null;}
-
-    this.state.matche_details.status       = this.state.matche_details.status ? this.state.matche_details.status : "-";
-    this.state.matche_details.league       = this.state.matche_details.league ? this.state.matche_details.league : "-";
-    this.state.matche_details.phase        = this.state.matche_details.phase ? this.state.matche_details.phase : "-";
-    this.state.matche_details.group        = this.state.matche_details.group ? this.state.matche_details.group : "-";
-    this.state.matche_details.round        = this.state.matche_details.round ? this.state.matche_details.round : "-";
-    this.state.matche_details.retour_score = this.state.matche_details.retour_score ? this.state.matche_details.retour_score : "-";
-    this.state.matche_details.stadium      = this.state.matche_details.stadium ? this.state.matche_details.stadium : "-";
-    this.state.matche_details.desc         = this.state.matche_details.desc ? this.state.matche_details.desc : "-";
-    this.state.matche_details.match_status = this.state.matche_details.match_status ? this.state.matche_details.match_status : "OK";
-    
-    //const fav_style_h = this.state.matche_details && this.get_fav_icon(row.team.id, true) ? {backgroundColor: global_theme.fav_background} : {};
-    //const fav_style_a = this.state.matche_details && this.get_fav_icon(row.team.id, true) ? {backgroundColor: global_theme.fav_background} : {};
-    const fav_style={};
-    const team_badge_h= this.state.matche_details && this.state.matche_details.home_team_logo ? this.state.matche_details.home_team_logo : false;
-    const team_badge_a= this.state.matche_details && this.state.matche_details.away_team_logo ? this.state.matche_details.away_team_logo : false;
-    const style_team_name ={flexDirection:'row',flexWrap:'wrap',width:"100%",height:50,borderColor:global_theme.text_color_default,borderBottomWidth :1,borderRadius:40,justifyContent:"center"};
-
-    const live_style = this.state.matche_details.live ? {"color":global_theme.live_borderColor}:{};
-    
-    const head2head_info = this.state.head2head && Object.keys(this.state.head2head).length==3 ?
-    Object.keys(this.state.head2head).map(k=><Text style={[styles_match.text_info,{color:"orange"}]} key={k}>{k} : {this.state.head2head[k]}</Text>)
-    : null;
-    return (
-      <View style={styles_match.view_tab}>
-        <Text style={styles_match.text_info}>{this.state.matche_details.datetime ? this.state.matche_details.datetime : this.state.matche_details.date+" "+API_.convert_time(this.state.matche_details.time)} </Text>
-        {1==2 && this.state.matche_details && this.home_team_ar!="-" ?
-          <TouchableOpacity 
-            activeOpacity={0.7}
-            style={[fav_style, style_team_name]} 
-            onPress={() => { if (this.state.matche_details.home_team_id)this.setState({modalVisible_team:true,team_id:this.state.matche_details.home_team_id}) } }
-            delayLongPress={300}
-            >
-          <View style={{flex:1}}></View>
-          <View style={{flex:5}}><Text style={styles_match.text_info}>HomeTeam :</Text></View>
-          <View style={{flex:2,padding:2}} >
-            {team_badge_h ? <Image style={{height:"95%",width:"95%"}} source={{uri: team_badge_h}} /> : null}
-          </View>
-          <View style={{flex:7}}><Text style={styles_match.text_info} numberOfLines={1}> {this.home_team_ar}</Text></View>
-          <View style={{flex:1}}></View>
-        </TouchableOpacity>
-         : null}
-        {1==2 &&  this.state.matche_details && this.away_team_ar!="-" ?
-          <TouchableOpacity 
-          activeOpacity={0.7}
-          style={[fav_style, style_team_name]} 
-          onPress={() => { if (this.state.matche_details.away_team_id)this.setState({modalVisible_team:true,team_id:this.state.matche_details.away_team_id}) } }
-          delayLongPress={300}
-          >
-        <View style={{flex:1}}></View>
-        <View style={{flex:5}}><Text style={styles_match.text_info}>AwayTeam :</Text></View>
-        <View style={{flex:2,padding:2}} >
-          {team_badge_a ? <Image style={{height:"95%",width:"95%"}} source={{uri: team_badge_a}} /> : null}
-        </View>
-        <View style={{flex:7}}><Text style={styles_match.text_info} numberOfLines={1}> {this.away_team_ar}</Text></View>
-        <View style={{flex:1}}></View>
-      </TouchableOpacity>
-         : null}
-        {this.state.matche_details.status!="-" && this.state.matche_details.match_status=="ok" ?
-          <Text style={styles_match.text_info}>Status : {this.state.matche_details.status}</Text>
-         : null}
-        {this.state.matche_details.match_status!="ok" ?
-          <Text style={[styles_match.text_info,{color:"red"}]}>Status : {this.state.matche_details.match_status}</Text>
-         : null}
-        {this.state.matche_details.time_played && this.state.matche_details.time_played!="-" ?
-          <Text style={[styles_match.text_info,live_style]}>Playing time : {this.state.matche_details.time_played}</Text>
-         : null}
-        {this.state.matche_details.league!="-" ?
-          <Text style={styles_match.text_info}>League : {this.state.matche_details.league}</Text>
-         : null}
-        {this.state.matche_details.phase!="-" ?
-          <Text style={styles_match.text_info}>Phase : {this.state.matche_details.phase}</Text>
-         : null}
-        {this.state.matche_details.group!="-" ?
-          <Text style={styles_match.text_info}>Group : {this.state.matche_details.group}</Text>
-         : null}
-        {this.state.matche_details.round!="-" ?
-          <Text style={styles_match.text_info}>Round : {this.state.matche_details.round}</Text>
-         : null}
-        {this.state.matche_details.retour_score!="-" ?
-          <Text style={styles_match.text_info}>First leg : {this.state.matche_details.retour_score}</Text>
-         : null}
-        {this.state.matche_details.stadium!="-" ?
-          <Text style={styles_match.text_info}>Staduim : {this.state.matche_details.stadium}</Text>
-         : null}
-        {this.state.matche_details.referee && this.state.matche_details.referee!="-" ?
-          <Text style={styles_match.text_info}>Referee : {this.state.matche_details.referee}</Text>
-         : null}
-        {this.state.matche_details.desc!="-" ?
-          <Text style={[styles_match.text_info,{color:"Orange"}]}>Description : {this.state.matche_details.desc}</Text>
-         : null}
-        {head2head_info && head2head_info.length>0 && 
-        <Text style={styles_match.text_info}>Head to Head : </Text>
-        }
-        {head2head_info}
-
-        <View style={{flexDirection:'row', flexWrap:'wrap', flex:1}}>
-          <Text style={styles_match.text_info}>Live match :</Text>
-          <Switch
-                    style={{justifyContent:"center",marginVertical:"auto",marginHorizontal:10,width:40}}
-                    trackColor={{ false: "#767577", true: "#81b0ff" }}
-                    thumbColor={this.state.is_live_match ? "#f5dd4b" : "#f4f3f4"}
-                    ios_backgroundColor="#3e3e3e"
-                    onValueChange={async()=>{
-                      if(this.state.is_live_match){
-                        this.state.is_live_match = !await backup.remove_live_match(this.state.matche_details.id, this.away_team_ar + " VS " + this.home_team_ar);
-                      }else{
-                        this.state.is_live_match = await backup.save_live_match(this.state.matche_details, this.away_team_ar + " VS " + this.home_team_ar);
-                      }
-                      this.setState({ is_live_match : this.state.is_live_match ? true : false});
-                    }}
-                    value={this.state.is_live_match}
-                  />
-        </View>
-        {channels!=null && channels.length>0 ?
-          <Text style={styles_match.text_info}>Channels :</Text>
-         : null}
-        {channels!=null && channels.length>0 ?
-          channels
-         : null}
-      </View> 
-    );
+  get_head2head(){
+    if(!this.state.head2head || Object.keys(this.state.head2head).length!=3 ){
+      return null
+    }
+    const head2head_info = bject.keys(this.state.head2head).map(k=><Text style={[styles_match.text_info,{color:"orange"}]} key={k}>{k} : {this.state.head2head[k]}</Text>);
+    return head2head_info;
   }
   get_subs(type_){
     let substitutions = []
@@ -386,7 +262,12 @@ class Matchcreen extends React.Component {
           />}
       >
         <View style={{height:250,width:"95%"}}>
-          {render_match(this.state.matche_details, this.windowWidth)}
+          <MatchCard 
+            item={this.state.matche_details} 
+            windowWidth={this.windowWidth} 
+            pressableTeams={true} 
+            navigation={this.props.navigation}
+            />
         </View>
         {this.state.loading ? <Loading /> : this.get_info()}
         

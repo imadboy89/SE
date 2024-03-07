@@ -1,16 +1,16 @@
 import * as React from 'react';
-import {  ScrollView, View, TouchableOpacity, Image, ImageBackground  } from 'react-native';
+import {  ScrollView, View, TouchableOpacity  } from 'react-native';
 import { SectionList, FlatList, Dimensions,TouchableHighlight, Text } from 'react-native';
 import Loader from "./Loader";
 import styles_matches from "../Styles/matches";
 import styles_news from "../Styles/news";
 import styles_list from "../Styles/list";
+import { Image,ImageBackground } from 'expo-image';
 
 
 import {_isMobile,isBigScreen, isWeb} from "../Styles/general";
-import {img_domain} from "../libs/config";
-import render_match  from './render_match';
-import emptyView from  './emptyFooter';
+import EmptySpace from  './EmptySpace';
+import MatchCard from './MatchCard';
 
 class ItemsList extends React.Component {
   constructor(props) {
@@ -80,12 +80,17 @@ class ItemsList extends React.Component {
   get_item(item){
     if(this.props.type=="matches"){
 
-      return render_match(item,this.windowWidth);
+      return <MatchCard item={item} windowWidth={this.windowWidth} navigation={this.props.navigation}/>
 
     }else if(this.props.type=="news"){
       return (
         <View style={[styles_news.container]}>
-          <ImageBackground style={styles_news.img_background} source={{uri: item.img}} imageStyle={styles_news.image_style}>
+          <ImageBackground 
+            style={styles_news.img_background} 
+            source={{uri: item.img}} 
+            imageStyle={styles_news.image_style}
+            
+            >
             { item.date ? <Text style={styles_news.date_text}>{item.date}</Text> : null}
             <View style={styles_news.news_img_v}>
             </View>
@@ -103,7 +108,7 @@ class ItemsList extends React.Component {
             style={styles_news.live_img_background} 
             source={{uri: item.logo}} 
             imageStyle={styles_news.live_image_style}
-            resizeMode="center"
+            contentFit="contain"
             >
             { item.date ? <Text style={styles_news.date_text}>{item.date}</Text> : null}
             <View style={styles_news.news_img_v}>
@@ -229,7 +234,7 @@ class ItemsList extends React.Component {
             <ListToRender
 
               ListHeaderComponent = {this.props.ListHeaderComponent!=undefined ? this.props.ListHeaderComponent : undefined}
-              ListFooterComponent = {emptyView}
+              ListFooterComponent = {EmptySpace}
               numColumns={this.state.numColumns} 
               stickySectionHeadersEnabled={false}
               onEndReached = {this.props.onEndReached}

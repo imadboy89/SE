@@ -14,6 +14,7 @@ class API {
         this.error = null;
         this.data = null;
         this.main_domain    = "goalzz.com";
+        this.main_koora_domain="kooora.com";
         this.kooora_domain  = `https://${this.main_domain}/`;
         this.kooora_news    = `https://m.${this.main_domain}/?n=[cat]&o=ncma&arabic&pg=[pg]`;
         this.kooora_article = `https://m.${this.main_domain}/?[article_id]&arabic`;
@@ -30,8 +31,8 @@ class API {
   
         }
 
-        this.cc_url = `https://o.${this.main_domain}/f/big/[cc].png`;
-        this.cc_url_small = `https://o.${this.main_domain}/f/[cc].png`;
+        this.cc_url = `https://o.${this.main_koora_domain}/f/big/[cc].png`;
+        this.cc_url_small = `https://o.${this.main_koora_domain}/f/[cc].png`;
         this.scraping_pages=false
         this.user_agents = {
             "Windows 10":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.72 Safari/537.36",
@@ -42,13 +43,51 @@ class API {
             "iPhone":"Mozilla/5.0 (iPhone; CPU iPhone OS 14_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/87.0.4280.77 Mobile/15E148 Safari/604.1",
             "iPad" : "Mozilla/5.0 (iPad; CPU OS 14_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/87.0.4280.77 Mobile/15E148 Safari",
           }
-          const default_ua = this.user_agents["Linux"];
-          this.headers = {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json; charset=utf-8',
-            'User-Agent': default_ua
-          }
-      
+        const default_ua = this.user_agents["Linux"];
+        this.headers = {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json; charset=utf-8',
+          'User-Agent': default_ua
+        }
+        this.player_positions={
+          0:"Manager",
+          1:"Gool-keeper",
+          2:"Defense",
+          3:"MidField",
+          4:"Attack"
+        };
+        this.sport_types={
+          0:'Football',
+          1:'Basketball',
+          2:'Handball',
+          3:'voleyball',
+          4:'Ice hockey',
+          5:'-',
+          6:'Tennis',
+          7:'-',
+          8:'Futsall',
+        };
+        this.sport_scoops={
+          'l':'National',
+          'o':'International',
+        }
+        this.matches_categories ={
+          "0":"FootBall",
+          "1":"Other",
+          "6":"Palying now",
+          "101":"Basketball",
+          "103":"Voleyball",
+          "106":"Tennis",
+          "199":"Women competitions",
+          "201":"Europ",
+          "202":"Africa&Asia",
+          "102":"Handball",
+      };
+      this.team_types= [
+        " - ",
+        "Club",
+        "National team",
+      ]
     }
     debugMsg(msg){
       console.log("debugMsg : "+msg)

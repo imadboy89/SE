@@ -506,9 +506,7 @@ class Scrap extends Scrap_tools{
     matches = Object.values(matches) ;
     matches_bl = Object.values(matches_bl) ;
     const periority_cc= ["AFRICA","MA","US","NL","DE","FR","ES","IT","EN","EURO"];
-    matches.map(m=>{ console.log(m["country"])});
     matches = matches.sort((a,b)=>{return periority_cc.indexOf(a["country"]) >= periority_cc.indexOf(b["country"])? -1 : 1;});
-    matches.map(m=>{ console.log(m["country"])});
     //matches = matches.sort((a,b)=>{return a["country"]=="MA"? -1 : 1;});
     return matches;
   }
@@ -606,14 +604,14 @@ class Scrap extends Scrap_tools{
       "team_group_photo":"",
       "team_dress_home":"",
       "team_dress_away":"",
-      //"team_info":"",
-      //"team_info2":"",
-      //"comps":"array",
-      //"squad_club":"array",
+      "team_info":"",
+      "team_info2":"",
+      "comps":"array",
+      "squad_club":"array",
       //"news":"array",
-      //"transfers":"array",
+      "transfers":"array",
       
-      //"squad_club":"array",
+      "squad_club":"array",
     }
     for(let i=0;i<Object.keys(infos).length;i++){
       const k = Object.keys(infos)[i];

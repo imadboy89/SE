@@ -15,6 +15,7 @@ import MachesScreen from './Screens/Matches';
 import ArticleScreen from './Screens/Article';
 import Matchcreen from './Screens/Match';
 import LiveHSLScreen from './Screens/HSL';
+import TeamScreen from './Screens/Team';
 
 
 import { isWeb,theme } from './Styles/general';
@@ -69,6 +70,8 @@ function MatchesStackScreen() {
     <MatchesStack.Navigator>
       <MatchesStack.Screen name="MatchesList" component={MachesScreen} options={screen_option}  />
       <MatchesStack.Screen name="Match" component={Matchcreen} options={screen_option} />
+      <MatchesStack.Screen name="Team" component={TeamScreen} options={screen_option} />
+      
     </MatchesStack.Navigator>
   );
 }
