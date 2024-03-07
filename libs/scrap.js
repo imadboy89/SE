@@ -505,8 +505,10 @@ class Scrap extends Scrap_tools{
     }
     matches = Object.values(matches) ;
     matches_bl = Object.values(matches_bl) ;
-    const periority_cc= ["NL","DE","ES","IT","EN","AFRICA","EURO","MA"];
+    const periority_cc= ["AFRICA","MA","US","NL","DE","FR","ES","IT","EN","EURO"];
+    matches.map(m=>{ console.log(m["country"])});
     matches = matches.sort((a,b)=>{return periority_cc.indexOf(a["country"]) >= periority_cc.indexOf(b["country"])? -1 : 1;});
+    matches.map(m=>{ console.log(m["country"])});
     //matches = matches.sort((a,b)=>{return a["country"]=="MA"? -1 : 1;});
     return matches;
   }

@@ -74,12 +74,16 @@ class Matchcreen extends React.Component {
       return;
     }
     _API.get_match(id).then(resp=>{
-      if(resp && resp["data"] && resp["data"][0] ){
-        this.state.matche_details = resp["data"][0];
+
+      console.log("----",resp)
+      if(resp ){
+        
+        this.state.matche_details = resp;
+        this.state.matche_details.round = this.state.matche_details.round.replace("الأسبوع","Week")
         this.home_team_ar = this.state.matche_details.home_team_ar ? this.state.matche_details.home_team_ar : this.state.matche_details.home_team;
         this.away_team_ar = this.state.matche_details.away_team_ar ? this.state.matche_details.away_team_ar : this.state.matche_details.away_team; 
         this.render_header();
-        API_.setTitleWeb(this.home_team_ar +" - "+ this.away_team_ar);
+        //_API.setTitleWeb(this.home_team_ar +" - "+ this.away_team_ar);
       }
       this.setState({loading:false});
     });
@@ -237,56 +241,32 @@ class Matchcreen extends React.Component {
     return subs;
   }
   get_info(){
-    this.state.matche_details.status       = this.state.matche_details.status ? this.state.matche_details.status : "-";
-    this.state.matche_details.league       = this.state.matche_details.league ? this.state.matche_details.league : "-";
-    this.state.matche_details.phase        = this.state.matche_details.phase ? this.state.matche_details.phase : "-";
-    this.state.matche_details.group        = this.state.matche_details.group ? this.state.matche_details.group : "-";
-    this.state.matche_details.round        = this.state.matche_details.round ? this.state.matche_details.round : "-";
-    this.state.matche_details.retour_score = this.state.matche_details.retour_score ? this.state.matche_details.retour_score : "-";
-    this.state.matche_details.stadium      = this.state.matche_details.stadium ? this.state.matche_details.stadium : "-";
-    this.state.matche_details.desc         = this.state.matche_details.desc ? this.state.matche_details.desc : "-";
-    this.state.matche_details.match_status = this.state.matche_details.match_status ? this.state.matche_details.match_status : "OK";
+    const key2show=[
+      {"key":"status","label":"Status","default":"-"},
+      {"key":"league","label":"League","default":"-"},
+      {"key":"phase","label":"Phase","default":"-"},
+      {"key":"group","label":"Group","default":"-"},
+      {"key":"round","label":"Round","default":"-"},
+      {"key":"retour_score","label":"1st leg results","default":"-"},
+      {"key":"stadium","label":"Stadium","default":"-"},
+      {"key":"desc","label":"Description","default":"-"},
+      {"key":"match_status","label":"Match status","default":"-"},
+    ]
+    let attrs = key2show.map(i=> {
+      if(!this.state.matche_details[i.key] || this.state.matche_details[i.key]=="" || this.state.matche_details[i.key]=="-"){
+        return null;
+      }
+      return (
+    <View style={styles_match.general_info_row} key={i.key}>
+      <Text style={styles_match.general_info_label_text}>{i.label} : </Text>
+      <Text style={styles_match.general_info_value_text}>{this.state.matche_details[i.key]}</Text>
+    </View>);
+    }) ;
     return(
       <>
       <View style={styles_match.title_view}><Text style={styles_match.title_text}>Match details : </Text></View>
       <View style={styles_match.general_info_container}>
-        <View style={styles_match.general_info_row}>
-          <Text style={styles_match.general_info_label_text}>League : </Text>
-          <Text style={styles_match.general_info_value_text}>{this.state.matche_details.league}</Text>
-        </View>
-        <View style={styles_match.general_info_row}>
-          <Text style={styles_match.general_info_label_text}>Phase : </Text>
-          <Text style={styles_match.general_info_value_text}>{this.state.matche_details.phase}</Text>
-        </View>
-        <View style={styles_match.general_info_row}>
-          <Text style={styles_match.general_info_label_text}>Group : </Text>
-          <Text style={styles_match.general_info_value_text}>{this.state.matche_details.group}</Text>
-        </View>
-        <View style={styles_match.general_info_row}>
-          <Text style={styles_match.general_info_label_text}>Round : </Text>
-          <Text style={styles_match.general_info_value_text}>{this.state.matche_details.round}</Text>
-        </View>
-        <View style={styles_match.general_info_row}>
-          <Text style={styles_match.general_info_label_text}>Status : </Text>
-          <Text style={styles_match.general_info_value_text}>{this.state.matche_details.status}</Text>
-        </View>
-        <View style={styles_match.general_info_row}>
-          <Text style={styles_match.general_info_label_text}>1st leg results : </Text>
-          <Text style={styles_match.general_info_value_text}>{this.state.matche_details.retour_score}</Text>
-        </View>
-        <View style={styles_match.general_info_row}>
-          <Text style={styles_match.general_info_label_text}>Stadium : </Text>
-          <Text style={styles_match.general_info_value_text}>{this.state.matche_details.stadium}</Text>
-        </View>
-        <View style={styles_match.general_info_row}>
-          <Text style={styles_match.general_info_label_text}>Description : </Text>
-          <Text style={styles_match.general_info_value_text}>{this.state.matche_details.desc}</Text>
-        </View>
-        <View style={styles_match.general_info_row}>
-          <Text style={styles_match.general_info_label_text}>Match status : </Text>
-          <Text style={styles_match.general_info_value_text}>{this.state.matche_details.match_status}</Text>
-        </View>
-
+        {attrs}
       </View>
       </>
     );

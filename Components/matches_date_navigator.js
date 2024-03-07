@@ -23,6 +23,7 @@ const styles = StyleSheet.create({
     alignSelf:"center",
     alignItems:"center",
     marginHorizontal:10,
+    width:200
   },
   date_text:{
     fontSize:20
@@ -34,10 +35,11 @@ const styles = StyleSheet.create({
     padding: 10
   },
   buttons:{
-    backgroundColor:theme.headerStyle_backgroundColor,
+    //backgroundColor:theme.headerStyle_backgroundColor,
     width:40,
     height:40,
     borderRadius:30,
+
     //justifyContent:"center"
   }
 });
@@ -78,7 +80,7 @@ class DateNav extends React.Component {
             <IconButton 
               disabled={this.props.loading}
               name="arrow-circle-left" 
-              size={20} 
+              size={50} 
               style={styles.buttons} 
               onPress={()=>this.previousPage()}  />
             <TouchableOpacity
@@ -92,7 +94,7 @@ class DateNav extends React.Component {
             <IconButton 
               disabled={this.props.loading}
               name="arrow-circle-right" 
-              size={20} 
+              size={50} 
               style={styles.buttons} 
               onPress={()=>this.nextPage()}  
               />

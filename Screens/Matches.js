@@ -47,6 +47,7 @@ export default class MatchesScreen extends React.Component {
             })
           })
         }
+        console.log("mactches : ",data.length)
         this.setState({loading:false,list:data})
       });
 

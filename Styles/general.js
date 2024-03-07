@@ -48,6 +48,7 @@ const theme = {
   alert_body_color : theme_base.color_6,
 
   text_color_default : theme_base.color_6,
+  text_color_default_dark : theme_base.color_2,
 
   list_header_backgroundColor: theme_base.color_5,
   live_borderColor:"#2ecc71",

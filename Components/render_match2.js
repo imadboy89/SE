@@ -1,7 +1,8 @@
 import {  View, TouchableOpacity, Image, ImageBackground  } from 'react-native';
 import { Text } from 'react-native';
+import {  StyleSheet, Dimensions} from 'react-native';
+import {theme,maxWidth,_isMobile,isWeb  } from "../Styles/general";
 
-import styles_matches from "../Styles/matches";
 
 function parse_details(){
     return ;
@@ -69,22 +70,17 @@ const render=(item, time_status,home_team_name,away_team_name,league_img,home_te
     const palceholder_logo = require('../assets/placeholder.png');
     const home_team_logo = item.home_team_logo ? {uri: item.home_team_logo} : palceholder_logo;
     const away_team_logo = item.away_team_logo ? {uri: item.away_team_logo} : palceholder_logo;
-    
+
     return (
-      <ImageBackground 
-        style={[styles_matches.matche_container,shadow_style,{opacity:.8}]}
-        imageStyle={styles_matches.matche_container_img}
-        source={{uri: "https://yacine--app.live/wp-content/themes/yacine/b.jpg"}} 
-        resizeMode="stretch"
-      >
-        <View style={[styles_matches.teams_and_score_view,{backgroundColor:"#00000061"}]}>
+      <View style={[styles_matches.matche_container,shadow_style,{opacity:.8}]} >
+        <View style={[styles_matches.teams_and_score_view,{backgroundColor:"white"}]}>
 
           <View style={styles_matches.home_team_view}>
             <View style={styles_matches.matche_team_logo_view}>
               { home_team_logo ? <Image style={styles_matches.matche_team_logo_image} source={home_team_logo} /> : <Text>-</Text>}
             </View>
             <View style={styles_matches.home_team_name_view}>
-              <Text style={styles_matches.team_name_text} numberOfLines={1}>{home_team_name}</Text>
+              <Text style={styles_matches.team_name_text}>{home_team_name}</Text>
             </View>
             <View style={styles_matches.home_team_score_view}>
               <Text style={styles_matches.team_score_text}>{item.home_team_score}</Text>
@@ -97,7 +93,7 @@ const render=(item, time_status,home_team_name,away_team_name,league_img,home_te
               { away_team_logo ? <Image style={styles_matches.matche_team_logo_image} source={away_team_logo} /> : <Text>-</Text>}
             </View>
             <View style={styles_matches.home_team_name_view}>
-              <Text style={styles_matches.team_name_text} numberOfLines={1}>{away_team_name}</Text>
+              <Text style={styles_matches.team_name_text}>{away_team_name}</Text>
             </View>
             <View style={styles_matches.home_team_score_view}>
             <Text style={[styles_matches.away_team_score_text_penalties, styles_matches.matche_team_scor_text]} noFonts={true}>{item.away_team_score_penalties ? item.away_team_score_penalties : ""}</Text>
@@ -113,8 +109,151 @@ const render=(item, time_status,home_team_name,away_team_name,league_img,home_te
           </View>
           <View style={styles_matches.matche_team_time_view}>{time_status}</View>
         </View>
-      </ImageBackground>
+      </View>
       );
   }
+
+
+const styles_matches = StyleSheet.create({
+    container: {
+      flex: 1,
+      //justifyContent: 'center',
+      //paddingTop: Constants.statusBarHeight,
+      backgroundColor:"white" ,//theme.background_color_default,
+      color : "#fff",
+      
+    },
+
+    matche_container:{
+      //backgroundColor: theme.matche_container_backgroundColor,
+      width:"100%",
+      flexWrap:'wrap',
+      marginVertical:8,
+      marginHorizontal:6,
+      backgroundColor:"white",
+      flex: 1 ,
+      height: isWeb ? 150 : 155,
+      height: "100%",
+      //marginLeft:5,
+      borderRadius:10,
+      //borderWidth:1,
+      borderColor:"#5e5e698a",
+      
+      
+    },
+    matche_container_img:{
+      width:"100%",
+      flexWrap:'wrap',      
+      flex: 1 ,
+      height: "100%",
+      //marginLeft:5,
+      borderRadius:10,
+      //borderWidth:1,
+      borderColor:"#5e5e698a",
+      //borderColor:"red",
+      borderWidth:2,
+      
+      
+    },
+    
+    matche_team_logo_view:{
+      backgroundColor:"white",
+      flex:2,
+      //backgroundColor:"red",
+      justifyContent: 'center',
+      alignItems:'center',
+
+    },
+    matche_team_time_view:{
+      flex:1,
+      //backgroundColor: theme.match_time_backgroundColor,
+      backgroundColor:"white",
+      borderTopWidth:1,
+      borderColor:"black",
+      justifyContent: 'center',
+      alignItems:'center',
+
+    },
+    matche_team_time_text:{
+      color: theme.text_color_default_dark,
+      fontWeight: 'bold',
+    },
+    matche_team_logo_image:{
+      flex:1,
+      //backgroundColor:"yellow",
+      aspectRatio: 1,
+      margin:"5%"
+    },
+    matche_team_scor_text:{
+      paddingHorizontal:10,
+      color:theme.text_color_default_dark,
+      fontSize:15
+    },
+    home_team_score_text_penalties:{
+      justifyContent: 'flex-start',
+      alignItems:'flex-start',
+      color: theme.text_color_default_dark
+    },
+    away_team_score_text_penalties:{
+      alignItems:'flex-end',
+    },
+    home_team_view:{
+      flex:1,
+    },
+    away_team_view:{},
+    teams_and_score_view:{
+      backgroundColor:"white",
+      flex:1,
+      flexDirection:'row', 
+      flexWrap:'wrap',
+      //height: isWeb ? 87 : 83,
+      //borderWidth:1,
+      borderColor:"black",
+    },
+    extra_details_view:{
+      flexDirection:'row', 
+      height:20
+    },
+    home_team_name_view:{
+      flex:1,
+      height:35,
+    },
+
+    team_name_text:{
+      flex:1,
+      width:"98%",
+      color: theme.text_color_default_dark,
+      paddingLeft:5,
+      paddingRight:5,
+      justifyContent: 'center',
+      fontSize:13,
+      lineHeight:25,
+      textAlign:"center",
+    },
+    home_team_score_view:{
+      flexDirection:'row', 
+
+    },
+    team_score_text:{
+      flex:5,
+      color: theme.text_color_default_dark,
+      fontSize:18,
+      justifyContent: 'center',
+      textAlign:"center",
+    },
+    team_name_winner:{
+      fontWeight:"bold"
+
+    },
+    team_name_drawer:{
+      
+    },
+    team_name_looser:{
+
+    },
+    matche_team_time_live:{
+      color:"green"
+    },
+  });
 
   export default render_match;

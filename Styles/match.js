@@ -68,7 +68,7 @@ const styles_home = StyleSheet.create({
     general_info_label_text:{
       height:50,
       padding:5,
-      flex:1,
+      flex:2,
 
       textAlign:"right",
       alignItems:'flex-end',
@@ -78,7 +78,7 @@ const styles_home = StyleSheet.create({
     general_info_value_text:{
       height:50,
       padding:5,
-      flex:1,
+      flex:3,
       textAlign:"left",
       alignItems:'flex-start',
 
