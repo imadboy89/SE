@@ -10,6 +10,11 @@ const styles_home = StyleSheet.create({
       backgroundColor: theme.background_color_default,
       color : "#fff",
     },
+    container_container:{
+      justifyContent:"center",
+      alignContent:"center",
+
+    },
     stats_view:{
       backgroundColor: theme.matche_container_backgroundColor,
       width:"98%",

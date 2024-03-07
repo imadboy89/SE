@@ -1,5 +1,5 @@
 import {  View, TouchableOpacity, Image, ImageBackground  } from 'react-native';
-import { SafeAreaView, FlatList, Dimensions,TouchableHighlight, Text } from 'react-native';
+import { Text } from 'react-native';
 
 import styles_matches from "../Styles/matches";
 
@@ -66,13 +66,18 @@ const render_match=(item,windowWidth)=>{
 const render=(item, time_status,home_team_name,away_team_name,league_img,home_team_style ,away_team_style )=>{
     const shadow_style = isWeb ? styles_matches.shadow_3  : styles_matches.shadow_1;
 
-    //https://img.kooora.com/?i=mohd1%2fbaladialogo.jpg
     const palceholder_logo = require('../assets/placeholder.png');
     const home_team_logo = item.home_team_logo ? {uri: item.home_team_logo} : palceholder_logo;
     const away_team_logo = item.away_team_logo ? {uri: item.away_team_logo} : palceholder_logo;
+
     return (
-      <View style={[styles_matches.matche_container,shadow_style]}>
-        <View style={styles_matches.teams_and_score_view}>
+      <ImageBackground 
+        style={[styles_matches.matche_container,shadow_style,{opacity:.8}]}
+        imageStyle={styles_matches.matche_container_img}
+        source={{uri: "https://yacine--app.live/wp-content/themes/yacine/b.jpg"}} 
+        resizeMode="stretch"
+      >
+        <View style={[styles_matches.teams_and_score_view,{backgroundColor:"#00000061"}]}>
 
           <View style={styles_matches.home_team_view}>
             <View style={styles_matches.matche_team_logo_view}>
@@ -108,7 +113,7 @@ const render=(item, time_status,home_team_name,away_team_name,league_img,home_te
           </View>
           <View style={styles_matches.matche_team_time_view}>{time_status}</View>
         </View>
-      </View>
+      </ImageBackground>
       );
   }
 

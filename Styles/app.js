@@ -72,7 +72,7 @@ const screen_baricon_main = (iconName)=> {
             borderWidth:1,
             backgroundColor: 'white',
             justifyContent: 'center',
-            alignItems: 'center'        
+            alignItems: 'center'
           }}>
           <Icon
             name={iconName}

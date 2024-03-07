@@ -15,7 +15,6 @@ const styles_news = StyleSheet.create({
       backgroundColor: theme.matche_container_backgroundColor,
       width:"98%",
       marginLeft:5,
-      marginVertical:5,
       flexWrap:'wrap',
       flex: 1 ,
       marginRight:5,
@@ -25,8 +24,19 @@ const styles_news = StyleSheet.create({
       borderColor:"#5e5e698a",
       height:230,
       //backgroundColor:"red"
-
-      
+    },
+    live_container:{
+      backgroundColor: theme.matche_container_backgroundColor,
+      width:"98%",
+      margin:2,
+      flexWrap:'wrap',
+      flex: 1 ,
+      //marginLeft:5,
+      borderRadius:10,
+      borderWidth:4,
+      borderColor:"#5e5e698a",
+      height:150,
+      //backgroundColor:"red"
     },
     live_img_background:{
       borderRadius:10,

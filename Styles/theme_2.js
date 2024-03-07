@@ -10,6 +10,7 @@ const theme_base = {
   color_8:"#00000070", // semi transparent dark
   color_9:"#BFEA7C",//light , news xlist titles text
   noColor:"#00000000", //full transpaent
+  color_10:"#d6efb0",
 }
 
 

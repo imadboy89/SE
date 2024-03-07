@@ -9,7 +9,6 @@ const styles_home = StyleSheet.create({
       //paddingTop: Constants.statusBarHeight,
       backgroundColor: theme.background_color_default,
       color : "#fff",
-
       
     },
 
@@ -22,6 +21,7 @@ const styles_home = StyleSheet.create({
       
       flex: 1 ,
       height: isWeb ? 150 : 155,
+      height: "100%",
       //marginLeft:5,
       borderRadius:10,
       //borderWidth:1,
@@ -29,6 +29,21 @@ const styles_home = StyleSheet.create({
       
       
     },
+    matche_container_img:{
+      width:"100%",
+      flexWrap:'wrap',      
+      flex: 1 ,
+      height: "100%",
+      //marginLeft:5,
+      borderRadius:10,
+      //borderWidth:1,
+      borderColor:"#5e5e698a",
+      //borderColor:"red",
+      borderWidth:2,
+      
+      
+    },
+    
     matche_team_logo_view:{
       flex:2,
       //backgroundColor:"red",
@@ -44,13 +59,16 @@ const styles_home = StyleSheet.create({
       justifyContent: 'center',
       alignItems:'center',
 
-
+    },
+    matche_team_time_text:{
+      color:theme.match_time_color,
+      fontWeight: 'bold',
     },
     matche_team_logo_image:{
       flex:1,
       //backgroundColor:"yellow",
       aspectRatio: 1,
-      margin:5
+      margin:"5%"
     },
     matche_team_scor_text:{
       paddingHorizontal:10,

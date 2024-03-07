@@ -64,6 +64,7 @@ class ItemsList extends React.Component {
     if(this.windowWidth == current_windowWidth || this.props.disable_auto_scal==true){return ;}
     let margin2add = _isMobile ? 15 : 40;
     margin2add = this.minWidth<300 ? parseInt(margin2add * (this.minWidth/300)): margin2add;
+    margin2add = 10
     this.windowWidth = current_windowWidth;
     this.state.numColumns = parseInt(this.windowWidth/this.minWidth);
     this.state.numColumns = this.state.numColumns>=1 ? this.state.numColumns : 1;
@@ -97,7 +98,7 @@ class ItemsList extends React.Component {
 
     }else if(this.props.type=="live" ){
       return (
-        <View style={[styles_news.container]}>
+        <View style={[styles_news.live_container]}>
           <ImageBackground  
             style={styles_news.live_img_background} 
             source={{uri: item.logo}} 
@@ -118,13 +119,19 @@ class ItemsList extends React.Component {
 
 
   _render_item=({item})=>{
+    const item_style = this.props.type=="matches"?styles_list.item_container:styles_list.item_container_nomarggin;
+    
+    let styles_sub = [styles_list.item_sub_container,];
+    if(this.props.type=="matches"){
+      styles_sub.push(styles_list.item_sub_matches);
+    }
     const item2render=  (<TouchableOpacity
       
-      style={[styles_list.item_container,{width:this.elem_width,}]}
+      style={[item_style,{width:this.elem_width}]}
       activeOpacity={0.5}
       onPress={ () => {this.props.onclick(item) }} 
       onLongPress={ () => {this.props.onLongPress?this.props.onLongPress(item):null; }} >
-      <View style={styles_list.item_sub_container}>
+      <View style={styles_sub}>
         {this.get_item(item)}
       </View>
     </TouchableOpacity>);
@@ -235,7 +242,6 @@ class ItemsList extends React.Component {
               renderItem={this._render_item}
               renderSectionHeader={this._render_header}
 
-            
             />
         </View>
       );

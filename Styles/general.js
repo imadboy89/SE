@@ -1,5 +1,5 @@
 import {  StyleSheet, Dimensions, Platform} from 'react-native';
-import theme_base from "./theme_3";
+import theme_base from "./theme_2";
 function isMobile(){
   var isMobile = true;
   if(isWeb==false){
@@ -53,10 +53,10 @@ const theme = {
   live_borderColor:"#2ecc71",
   matche_container_backgroundColor : theme_base.color_4,
   match_name_backgroundColor: theme_base.color_7,
-  match_name_color: theme_base.color_1,
+  match_name_color: theme_base.color_10,
   match_score_backgroundColor: theme_base.color_1,
   match_score_color : theme_base.noColor,
-  match_time_backgroundColor: theme_base.noColor,
+  match_time_backgroundColor: theme_base.color_8,
   match_time_color:"#fff",
 
 

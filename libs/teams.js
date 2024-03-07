@@ -19,7 +19,7 @@ export default class Teams {
         this.database_path="SQLite/";
         this.db_name="teams.db";
         this.sqlDB = SQLite.openDatabase(this.db_name,this.db_version, this.db_displayname, this.db_size);
-        this.init_first()
+        //this.init_first()
     }
     async init_first(){
         const create_table_sql = 'CREATE TABLE IF NOT EXISTS '+this.table_name+' ('+this.fields_defenition_str+')' ;
@@ -45,7 +45,8 @@ export default class Teams {
             k = parseInt(k);
             await this.addTeams(k,teams_dict.default[k]);
         }
-        console.log("DB init ... done")
+        console.log("DB init ... done");
+        
 
     }
     async addTeams(id,logo){

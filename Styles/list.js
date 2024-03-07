@@ -20,6 +20,12 @@ const styles_home = StyleSheet.create({
     item_container:{
         alignSelf:"center",
         //paddingRight:5
+        marginVertical:10
+    },
+    item_container_nomarggin:{
+      alignSelf:"center",
+      //paddingRight:5
+      marginVertical:2
     },
     item_sub_container:{
         flexDirection:'row', 
@@ -29,6 +35,10 @@ const styles_home = StyleSheet.create({
         alignItems:"center",
         alignContent:"center",
         //marginHorizontal:3,
+        
+    },
+    item_sub_matches:{
+      height:200
     },
     header_container:{
         height:40,

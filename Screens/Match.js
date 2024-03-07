@@ -398,13 +398,14 @@ class Matchcreen extends React.Component {
     //render_match(item, time_status,home_team_name,away_team_name,league_img)
     return (
       <ScrollView style={styles_match.container}
+        contentContainerStyle={styles_match.container_container}
         refreshControl={
           <RefreshControl
             refreshing={this.state.loading}
             onRefresh={()=>this.get_Match(this.id)}
           />}
       >
-        <View style={{height:200}}>
+        <View style={{height:250,width:"95%"}}>
           {render_match(this.state.matche_details, this.windowWidth)}
         </View>
         {this.state.loading ? <Loading /> : this.get_info()}
