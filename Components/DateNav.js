@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, TouchableOpacity , View, Text  } from 'react-native';
 import {_isMobile,isBigScreen,theme} from "../Styles/general";
 import {Scrap_tools} from "react-native-essential-tools";
-import IconButton from '../Components/iconBtn';
+import IconButton from './iconBtn';
 
 
 const styles = StyleSheet.create({
@@ -80,7 +80,7 @@ class DateNav extends React.Component {
             <View style={styles.container} >
             <IconButton 
               disabled={this.props.loading}
-              name="arrow-circle-left" 
+              name="chevron-circle-right" 
               size={47} 
               style={styles.buttons} 
               onPress={()=>this.previousPage()}  />
@@ -94,7 +94,7 @@ class DateNav extends React.Component {
             </TouchableOpacity>
             <IconButton 
               disabled={this.props.loading}
-              name="arrow-circle-right" 
+              name="chevron-circle-left" 
               size={47} 
               style={styles.buttons} 
               onPress={()=>this.nextPage()}  

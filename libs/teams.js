@@ -1,4 +1,4 @@
-import * as SQLite from 'expo-sqlite';
+//import * as SQLite from 'expo-sqlite';
 
 
 export default class Teams {
@@ -15,13 +15,26 @@ export default class Teams {
         "logo text",
     ];
     constructor() {
+        if(_API.isWeb){
+            return;
+        }
         this.fields_defenition_str = this.fields_defenition.join(",")
         this.database_path="SQLite/";
         this.db_name="teams.db";
-        this.sqlDB = SQLite.openDatabase(this.db_name,this.db_version, this.db_displayname, this.db_size);
         //this.init_first()
     }
+    async init(){
+        if(_API.isWeb){
+            return;
+        }
+        const SQLite = require('expo-sqlite');
+        this.sqlDB = SQLite.openDatabase(this.db_name,this.db_version, this.db_displayname, this.db_size);
+
+    }
     async init_first(){
+        if(_API.isWeb){
+            return;
+        }
         const create_table_sql = 'CREATE TABLE IF NOT EXISTS '+this.table_name+' ('+this.fields_defenition_str+')' ;
         //this.executeSql(create_table_sql,[])
         await this.sqlDB.transactionAsync(async tx => {
@@ -50,6 +63,9 @@ export default class Teams {
 
     }
     async addTeams(id,logo){
+        if(_API.isWeb){
+            return;
+        }
         const sqlQuery = `INSERT INTO ${this.table_name} VALUES(?,?)`;
         const readOnly = false;
         return await this.sqlDB.transactionAsync(async tx => {
@@ -59,6 +75,9 @@ export default class Teams {
 
     }
     async updateTeams(id,logo){
+        if(_API.isWeb){
+            return;
+        }
         const sqlQuery = `INSERT INTO ${this.table_name} VALUES(?,?) ON CONFLICT(id) DO UPDATE SET logo = excluded.logo`;
         const readOnly = false;
         return await this.sqlDB.transactionAsync(async tx => {
@@ -69,6 +88,9 @@ export default class Teams {
 
     }
     async get_teams_logo(ids){
+        if(_API.isWeb){
+            return;
+        }
         let result = {}; 
 
         let holders_symbol = [];
@@ -84,6 +106,9 @@ export default class Teams {
 
     }
     async get_all(){
+        if(_API.isWeb){
+            return;
+        }
       const sqlQuery = `SELECT * FROM ${this.table_name} limit 10`;
         let result = {}; 
       await this.sqlDB.transactionAsync(async tx => {

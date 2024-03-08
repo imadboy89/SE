@@ -337,7 +337,7 @@ class API {
       if(res && res.length){
         let id=1;
         res = res.map(l=>{
-          l.id = ''+id;
+          l._id = ''+id;
           id=id+1;
           return l;
         });

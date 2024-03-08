@@ -11,6 +11,8 @@ import { Image,ImageBackground } from 'expo-image';
 import {_isMobile,isBigScreen, isWeb} from "../Styles/general";
 import EmptySpace from  './EmptySpace';
 import MatchCard from './MatchCard';
+import { Pressable } from 'react-native';
+import FavoriteIcon from "../Components/FavoriteIcon";
 
 class ItemsList extends React.Component {
   constructor(props) {
@@ -111,6 +113,7 @@ class ItemsList extends React.Component {
             contentFit="contain"
             >
             { item.date ? <Text style={styles_news.date_text}>{item.date}</Text> : null}
+            <FavoriteIcon favType="channels" favId={item.id?item.id:item.name} pullRight/>
             <View style={styles_news.news_img_v}>
             </View>
             <View style={styles_news.news_title_v}>
@@ -142,14 +145,18 @@ class ItemsList extends React.Component {
     </TouchableOpacity>);
     return item2render;
   }
-
+  header_long_press= async (item)=>{
+    await _Favs.toggle_favorite("leagues", item);
+    this.setState({});
+  }
   _render_header=({ section: { title,img,id,is_koora,options } })=>{
     if(title==undefined || title==""){
       return null;
     }
+    const style_fav = _Favs.is_fav('leagues', id) ? {backgroundColor:"#2f282838"} : {};
     //<View style={[{paddingHorizontal:5,flexDirection:'row', flexWrap:'wrap'},styles_list.header]}>
     return (
-      <TouchableHighlight style={styles_list.header_container}
+      <Pressable style={[styles_list.header_container, style_fav]}
         underlayColor={"#00000030"}
         activeOpacity={0.9}
         onPress={()=>{
@@ -166,20 +173,21 @@ class ItemsList extends React.Component {
           }
           this.props.refresh_list();
           }}
+          onLongPress={()=>this.header_long_press(id)}
       >
         <View style={[{paddingHorizontal:5,flexDirection:'row', flexWrap:'wrap'},styles_list.header]} >
             <ImageBackground  
             style={styles_list.header_image_v} 
             source={{uri: img}} 
             imageStyle={styles_list.header_image}
-            resizeMode="stretch"
+            contentFit="contain"
             ></ImageBackground>
-
           <View style={styles_list.header_text_v} >
             <Text style={styles_list.header_text} numberOfLines={1}>{title}</Text>
           </View>
+          <FavoriteIcon favType="leagues" favId={id}/>
           </View>
-      </TouchableHighlight>);
+      </Pressable>);
 
   }
 

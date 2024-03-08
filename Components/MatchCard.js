@@ -4,7 +4,7 @@ import { Text } from 'react-native';
 import { Image,ImageBackground } from 'expo-image';
 
 import styles_matches from "../Styles/matches";
-
+import FavoriteIcon from "./FavoriteIcon";
 
 const parse_details=()=>{
 
@@ -38,6 +38,7 @@ class MatchCard extends React.Component {
         <View style={[styles_matches.teams_and_score_view,{backgroundColor:"#00000061"}]}>
 
           <View style={styles_matches.home_team_view}>
+            <FavoriteIcon favType="teams" favId={item.home_team_id}/>
             <Pressable style={styles_matches.matche_team_logo_view} onPress={()=>this.onPressTeam(item.home_team_id)}>
               { home_team_logo ? 
                 <Image 
@@ -57,6 +58,7 @@ class MatchCard extends React.Component {
           </View>
 
           <View style={styles_matches.home_team_view}>
+            <FavoriteIcon favType="teams" favId={item.away_team_id} pullRight/>
             <Pressable style={styles_matches.matche_team_logo_view} onPress={()=>this.onPressTeam(item.away_team_id)}>
               { away_team_logo ? 
               <Image 

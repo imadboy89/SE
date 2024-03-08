@@ -120,7 +120,7 @@ class ArticleScreen extends React.Component {
             key={"article_backgrnd"} 
             style={styles_article.article_img} 
             source={{uri: article_img}}
-            resizeMode="contain">
+            contentFit="contain">
             </ImageBackground>
 
         </View>

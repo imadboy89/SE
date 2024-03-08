@@ -6,7 +6,7 @@ import Teams from "../libs/teams.js"
 
 import IconButton from '../Components/iconBtn';
 
-import DateNav from "../Components/matches_date_navigator"
+import DateNav from "../Components/DateNav"
 
 export default class MatchesScreen extends React.Component {
     constructor(props) {
