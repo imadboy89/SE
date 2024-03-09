@@ -17,10 +17,11 @@ class API {
         this.main_koora_domain="kooora.com";
         this.kooora_domain  = `https://${this.main_domain}/`;
         this.kooora_news    = `https://m.${this.main_domain}/?n=0&o=[cat]&arabic&pg=[pg]`;
-        this.kooora_article = `https://m.${this.main_domain}/?[article_id]&arabic`;
+        this.kooora_article = `https://m.${this.main_domain}/?[article_id]`;
         this.kooora_matches = `https://www.${this.main_domain}/?region=-1&area=[area]&dd=`;
-        this.kooora_match   = `https://www.${this.main_domain}/?ajax=1&m=[id]&arabic`;
-        this.kooora_team    = `https://m.${this.main_domain}/?team=[id]&arabic`;
+        this.kooora_match   = `https://www.${this.main_domain}/?ajax=1&m=[id]`;
+        this.kooora_team    = `https://m.${this.main_domain}/?team=[id]`;
+        this.kooora_player  = `https://m.${this.main_domain}/?player=[id]`;
         this.usingproxy = Platform.OS == 'web';
         this.isWeb = Platform.OS == 'web';
         if(this.isWeb){
@@ -358,7 +359,25 @@ class API {
         return res;
       }).catch(error=>this.showMsg(error,"danger"));
     }
-    
+    async get_player(player_id){
+      let url = this.kooora_player.replace("[id]",player_id);
+      url = this.scraping_pages ? "scarp_"+url : url;
+      const resp =await this.http(url,"GET",null,{});
+      if(this.scraping_pages){
+        try {
+          const player = JSON.parse(resp) ;
+          player["player_position"] = player["player_position"] in this.player_positions ? this.player_positions[player["player_position"]] : player["player_position"];
+          
+          return player;
+        } catch (error) {
+          console.log(error);
+          return [];
+        }
+      }
+      let scrap = new Scrap();
+      scrap.isWeb = this.isWeb;
+      return scrap.get_player(resp);
+    }
     async get_live_list(){
       let channels = await this.http(this.url_live_list,"GET",null,{},true);
       if(channels && channels.length){

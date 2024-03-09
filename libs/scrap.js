@@ -619,6 +619,43 @@ class Scrap extends Scrap_tools{
     }
     return infos;
   }
+  get_player(html){
+    let infos = {
+      "player_id":"",
+      "player_sport":"",
+      "player_gender":"",
+      "player_position":"",
+      "player_name_en":"",
+      "player_nickname_ar":"",
+      "player_photo":"",
+      "player_nationality":"",
+      "player_nationality_flag":"",
+      "player_team_id":"",
+      "player_team_name":"",
+      "player_teamcountry":"",
+      "player_weight":"",
+      "player_height":"",
+      "player_birthdate":"",
+      "player_career":"",
+      "transfers":[],
+    }
+    for(let i=0;i<Object.keys(infos).length;i++){
+      const k = Object.keys(infos)[i];
+      infos[k] = typeof infos[k] == "string" ? this.get_var(html, k) : this.get_var_array(html, k);
+      if(k=="player_position"){
+        infos[k] = _API.player_positions[infos[k]];
+      }
+      if(k=="player_photo" && infos[k].slice(0,2)=="//"){
+        infos[k]  = infos[k] .replace("//","https://");
+      }
+      if(k=="player_birthdate"){
+        try {
+          infos[k] = infos[k] && infos[k].slice && infos[k].slice(0,1) =='#' ? this.get_date2(new Date(infos[k].replace("#","") * 1000)) : infos[k] ;
+        } catch (error) {}
+      }
+    }
+    return infos;
+  }
 }
 
 export default Scrap;

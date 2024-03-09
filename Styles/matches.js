@@ -68,6 +68,7 @@ const styles_home = StyleSheet.create({
     matche_team_time_text:{
       color:theme.match_time_color,
       fontWeight: 'bold',
+      textAlign:"right"
     },
     matche_team_logo_image:{
       flex:1,
@@ -144,6 +145,8 @@ const styles_home = StyleSheet.create({
       color:"#00ff4e",
       width:"100%",
       textAlign:"center",
+      //paddingRight:20,
+      paddingBottom:2
       //backgroundColor:"red"
     },
   });

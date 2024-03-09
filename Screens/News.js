@@ -47,11 +47,12 @@ export default class NewsScreen extends React.Component {
     this.props.navigation.navigate('Article',item);
   }
   onChangeCat=(item)=>{
+    this.state.selectedItem = item;
     this.state.link = item.link;
     this.refresh();
   }
   render(){
-    const ListHeaderComponent = <FavNews onChangeCat={this.onChangeCat}/>;
+    const ListHeaderComponent = <FavNews onChangeCat={this.onChangeCat} selectedItem={this.state.selectedItem}/>;
     return (<View style={styles_news.root_container}>
 
     <ListCustom 

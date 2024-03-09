@@ -49,7 +49,7 @@ export default class LiveScreen extends React.Component {
   
   refresh=()=>{
     _API.get_live_list().then(data =>{
-      this.setState({loading:false,list:data.slice(0,4)})
+      this.setState({loading:false,list:data})
     });
 
     this.setState({loading:true,list:[]});
@@ -86,7 +86,6 @@ export default class LiveScreen extends React.Component {
   }
   onLongPress=async(item)=>{
     const isok = await _Favs.toggle_favorite("channels",_Favs.format(...[item.name,item.name,item.logo]));
-    console.log("---",[item.name,item.name,item.img],item);
     if(isok){
       this.setState({})
     }

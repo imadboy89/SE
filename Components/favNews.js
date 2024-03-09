@@ -3,6 +3,7 @@ import { StyleSheet, TouchableOpacity , View, Text  } from 'react-native';
 import {_isMobile,isBigScreen,theme} from "../Styles/general";
 import IconButton from './iconBtn';
 import SelectDropdown from 'react-native-select-dropdown'
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 
 const styles = StyleSheet.create({
@@ -17,6 +18,10 @@ const styles = StyleSheet.create({
     //borderColor:"black",
     margin:2,
     marginBottom:5
+  },
+  buttonStyle:{
+    width:"80%",
+    borderRadius:10
   },
   date_container:{
     alignContent:"center",
@@ -74,21 +79,30 @@ class FavNews extends React.Component {
       return (        
           <View style={styles.container} >
             <SelectDropdown
-              style={{ width:"100%",height:100,backgroundColor:"red"}}
+              buttonStyle={styles.buttonStyle}
               data={items}
               onSelect={(selectedItem, index) => {
-                console.log("selectedItem",selectedItem, index)
+                this.state.selectedItem = selectedItem.name;
+                this.setState({selectedItem:selectedItem});
                 this.props.onChangeCat(selectedItem);
+                return selectedItem.name;
+                //alert(this.state.selectedItem)
               }}
-            	buttonTextAfterSelection={(selectedItem, index) => {
-                alert(selectedItem.name)
-                return selectedItem.name
-              }}
+              defaultValue={this.props.selectedItem}
               rowTextForSelection={(item, index) => {
                 return item.name
               }}
+            	buttonTextAfterSelection={(selectedItem, index) => {
+                return selectedItem.name
+              }}
+
               renderDropdownIcon={()=>{
-                return <IconButton name="sort-down" color="black"></IconButton>
+                return                 <Icon 
+                name="sort-down"
+                size={20} 
+                color="black"
+                style={{paddingBottom:5}}
+                 />
               }}
               />
 

@@ -127,8 +127,8 @@ class MatchCard extends React.Component {
     }
 
     const league_img = item.league_img ? item.league_img : null;
-    let time_style={};
-    const game_nbr  ={color:"#8fa2ff", fontSize:12};
+    let time_style={textAlign:"right"};
+    const game_nbr  ={color:"#8fa2ff", fontSize:12,};
     try {
       time_style = JSON.parse(JSON.stringify(styles_matches.matche_team_time_live));
     } catch (error) {}

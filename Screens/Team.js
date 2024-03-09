@@ -84,26 +84,29 @@ class Teamcreen extends React.Component {
     }
     const players = this.state.team_details && this.state.team_details.squad_club && this.state.team_details.squad_club.map
     ? this.state.team_details.squad_club.map(row=>{
-      const p_id = row[0];
+      const player_id = row[0];
       const p_pos = row[1];
       const p_nbr = p_pos>0 ? row[3] : "🗣️";
       const p_ccode = row[7];
-      const p_name = row[4] && row[4].trim ? row[4].trim() : "";
+      const player_name_en = row[4] && row[4].trim ? row[4].trim() : "";
       const ma_style = p_ccode && p_ccode.trim && p_ccode.toLocaleLowerCase().trim() == "ma" ? {borderWidth:1}: {};
       const cc_flag = p_ccode && p_ccode.trim && p_ccode.toLocaleLowerCase().trim()!="" ?  p_ccode.toLocaleLowerCase().trim() : false;
       const text = {fontSize:20};
-      return  <Pressable key={p_id+"-"+p_pos}
+      return  <Pressable key={player_id+"-"+p_pos}
       onLongPress={()=>{
-        this.player_onLongPress([p_id,p_name,""]);
+        this.player_onLongPress([player_id,player_name_en,""]);
       }}
       delayLongPress={300}
       activeOpacity={0.7}
       style={[{flexDirection:"row",flex:1,height:35,borderBottomWidth:1,justifyContent:"center",alignContent:"center",alignItems:"center",alignContent:"center"},ma_style ]}>
 
-        <FavoriteIcon favType="players" favId={p_id}  size={18} style={{}}
-            item={[p_id,p_name,""]}/>
+        <FavoriteIcon favType="players" favId={player_id}  size={18} style={{}}
+            item={[player_id,player_name_en,""]}/>
         <View style={{width:30,}}><Text style={text}>{p_nbr}</Text></View>
-        <View style={{flex:1}}><Text style={text}>{p_name}</Text></View>
+        <Pressable 
+          style={{flex:1}}
+          onPress={()=>this.props.navigation.navigate("Player",{player_id,player_name_en})}
+        ><Text style={text}>{player_name_en}</Text></Pressable>
         {cc_flag!=false ? 
         <View style={{width:40,padding:5,marginHorizontal:22}} >
           <Image 
@@ -113,8 +116,8 @@ class Teamcreen extends React.Component {
         </View> : null }
         </Pressable>;
 
-      return <View key={p_id} styles={this.state.dynamic_style.info_row}>
-                <Text style={this.state.dynamic_style.text_carrier}>{p_name}</Text>
+      return <View key={player_id} styles={this.state.dynamic_style.info_row}>
+                <Text style={this.state.dynamic_style.text_carrier}>{player_name_en}</Text>
               </View>
     }) : null;
     return <>
@@ -183,6 +186,7 @@ class Teamcreen extends React.Component {
           pullRight showAlways size={50} 
           onPress={()=>this.setState({})}
           item={[this.id,this.state.team_details.team_name_en,this.state.team_details.team_logo]}
+          style={{position: 'absolute',top:2,right:2, zIndex:999}}
           />
         <View style={{height:250,width:"98%",alignItems:"center",justifyContent:"center",alignContent:"center", flex:1}}>
             <Image
