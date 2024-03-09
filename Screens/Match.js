@@ -4,7 +4,7 @@ import Loading from '../Components/Loader';
 import styles_match from "../Styles/match"
 import MatchCard from '../Components/MatchCard';
 import IconButton from '../Components/iconBtn';
-
+import BackBtn from "../Components/backBtn";
 let list = [
 
           ];
@@ -57,17 +57,22 @@ class Matchcreen extends React.Component {
     if(this.state.matche_details){
       title=`${this.state.matche_details.home_team} VS ${this.state.matche_details.away_team}`;
     }
-    this.props.navigation.setOptions({title: title,
-    "headerRight":()=>(
-      <View style={{flexDirection:"row",margin:5,}}>
-                <IconButton
-          name='refresh'
-          onPress={this.refresh}
+    this.props.navigation.setOptions({
+      title: title,
+      headerLeft: (props) => (
+        <BackBtn  {...props} navigation={this.props.navigation}/>
+      ),
 
-        />
-    </View>
-    )
-    });
+      "headerRight":()=>(
+        <View style={{flexDirection:"row",margin:5,}}>
+                  <IconButton
+            name='refresh'
+            onPress={this.refresh}
+
+          />
+      </View>
+      )
+      });
   }
   get_Match(id){
     if(this.id==undefined){

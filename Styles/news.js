@@ -47,7 +47,7 @@ const styles_news = StyleSheet.create({
     },
     live_image_style : {
       borderRadius:10,
-      resizeMode:"center",
+      contentFit:"center",
       width:"100%",
     },
     img_background:{
@@ -58,7 +58,7 @@ const styles_news = StyleSheet.create({
     },
     image_style : {
       borderRadius:10,
-      resizeMode:"cover",
+      contentFit:"cover",
       width:"100%",
     },
     news_img_v:{

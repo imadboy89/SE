@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import ListCustom from "../Components/list";
 import styles_news from "../Styles/news";
 import IconButton from '../Components/iconBtn';
+import FavNews from "../Components/favNews";
 const list = [
 
   {"id":1,"title_news":"newsxxxssss1 title","date":"2022-02-22","img":"//img.kooora.com/?i=mhmed_aziz%2fjanuary%2f1%2f1%2f2019_january_koo_1%2fibrahim_samir_koo_%2fmohamed+boudrega.jpg&z=320|240&c=0|0|738|417&h=8828"},
@@ -13,13 +14,15 @@ export default class NewsScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+        page:1,
+        link:"ncma",
         list:[],
         loading:true,
     };
   }
   refresh=()=>{
     this.setState({loading:true,list:[]});
-    _API.get_news(new Date()).then(data =>{
+    _API.get_news(this.state.link, this.state.page).then(data =>{
       this.setState({loading:false,list:data})
     });
   }
@@ -43,12 +46,16 @@ export default class NewsScreen extends React.Component {
   onclick = (item)=>{
     this.props.navigation.navigate('Article',item);
   }
-  
+  onChangeCat=(item)=>{
+    this.state.link = item.link;
+    this.refresh();
+  }
   render(){
-
+    const ListHeaderComponent = <FavNews onChangeCat={this.onChangeCat}/>;
     return (<View style={styles_news.root_container}>
 
     <ListCustom 
+      ListHeaderComponent={ListHeaderComponent}
       loading={this.state.loading} 
       list={this.state.list} 
       onclick={this.onclick}

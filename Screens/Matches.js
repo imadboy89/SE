@@ -23,7 +23,7 @@ export default class MatchesScreen extends React.Component {
     }
     refresh=async ()=>{
       this.setState({loading:true,list:[]})
-      _API.get_matches(this.state.date).then( async data =>{
+      _API.get_matches(this.state.date)?.then( async data =>{
         let ids=[];
         data.map(l=>{
           l.data.map(m=>{
@@ -60,15 +60,16 @@ export default class MatchesScreen extends React.Component {
     }
     render_header=()=>{
       this.props.navigation.setOptions({
-      "headerRight":()=>(
-        <View style={{flexDirection:"row",margin:5}}>
-          <IconButton
-            name='refresh'
-            onPress={this.refresh}
-          />
-      </View>
-      )
-      });
+
+        "headerRight":()=>(
+          <View style={{flexDirection:"row",margin:5}}>
+            <IconButton
+              name='refresh'
+              onPress={this.refresh}
+            />
+        </View>
+        )
+        });
     }
     
     onclick = (item)=>{

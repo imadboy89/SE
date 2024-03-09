@@ -16,7 +16,7 @@ class API {
         this.main_domain    = "goalzz.com";
         this.main_koora_domain="kooora.com";
         this.kooora_domain  = `https://${this.main_domain}/`;
-        this.kooora_news    = `https://m.${this.main_domain}/?n=[cat]&o=ncma&arabic&pg=[pg]`;
+        this.kooora_news    = `https://m.${this.main_domain}/?n=0&o=[cat]&arabic&pg=[pg]`;
         this.kooora_article = `https://m.${this.main_domain}/?[article_id]&arabic`;
         this.kooora_matches = `https://www.${this.main_domain}/?region=-1&area=[area]&dd=`;
         this.kooora_match   = `https://www.${this.main_domain}/?ajax=1&m=[id]&arabic`;
@@ -190,11 +190,10 @@ class API {
         return small ? this.cc_url_small.replace("[cc]",flag) : this.cc_url.replace("[cc]",flag) ; 
     }
 
-    get_news(page=0, news_id=0){
+    get_news(news_id=0, page=0, ){
 
         this.scrap = new Scrap();
         let url = this.kooora_news.replace("[cat]",news_id).replace("[pg]",page);
-
         url = this.scraping_pages ? "scarp_"+url : url;
         if(!this.running_calls_check(url)){return [];}
         return this.http(url,"GET",null,{})
@@ -254,7 +253,32 @@ class API {
         });
 
     }
+    add_favorite_teams_section(data){
+      let fav_list = {"id":1,"title":"Favorite teams","img":"",data:[]};
+      let added_fav_matches = [];
+      for(let j=0;j<data.length;j++){
+        for(let m=0;m<data[j]["data"].length;m++){
+          const matche_f = JSON.parse(JSON.stringify(data[j]["data"][m]));
+          const home_team_id = parseInt(matche_f["home_team_id"]) ? parseInt(matche_f["home_team_id"]) : 0 ;
+          const away_team_id = parseInt(matche_f["away_team_id"]) ? parseInt(matche_f["away_team_id"]) : 0 ;
+          if(added_fav_matches.includes(matche_f["id"])){
+            continue;
+          }
+          /*
+          if(_Favs.is_fav('matches',matche_f.id) ){
+            added_fav_matches.push(matche_f["id"]);
+            fav_list.data.push(matche_f);
+          }else */
+          if(_Favs.is_fav('teams',home_team_id) || _Favs.is_fav('teams',away_team_id)){
+            added_fav_matches.push(matche_f["id"]);
+            fav_list.data.push(matche_f);
+          }
+        }
+      }
     
+      data = fav_list.data.length>0 ? [fav_list,].concat(data) : data ;
+      return data;
+    }
     get_matches(date_obj, is_only_live, area=0){
         let url = this.kooora_matches.replace("[area]",area);
         url = is_only_live ? "https://www.kooora.com/?region=-1&area=6&dd=" : url;
@@ -264,6 +288,7 @@ class API {
         if(!this.running_calls_check(url)){return [];}
         return this.http(url,"GET",null,null)
         .then(resp=>{
+          //console.log(resp)
           let scrap = new Scrap();
           scrap.isWeb = this.isWeb;
           let matches = [];
@@ -272,6 +297,8 @@ class API {
             matches = scrap.get_matches_k(resp,date_obj,false, is_only_live);    
           } catch (e) { console.log(e);}
           this.running_calls_remove(url);
+          matches = _Favs.prioritize_favorites("leagues",matches,"id");
+          matches = this.add_favorite_teams_section(matches);
           return matches;//this.set_logos(matches);
         });
       }
@@ -333,16 +360,17 @@ class API {
     }
     
     async get_live_list(){
-      let res = await this.http(this.url_live_list,"GET",null,{},true);
-      if(res && res.length){
+      let channels = await this.http(this.url_live_list,"GET",null,{},true);
+      if(channels && channels.length){
         let id=1;
-        res = res.map(l=>{
+        channels = channels.map(l=>{
           l._id = ''+id;
           id=id+1;
           return l;
         });
       }
-      return res;
+      channels = _Favs.prioritize_favorites("channels",channels,"name");
+      return channels;
     }
     async saving_teams(){
       const team = await this.get_team(12);

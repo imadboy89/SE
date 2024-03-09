@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flex:1,
     width:"100%",
-    backgroundColor:"#0000001f"
+    //backgroundColor:"#00000011"
   },
   horizontal: {
     alignContent:"center",

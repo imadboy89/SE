@@ -1,8 +1,8 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity , View, Text  } from 'react-native';
 import {_isMobile,isBigScreen,theme} from "../Styles/general";
-import {Scrap_tools} from "react-native-essential-tools";
 import IconButton from './iconBtn';
+import SelectDropdown from 'react-native-select-dropdown'
 
 
 const styles = StyleSheet.create({
@@ -46,16 +46,12 @@ const styles = StyleSheet.create({
 });
 
 
-class DateNav extends React.Component {
+class FavNews extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
-        dynamic_style:false,
-        header_to_hide:[],
-        numColumns:1,
         list : [],
       }
-      this.Scrap_tools = new Scrap_tools();
     }
     nextPage = ()=>{
       this.end=false;
@@ -73,38 +69,35 @@ class DateNav extends React.Component {
         this.props.refresh();
       }
     }
-   
     render(){
-        const dayname = this.props.date.toLocaleDateString("us-US", { weekday: 'short'});
-        return (        
-            <View style={styles.container} >
-            <IconButton 
-              disabled={this.props.loading}
-              name="chevron-circle-left" 
-              size={47} 
-              style={styles.buttons} 
-              onPress={()=>this.previousPage()}  />
-            <TouchableOpacity
-              style={styles.date_container}
-              disabled={this.props.loading}
-              activeOpacity={0.5}
-              onPress={()=>this.setState({show_datPicker:true})}
-              >
-              <Text style={styles.date_text} >{this.Scrap_tools.get_date2(this.props.date)+" - "+dayname}</Text>
-            </TouchableOpacity>
-            <IconButton 
-              disabled={this.props.loading}
-              name="chevron-circle-right" 
-              size={47} 
-              style={styles.buttons} 
-              onPress={()=>this.nextPage()}  
+      const items = _Favs.favorite_news()//.map(n=><Picker.Item label={n.name} value={n.link} key={n.link}/>);
+      return (        
+          <View style={styles.container} >
+            <SelectDropdown
+              style={{ width:"100%",height:100,backgroundColor:"red"}}
+              data={items}
+              onSelect={(selectedItem, index) => {
+                console.log("selectedItem",selectedItem, index)
+                this.props.onChangeCat(selectedItem);
+              }}
+            	buttonTextAfterSelection={(selectedItem, index) => {
+                alert(selectedItem.name)
+                return selectedItem.name
+              }}
+              rowTextForSelection={(item, index) => {
+                return item.name
+              }}
+              renderDropdownIcon={()=>{
+                return <IconButton name="sort-down" color="black"></IconButton>
+              }}
               />
-          </View>);
+
+        </View>);
     }
 }
 
 
-export default DateNav;
+export default FavNews;
 
 
 

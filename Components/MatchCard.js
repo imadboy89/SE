@@ -22,15 +22,14 @@ class MatchCard extends React.Component {
   }
   render_start=(item, time_status,home_team_name,away_team_name,league_img,home_team_style ,away_team_style )=>{
     const shadow_style = isWeb ? styles_matches.shadow_3  : styles_matches.shadow_1;
-
+    const match_live = item.live ? styles_matches.matche_container_live : {};
     const palceholder_logo = require('../assets/placeholder.png');
     const match_backg      = require('../assets/b.jpg');
     const home_team_logo = item.home_team_logo ? {uri: item.home_team_logo} : palceholder_logo;
     const away_team_logo = item.away_team_logo ? {uri: item.away_team_logo} : palceholder_logo;
-    
     return (
       <ImageBackground 
-        style={[styles_matches.matche_container,shadow_style,{opacity:.8}]}
+        style={[styles_matches.matche_container,match_live,{opacity:.8}]}
         imageStyle={styles_matches.matche_container_img}
         source={match_backg}
         
@@ -38,7 +37,7 @@ class MatchCard extends React.Component {
         <View style={[styles_matches.teams_and_score_view,{backgroundColor:"#00000061"}]}>
 
           <View style={styles_matches.home_team_view}>
-            <FavoriteIcon favType="teams" favId={item.home_team_id}/>
+            <FavoriteIcon favType="teams" favId={item.home_team_id} item={[item.home_team_id,home_team_name,item.home_team_logo]}/>
             <Pressable style={styles_matches.matche_team_logo_view} onPress={()=>this.onPressTeam(item.home_team_id)}>
               { home_team_logo ? 
                 <Image 
@@ -58,7 +57,7 @@ class MatchCard extends React.Component {
           </View>
 
           <View style={styles_matches.home_team_view}>
-            <FavoriteIcon favType="teams" favId={item.away_team_id} pullRight/>
+            <FavoriteIcon favType="teams" favId={item.away_team_id} pullRight item={[item.away_team_id,away_team_name,item.away_team_logo]}/>
             <Pressable style={styles_matches.matche_team_logo_view} onPress={()=>this.onPressTeam(item.away_team_id)}>
               { away_team_logo ? 
               <Image 
@@ -90,9 +89,9 @@ class MatchCard extends React.Component {
   onPressTeam=(team_id)=>{
     let payload = {};
     if(team_id==this.props.item.home_team_id){
-      payload = {id:team_id,team_name_en:this.props.item.home_team,team_logo:this.props.item.home_team_logo};
+      payload = {team_id:team_id,team_name_en:this.props.item.home_team,team_logo:this.props.item.home_team_logo};
     }else{
-      payload = {id:team_id,team_name_en:this.props.item.away_team,team_logo:this.props.item.away_team_logo};
+      payload = {team_id:team_id,team_name_en:this.props.item.away_team,team_logo:this.props.item.away_team_logo};
     }
     if(this.props.pressableTeams){
       this.props.navigation.navigate('Team',payload);
@@ -145,15 +144,17 @@ class MatchCard extends React.Component {
     if(match_details && match_details.mn && match_details.mn.length>0 && match_details.mn[0].length>0){
       match_nbr = match_details.mn[0][1];
     }
-    const time_status = <>{item.is_done==true ? 
+    const time_status = <>
+    {item.is_done==true ? 
       <Text style={time_style}>{"Finished"}</Text> 
     : null}
     {item.live==1 && time_played? 
-      <Text style={time_style}  noFonts={true}>{time_played}</Text>
+      <Text style={time_style}  >{time_played}</Text>
     : null}
     {match_nbr!==0 ? 
-      <Text style={game_nbr}  noFonts={true}>M {match_nbr}</Text>
-    : null}</>;
+      <Text style={game_nbr}  >M {match_nbr}</Text>
+    : null}
+    </>;
 
     return this.render_start(item, time_status,home_team_name,away_team_name,league_img);
 }

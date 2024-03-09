@@ -108,6 +108,7 @@ const screen_baricon_secondary = (iconName)=> {
 const screen_option = {
   headerStyle: header_styler,
   headerTitleStyle: headerTitleStyle,
+  
 }
 
 export {tabBarOptions, headerTitleStyle, header_styler, tarballLabel_style, bottomTab, screenOptions, screen_baricon_secondary, screen_baricon_main, screen_option };

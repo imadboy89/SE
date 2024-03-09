@@ -45,7 +45,7 @@ const styles_news = StyleSheet.create({
     article_img:{
         flex:1,
         width:"100%",
-        resizeMode:"repeat"
+        contentFit:"repeat"
     },
 
     article_body_t:{
@@ -69,7 +69,7 @@ const styles_news = StyleSheet.create({
       width:"100%"
     },
     image_style : {
-      resizeMode:"stretch",
+      contentFit:"stretch",
       width:"100%",
     },
     news_img_v:{

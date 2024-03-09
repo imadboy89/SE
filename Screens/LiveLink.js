@@ -4,7 +4,7 @@ import styles_live from "../Styles/live";
 import Loader from "../Components/Loader";
 import { WebView } from 'react-native-webview';
 import IconButton from '../Components/iconBtn';
-import HSL from '../Components/hsl_layer';
+import BackBtn from "../Components/backBtn";
 
 const kooora_domain="domain.com"
 
@@ -56,6 +56,9 @@ export default class LiveLinkScreen extends React.Component {
   render_header=()=>{
     let title = this.state.live && this.state.live.title ? this.state.live.title : "";
     this.props.navigation.setOptions({title: title,
+      headerLeft: (props) => (
+        <BackBtn  {...props} navigation={this.props.navigation}/>
+      ),
     "headerRight":()=>(
       <View style={{flexDirection:"row",margin:5}}>
         <IconButton

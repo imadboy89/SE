@@ -13,7 +13,7 @@ class IconButton extends React.Component {
 
 
     render(){
-        let color = this.props.color!=undefined?this.props.color:"#5abfd8" ;
+        let color = this.props.color!=undefined?this.props.color:theme.buttons_color;
         color = this.props.disabled ? theme.inactiveTintColor :color;
         let backgroundColor  = this.props.badge_bg_color ? this.props.badge_bg_color : "bg_info";
         //let color = this.props.txt_color ? this.props.txt_color : "txt_info";

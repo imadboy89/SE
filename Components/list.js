@@ -113,7 +113,9 @@ class ItemsList extends React.Component {
             contentFit="contain"
             >
             { item.date ? <Text style={styles_news.date_text}>{item.date}</Text> : null}
-            <FavoriteIcon favType="channels" favId={item.id?item.id:item.name} pullRight/>
+
+            <FavoriteIcon favType="channels" favId={item.name} 
+            item={[item.name,item.name,item.logo]} pullRight/>
             <View style={styles_news.news_img_v}>
             </View>
             <View style={styles_news.news_title_v}>
@@ -146,8 +148,12 @@ class ItemsList extends React.Component {
     return item2render;
   }
   header_long_press= async (item)=>{
-    await _Favs.toggle_favorite("leagues", item);
-    this.setState({});
+    const _item = _Favs.format(item[0],item[1],item[2])
+    const isok = await _Favs.toggle_favorite("leagues", _item);
+    if(isok){
+      this.setState({});
+
+    }
   }
   _render_header=({ section: { title,img,id,is_koora,options } })=>{
     if(title==undefined || title==""){
@@ -173,7 +179,7 @@ class ItemsList extends React.Component {
           }
           this.props.refresh_list();
           }}
-          onLongPress={()=>this.header_long_press(id)}
+          onLongPress={()=>this.header_long_press([id,title,img])}
       >
         <View style={[{paddingHorizontal:5,flexDirection:'row', flexWrap:'wrap'},styles_list.header]} >
             <ImageBackground  
@@ -185,7 +191,7 @@ class ItemsList extends React.Component {
           <View style={styles_list.header_text_v} >
             <Text style={styles_list.header_text} numberOfLines={1}>{title}</Text>
           </View>
-          <FavoriteIcon favType="leagues" favId={id}/>
+          <FavoriteIcon favType="leagues" favId={id} item={[id,title,img]} />
           </View>
       </Pressable>);
 
@@ -262,13 +268,11 @@ class ItemsList extends React.Component {
   }
 
   render() {
-    if(this.props.loading){
-      return <Loader />;
-    }
+
     if( this.props.loading==false && (this.check_width(false) || styles_list==false || this.props.list==undefined)){
       return (<View style={styles_matches.container}>
         {this.props.ListHeaderComponent!=undefined ? this.props.ListHeaderComponent : null}
-        <Loader/>
+        <Loader />
         {this.props.ListFooterComponent!=undefined ? this.props.ListFooterComponent : null}
         </View>);
     }
@@ -280,11 +284,11 @@ class ItemsList extends React.Component {
     
     return (<View style={styles_matches.container}>
       {this.props.loading && (this.props.refreshControl==undefined || isWeb || this.props.list==undefined || this.props.list.length == 0)  
-      ? <>
+      ? <View style={{flex:1,}}>
         {this.props.ListHeaderComponent!=undefined ? this.props.ListHeaderComponent : null}
-        <Loader/>
+        <Loader />
         {this.props.ListFooterComponent!=undefined ? this.props.ListFooterComponent : null}
-      </> : this.render_list()}
+      </View> : this.render_list()}
     </View>);
   }
 }

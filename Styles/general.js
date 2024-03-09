@@ -35,6 +35,7 @@ const modal_maxWidth = window_width<1000 ? window_width*0.9 : 1000;
 
 const theme = {
     //headerStyle:
+  buttons_color : "orange",
   headerStyle_backgroundColor: theme_base.color_1,
   headerTintColor: '#fff',
   activeBackgroundColor: '#30336b',

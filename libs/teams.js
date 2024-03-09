@@ -22,6 +22,7 @@ export default class Teams {
         this.database_path="SQLite/";
         this.db_name="teams.db";
         //this.init_first()
+        this.init();
     }
     async init(){
         if(_API.isWeb){
@@ -82,7 +83,7 @@ export default class Teams {
         const readOnly = false;
         return await this.sqlDB.transactionAsync(async tx => {
             const result = await tx.executeSqlAsync(sqlQuery, [id,logo]);
-            console.log(result);
+            console.log("updateTeams : ",result);
             return true
             }, false);
 

@@ -11,20 +11,33 @@ class FavoriteIcon extends React.Component {
         is_fav:0
       };
       this.icons=["heart-o","heart",];
-      this.default_color = theme.headerStyle_backgroundColor;
-      this.default_size = 28;
+      this.icons=["","star",];
+      this.default_color = "orange";
+      this.default_size = 20;
     }
-    onPress=()=>{
-        this.props.favType
-        this.props.favId
-        _Favs.toggle_favorite(this.props.favType, this.props.favId);
+    componentDidMount(){
+        if(this.props.showAlways){
+            this.icons[0]=this.icons[1]+"-o";
+        }
+        this.item = _Favs.format(...this.props?.item);
+    }
+    onPress=async ()=>{
+        await _Favs.toggle_favorite(this.props.favType, this.item);
+        console.log("status : ",_Favs.is_fav(this.props.favType, this.item));
         if(this.props.onPress){
             this.props.onPress();
         }
     }
 
     render(){
-        const isFav = _Favs.is_fav(this.props.favType, this.props.favId);
+        this.item = _Favs.format(...this.props?.item);
+
+        console.log(this.props)
+        if(this.props.item==undefined){
+            return null
+        }
+        
+        const isFav = _Favs.is_fav(this.props.favType, this.item);
         let color = this.props.color!=undefined?this.props.color:this.default_color ;
         color = this.props.disabled ? theme.inactiveTintColor :color;
         /*
@@ -32,7 +45,7 @@ class FavoriteIcon extends React.Component {
         backgroundColor = styles_colors[backgroundColor] ? styles_colors[backgroundColor] : {};
 
         */
-       const size = this.props.size!=undefined?this.props.size:28;
+       const size = this.props.size!=undefined?this.props.size:this.default_size;
        const extra_styles = {width:size,height:size};
        if(this.props.pullRight){
         extra_styles.alignSelf="flex-end";
@@ -49,6 +62,7 @@ class FavoriteIcon extends React.Component {
                 style={[styles.container,extra_styles,this.props.style]}
                 >
                 <Icon 
+                    style={styles.icon}
                     name={this.icons[isFav]} 
                     size={size} 
                     color={color}
@@ -62,7 +76,14 @@ var styles = StyleSheet.create({
     container:{
         justifyContent:"center",
         alignItems: 'center', 
-        backgroundColor:"red",
+        //backgroundColor:"red",
+        margin:2
+    },
+    icon:{
+        textShadowColor: 'black',
+        textShadowOffset: {width: 2, height: 1},
+        textShadowRadius: 1
+      
     },
     badge : {
         borderRadius: 10,

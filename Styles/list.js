@@ -55,7 +55,7 @@ const styles_home = StyleSheet.create({
     header_image : {
         height:40,
         borderRadius:40,
-        resizeMode:"stretch",
+        contentFit:"stretch",
         width:"100%",
         borderWidth:0
 

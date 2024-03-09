@@ -1,5 +1,5 @@
 import React from "react";
-import { View, TouchableOpacity, Modal, Text, ScrollView, RefreshControl} from 'react-native';
+import { View, Pressable, Modal, Text, ScrollView} from 'react-native';
 import Loading from '../Components/Loader';
 import styles_match from "../Styles/match"
 import render_match  from '../Components/MatchCard';
@@ -7,7 +7,8 @@ import IconButton from '../Components/iconBtn';
 import { Image,ImageBackground } from 'expo-image';
 import EmptySpace from  '../Components/EmptySpace';
 import Team from "../libs/teams";
-
+import FavoriteIcon from "../Components/FavoriteIcon";
+import BackBtn from "../Components/backBtn"
 class Teamcreen extends React.Component {
   constructor(props) {
     super(props);
@@ -19,12 +20,13 @@ class Teamcreen extends React.Component {
         height:"100%",
 
     };
-    this.id = this.props.route?.params?.id ;
+    this.id = this.props.route?.params?.team_id ;
+    console.log(this.props.route.params)
   }
   componentDidMount(){
     this._isMounted=true;
     this.state.team_details = this.state.team_details && this.state.team_details!="-" ? this.state.team_details : undefined;
-    this.id = this.state.team_details && this.state.team_details.id ? this.state.team_details.id : this.props.route.params.id ;    
+    this.id = this.state.team_details && this.state.team_details.team_id ? this.state.team_details.team_id : this.props.route.params.team_id ;    
     this.render_header();
 
     this.didBlurSubscription = this.props.navigation.addListener(
@@ -33,8 +35,7 @@ class Teamcreen extends React.Component {
           this.is_focused = true;
           if(this._isMounted==false){return;}
           this.state.team_details = this.state.team_details && this.state.team_details!="-" ? this.state.team_details : undefined;
-          this.id = this.state.team_details && this.state.team_details.id ? this.state.team_details.id : this.props.route.params.id ;          this.refresh();
-          console.log(this.state.team_details)
+          this.id = this.state.team_details && this.state.team_details.team_id ? this.state.team_details.team_id : this.props.route.params.team_id ;
           this.refresh();
       }
       );
@@ -48,6 +49,9 @@ class Teamcreen extends React.Component {
       title=`${this.state.team_details.team_name_en}`;
     }
     this.props.navigation.setOptions({title: title,
+      headerLeft: (props) => (
+        <BackBtn  {...props} navigation={this.props.navigation}/>
+      ),
     });
   }
   async get_Team(){
@@ -68,6 +72,12 @@ class Teamcreen extends React.Component {
     }
     this.setState({loading:false});
   }
+  player_onLongPress=async(item)=>{
+    const isok = await _Favs.toggle_favorite("players",_Favs.format(...item));
+    if(isok){
+      this.setState({})
+    }
+  }
   get_squad(){
     if(this.state.team_details && this.state.team_details.squad_club && this.state.team_details.squad_club.map){
       this.state.team_details.squad_club = this.state.team_details.squad_club.filter((sq,ind,self)=>this.state.team_details.squad_club.indexOf(sq)===ind);
@@ -81,22 +91,27 @@ class Teamcreen extends React.Component {
       const p_name = row[4] && row[4].trim ? row[4].trim() : "";
       const ma_style = p_ccode && p_ccode.trim && p_ccode.toLocaleLowerCase().trim() == "ma" ? {borderWidth:1}: {};
       const cc_flag = p_ccode && p_ccode.trim && p_ccode.toLocaleLowerCase().trim()!="" ?  p_ccode.toLocaleLowerCase().trim() : false;
-      console.log(cc_flag, _API.get_cc_img(cc_flag, true))
-      return  <TouchableOpacity key={p_id+"-"+p_pos}
+      const text = {fontSize:20};
+      return  <Pressable key={p_id+"-"+p_pos}
+      onLongPress={()=>{
+        this.player_onLongPress([p_id,p_name,""]);
+      }}
       delayLongPress={300}
       activeOpacity={0.7}
-      style={[{flexDirection:"row",flex:1,height:30,borderBottomWidth:1,justifyContent:"center",alignContent:"center",alignItems:"center"},ma_style ]}>
-        <View style={{width:20}}><Text style={{flex:1}}></Text></View>
-        <View style={{width:30}}><Text style={{flex:1}}>{p_nbr}</Text></View>
-        <View style={{flex:1}}><Text style={{flex:8}}>{p_name}</Text></View>
+      style={[{flexDirection:"row",flex:1,height:35,borderBottomWidth:1,justifyContent:"center",alignContent:"center",alignItems:"center",alignContent:"center"},ma_style ]}>
+
+        <FavoriteIcon favType="players" favId={p_id}  size={18} style={{}}
+            item={[p_id,p_name,""]}/>
+        <View style={{width:30,}}><Text style={text}>{p_nbr}</Text></View>
+        <View style={{flex:1}}><Text style={text}>{p_name}</Text></View>
         {cc_flag!=false ? 
-        <View style={{width:40,padding:5,marginHorizontal:20}} >
+        <View style={{width:40,padding:5,marginHorizontal:22}} >
           <Image 
           style={{height:"99%",width:"99%"}}  
           imageStyle={{borderRadius:  20,height:"99%",width:"99%"}} 
           source={{uri: _API.get_cc_img(cc_flag, true)}} />
         </View> : null }
-        </TouchableOpacity>;
+        </Pressable>;
 
       return <View key={p_id} styles={this.state.dynamic_style.info_row}>
                 <Text style={this.state.dynamic_style.text_carrier}>{p_name}</Text>
@@ -162,6 +177,13 @@ class Teamcreen extends React.Component {
       <ScrollView style={styles_match.container}
         contentContainerStyle={styles_match.container_container}
       >
+        <FavoriteIcon 
+          favType="teams" 
+          favId={this.id} 
+          pullRight showAlways size={50} 
+          onPress={()=>this.setState({})}
+          item={[this.id,this.state.team_details.team_name_en,this.state.team_details.team_logo]}
+          />
         <View style={{height:250,width:"98%",alignItems:"center",justifyContent:"center",alignContent:"center", flex:1}}>
             <Image
                 source={{uri:this.state.team_details.team_logo}}

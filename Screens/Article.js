@@ -1,9 +1,10 @@
 import React from "react";
-import {  View, Dimensions,ScrollView , ImageBackground, Text} from 'react-native';
+import {  View, Dimensions,ScrollView , Text} from 'react-native';
 import styles_article from "../Styles/article";
 import Loader from "../Components/Loader";
 import EmptySpace from  '../Components/EmptySpace';
-
+import BackBtn from "../Components/backBtn";
+import {ImageBackground} from "expo-image";
 
 const kooora_domain="domain.com"
 
@@ -47,6 +48,9 @@ class ArticleScreen extends React.Component {
   render_header=()=>{
     let title = this.state.article && this.state.article.title_news ? this.state.article.title_news : "";
     this.props.navigation.setOptions({title: title,
+      headerLeft: (props) => (
+        <BackBtn  {...props} navigation={this.props.navigation}/>
+      ),
     "headerRight":()=>(
       <View style={{flexDirection:"row",margin:5,}}>
     </View>
@@ -102,7 +106,7 @@ class ArticleScreen extends React.Component {
         img_src = img_src && img_src.slice(0,2) == "//" ? "https:"+img_src : img_src;
         img_src = img_src && img_src.slice(0,4) == "http" ? img_src : `${kooora_domain}${img_src}`;
         dom2retrurn = <View key={o} style={{flexDirection: 'row',height:300,width:width,alignSelf:"center",marginVertical:10}}>
-        <ImageBackground source={{uri:img_src}} style={{aspectRatio: 1,resizeMode: 'contain',flex: 1,}} resizeMode={'contain'}/>
+        <ImageBackground source={{uri:img_src}} style={{aspectRatio: 1,flex: 1,}} contentFit={'contain'}/>
         </View>;
       }else{
         dom2retrurn = <Text key={o} style={styles_article.article_body_t}>{o}</Text>

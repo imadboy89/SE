@@ -4,7 +4,7 @@ import ListCustom from "../Components/list";
 import styles_news from "../Styles/news";
 import IconButton from '../Components/iconBtn';
 import Constants from 'expo-constants'
-
+import BackBtn from "../Components/backBtn";
 
 export default class LiveScreen extends React.Component {
   constructor(props) {
@@ -49,7 +49,7 @@ export default class LiveScreen extends React.Component {
   
   refresh=()=>{
     _API.get_live_list().then(data =>{
-      this.setState({loading:false,list:data})
+      this.setState({loading:false,list:data.slice(0,4)})
     });
 
     this.setState({loading:true,list:[]});
@@ -63,6 +63,9 @@ export default class LiveScreen extends React.Component {
   }
   render_header=()=>{
     this.props.navigation.setOptions({
+      headerLeft: (props) => (
+        <BackBtn  {...props} navigation={this.props.navigation}/>
+      ),
     "headerRight":()=>(
       <View style={{flexDirection:"row",margin:5}}>
         <IconButton
@@ -81,7 +84,13 @@ export default class LiveScreen extends React.Component {
       this.onClosed();
     }
   }
-  
+  onLongPress=async(item)=>{
+    const isok = await _Favs.toggle_favorite("channels",_Favs.format(...[item.name,item.name,item.logo]));
+    console.log("---",[item.name,item.name,item.img],item);
+    if(isok){
+      this.setState({})
+    }
+  }
   render(){
 
     return (<View style={styles_news.root_container}>
@@ -90,6 +99,7 @@ export default class LiveScreen extends React.Component {
       loading={this.state.loading} 
       list={this.state.list} 
       onclick={this.onclick}
+      onLongPress={this.onLongPress}
       type="live" 
       id="_id"
       minWidth={150}
