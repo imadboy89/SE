@@ -5,6 +5,8 @@ import styles_match from "../Styles/match"
 import MatchCard from '../Components/MatchCard';
 import IconButton from '../Components/iconBtn';
 import BackBtn from "../Components/backBtn";
+import EmptySpace from  '../Components/EmptySpace';
+
 let list = [
 
           ];
@@ -25,9 +27,7 @@ class Matchcreen extends React.Component {
     };
     this.sub_out = {"home":[],"away":[]};
     this.id = 0;
-    this.symbol_goal = "⚽";
-    this.symbol_redcard = "🟥";
-    this.symbol_yallowcard = "🟨";
+    this.event_symbols = {"g":"⚽", "y":"🟨", "r":"🟥","p":"🥅"};
     this.windowWidth = Dimensions.get('window').width<=1000 ? Dimensions.get('window').width : 1000;
   }
   componentDidMount(){
@@ -145,7 +145,7 @@ class Matchcreen extends React.Component {
     }) ;
     return(
       <>
-      <View style={styles_match.title_view}><Text style={styles_match.title_text}>Match details : </Text></View>
+      <View style={styles_match.title_view}><Text style={styles_match.title_text}>Match details </Text></View>
       <View style={styles_match.general_info_container}>
         {attrs}
       </View>
@@ -153,7 +153,7 @@ class Matchcreen extends React.Component {
     );
   }
   get_eventsLine(){
-    return (        <View style={styles_match.stats_view}>
+    return (<View style={styles_match.stats_view}>
       <View style={[styles_match.stats_sides_view, styles_match.stats_left_view]}>
         <Text>test 1</Text>
       </View>
@@ -175,20 +175,24 @@ class Matchcreen extends React.Component {
         if(elm[type_+"_scorer"]==undefined || elm[type_+"_scorer"]=="" || elm[type_+"_scorer"]==null) return false;
         let text = "";
         if(type_=="away"){
-          if(API_.is_ascii(elm[type_+"_scorer"]) == false){
+          text = this.symbol_goal + " " +(elm.time ? elm.time+'"' : "-") +" "+ elm[type_+"_scorer"];
+          /*
+          if(_API.is_ascii(elm[type_+"_scorer"]) == false){
             text = this.symbol_goal + " " +(elm.time ? elm.time+'"' : "-") +" "+ elm[type_+"_scorer"];
           }else{
             text = elm[type_+"_scorer"]+" "+(elm.time ? elm.time+'"' : "-") +" "+this.symbol_goal;
-          }
+          }*/
           this.scorers_a.push(elm[type_+"_scorer"]);
           this.assist_a.push(elm[type_+"_assist"]);
           
         }else{
-          if(API_.is_ascii(elm[type_+"_scorer"]) == false){
+          /*
+          if(_API.is_ascii(elm[type_+"_scorer"]) == false){
             text = elm[type_+"_scorer"] +" "+(elm.time ? elm.time+'"' : "-") +" "+this.symbol_goal;
           }else{
             text = this.symbol_goal + " " +(elm.time ? elm.time+'"' : "-") +" " +elm[type_+"_scorer"];
-          }
+          }*/
+          text = elm[type_+"_scorer"] +" "+(elm.time ? elm.time+'"' : "-") +" "+this.symbol_goal;
           this.scorers_h.push(elm[type_+"_scorer"]);
           this.assist_h.push(elm[type_+"_assist"]);
         }
@@ -201,15 +205,60 @@ class Matchcreen extends React.Component {
       );
     }
   }
-
-  get_cards(type_="home"){
-    if(type_=="home"){
-      this.ycards_h =[];
-      this.rcards_h =[];
+  e_format(e){
+    let c = null;
+    const event_symbole = this.event_symbols[e.type]?this.event_symbols[e.type]:e.type;
+    const key = `${e.player_id}_${e.card_type}_${e.time}`;
+    if(e.team=="home"){
+      c = <View key={key} style={[styles_match.events_side_row,styles_match.events_side_row_home]}>
+            <Text style={[styles_match.events_side_row_text,styles_match.events_side_text_home]} numberOfLines={1}>{e.player_name}</Text>
+          </View>;
     }else{
-      this.ycards_a =[];
-      this.rcards_a =[];
+      c = <View key={key} style={[styles_match.events_side_row,styles_match.events_side_row_away]}>
+            <Text style={[styles_match.events_side_row_text,styles_match.events_side_text_away]} numberOfLines={1}>{e.player_name}</Text>
+          </View>;
     }
+    const placeholder_l=<View style={[styles_match.placeholder,styles_match.pullright]}>
+        <Text style={styles_match.events_time}>{e.time}'</Text>
+        <Text style={styles_match.events_symbole}>{event_symbole}</Text>
+        <View style={styles_match.events_line}><Text> </Text></View>
+      </View>;
+    const placeholder_r=<View style={[styles_match.placeholder,]}>
+        <View style={styles_match.events_line}><Text> </Text></View>
+        <Text style={styles_match.events_symbole}>{event_symbole}</Text>
+        <Text style={styles_match.events_time}>{e.time}'</Text>
+      </View>;
+
+    return [c,placeholder_l,placeholder_r];
+
+    return c;
+  }
+  get_events(){
+    let home_side = [];
+    let away_side = [];
+    
+    let events = [...this.state.matche_details.cards, ...this.state.matche_details.goal_scorer]
+    events = events.sort((a,b)=>{
+      return a.time<b.time?-1:1
+    });
+    for( const e of events){
+      console.log(e)
+      const e_res = this.e_format(e);
+      home_side.push( e.team=="home" ? e_res[0] : e_res[1] );
+      away_side.push( e.team=="away" ? e_res[0] : e_res[2] );
+    }
+    return <View style={styles_match.events_container}>
+      <View style={[styles_match.events_side,styles_match.events_side_home]}>{home_side}</View>
+      <View style={[styles_match.events_side,styles_match.events_side_away]}>{away_side}</View>
+    </View>;
+  }
+  get_cards(type_="home"){
+    this.match_events = [];
+    this.ycards_h =[];
+    this.rcards_h =[];
+    this.ycards_a =[];
+    this.rcards_a =[];
+
     let style_class = type_=="home"? styles_match.match_results_team_name_r : styles_match.match_results_team_name_l ;
     if(this.state.matche_details.cards){
       this.state.matche_details.cards = this.state.matche_details.cards.sort((a,b)=>{
@@ -217,32 +266,25 @@ class Matchcreen extends React.Component {
       });
       let res = this.state.matche_details.cards.map(elm=>{
         const __key = type_+"_card";
-        if(elm[__key]==undefined || elm[__key]=="" || elm[__key]==null) return false;
+        console.log("elm", elm);
+        //if(elm[__key]==undefined || elm[__key]=="" || elm[__key]==null) return false;
         let text = "";
         const card_type = elm.type=="r" ? this.symbol_redcard : this.symbol_yallowcard ;
-        if(type_=="away"){
-          if(API_.is_ascii(elm[__key]) == false){
-            text = card_type + " " + (elm.time ? elm.time+'"' : "-") +" "+ elm[__key];
-          }else{
-            text = elm[__key]+" "+(elm.time ? elm.time+'"' : "-") + " " + card_type;
-          }
+        if(elm.team=="away"){
+          text = card_type + " " + (elm.time ? elm.time+'"' : "-") +" "+ elm.player_name;
           if(elm.type=="r"){
-            this.rcards_a.push(elm[__key]);
+            this.rcards_a.push(elm);
           }else{
-            this.ycards_a.push(elm[__key]);
+            this.ycards_a.push(elm);
           }
           
           
         }else{
-          if(API_.is_ascii(elm[__key]) == false){
-            text = elm[__key] +" "+(elm.time ? elm.time+'"' : "-") + " " + card_type;
-          }else{
-            text = card_type + " " + (elm.time ? elm.time+'"' : "-") +" " +elm[__key];
-          }
+          text = elm.player_name +" "+(elm.time ? elm.time+'"' : "-") + " " + card_type;
           if(elm.type=="r"){
-            this.rcards_h.push(elm[__key]);
+            this.rcards_h.push(elm);
           }else{
-            this.ycards_h.push(elm[__key]);
+            this.ycards_h.push(elm);
           }
         }
         return <Text style={[style_class,styles_match.match_results_scorer_text]} key={text}>{text}</Text>;
@@ -274,8 +316,10 @@ class Matchcreen extends React.Component {
             navigation={this.props.navigation}
             />
         </View>
-        {this.state.loading ? <Loading /> : this.get_info()}
         
+        {this.state.loading ? null : this.get_events()}
+        {this.state.loading ? <Loading /> : this.get_info()}
+        <EmptySpace />
       </ScrollView>
     );
   }

@@ -19,6 +19,7 @@ class API {
         this.kooora_news    = `https://m.${this.main_domain}/?n=0&o=[cat]&arabic&pg=[pg]`;
         this.kooora_article = `https://m.${this.main_domain}/?[article_id]`;
         this.kooora_matches = `https://www.${this.main_domain}/?region=-1&area=[area]&dd=`;
+        this.kooora_matches_live = `https://www.${this.main_domain}/?region=-1&area=6&dd=`;
         this.kooora_match   = `https://www.${this.main_domain}/?ajax=1&m=[id]`;
         this.kooora_team    = `https://m.${this.main_domain}/?team=[id]`;
         this.kooora_player  = `https://m.${this.main_domain}/?player=[id]`;
@@ -282,10 +283,9 @@ class API {
     }
     get_matches(date_obj, is_only_live, area=0){
         let url = this.kooora_matches.replace("[area]",area);
-        url = is_only_live ? "https://www.kooora.com/?region=-1&area=6&dd=" : url;
+        url = is_only_live ? this.kooora_matches_live: url;
         url +=date_obj.getDate()+"&mm="+(date_obj.getMonth()+1)+"&yy="+date_obj.getFullYear()+"&arabic&ajax=1";
 
-        
         if(!this.running_calls_check(url)){return [];}
         return this.http(url,"GET",null,null)
         .then(resp=>{
@@ -293,9 +293,9 @@ class API {
           let scrap = new Scrap();
           scrap.isWeb = this.isWeb;
           let matches = [];
-          is_only_live = false;
+          //is_only_live = false;
           try {
-            matches = scrap.get_matches_k(resp,date_obj,false, is_only_live);    
+            matches = scrap.get_matches(resp,date_obj,false, is_only_live);    
           } catch (e) { console.log(e);}
           this.running_calls_remove(url);
           matches = _Favs.prioritize_favorites("leagues",matches,"id");

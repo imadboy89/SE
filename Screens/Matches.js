@@ -15,15 +15,20 @@ export default class MatchesScreen extends React.Component {
           list:[],
           loading:true,
           date:new Date(),
+          only_live:false,
       };
       if(!_API.isWeb){
         this.Tm = new Teams();
       }
 
     }
-    refresh=async ()=>{
+    refresh=async (live_only=false)=>{
       this.setState({loading:true,list:[]})
-      _API.get_matches(this.state.date)?.then( async data =>{
+      _API.get_matches(this.state.date,this.state.only_live)?.then( async data =>{
+        if(!data || !data.map){
+          this.setState({loading:false,list:[]});
+          return
+        }
         let ids=[];
         data.map(l=>{
           l.data.map(m=>{
@@ -58,11 +63,25 @@ export default class MatchesScreen extends React.Component {
         this.Tm.init_first().then(()=>this.setState({}))
       }
     }
+    toggle_liveonly(){
+
+    }
     render_header=()=>{
+      const live_btn_color = this.state.only_live ? "#00ff4e" : undefined;
       this.props.navigation.setOptions({
 
         "headerRight":()=>(
           <View style={{flexDirection:"row",margin:5}}>
+              <IconButton
+              style={{paddingRight:10}}
+              name='hourglass-start'
+              color={live_btn_color}
+              onPress={()=>{
+                this.state.only_live = !this.state.only_live;
+                this.refresh(true);
+                this.render_header();
+              }}
+            />
             <IconButton
               name='refresh'
               onPress={this.refresh}

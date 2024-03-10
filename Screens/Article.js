@@ -1,10 +1,10 @@
 import React from "react";
-import {  View, Dimensions,ScrollView , Text} from 'react-native';
+import {  View, Dimensions,ScrollView , Text,ImageBackground, Image} from 'react-native';
 import styles_article from "../Styles/article";
 import Loader from "../Components/Loader";
 import EmptySpace from  '../Components/EmptySpace';
 import BackBtn from "../Components/backBtn";
-import {ImageBackground} from "expo-image";
+//import {ImageBackground} from "expo-image";
 
 const kooora_domain="domain.com"
 
@@ -94,6 +94,7 @@ class ArticleScreen extends React.Component {
 
   render() {
     const article_img = this.state.article && this.state.article.img ? this.state.article.img : null;
+    console.log("article_img", article_img)
     const article_body = this.state.article && this.state.article.body ? this.state.article.body : "";
     const body_composed = article_body && article_body.split ? article_body.split("IMG**").map(o=>{
       if(o.trim()==""){
@@ -123,7 +124,7 @@ class ArticleScreen extends React.Component {
             <ImageBackground 
             key={"article_backgrnd"} 
             style={styles_article.article_img} 
-            source={{uri: article_img}}
+            source={{uri: article_img, headers: { 'Accept': 'image/*'}}}
             contentFit="contain">
             </ImageBackground>
 

@@ -5,6 +5,7 @@ import { Image,ImageBackground } from 'expo-image';
 
 import styles_matches from "../Styles/matches";
 import FavoriteIcon from "./FavoriteIcon";
+import {ActivityIndicator} from 'react-native';
 
 const parse_details=()=>{
 
@@ -79,7 +80,7 @@ class MatchCard extends React.Component {
         <View style={styles_matches.extra_details_view}>
           <View style={styles_matches.matche_team_time_view}></View>
           <View style={styles_matches.matche_team_time_view}>
-            <Text style={styles_matches.matche_team_time_text} noFonts={true}>{item.time}"</Text>
+            <Text style={styles_matches.matche_team_time_text} noFonts={true}>{item.time}</Text>
           </View>
           <View style={styles_matches.matche_team_time_view}>{time_status}</View>
         </View>
@@ -127,8 +128,10 @@ class MatchCard extends React.Component {
     }
 
     const league_img = item.league_img ? item.league_img : null;
-    let time_style={textAlign:"right"};
+    let time_style={textAlign:"right",fontSize:16,};
     const game_nbr  ={color:"#8fa2ff", fontSize:12,};
+    
+    /*
     try {
       time_style = JSON.parse(JSON.stringify(styles_matches.matche_team_time_live));
     } catch (error) {}
@@ -136,8 +139,10 @@ class MatchCard extends React.Component {
       time_style["color"]="#ff5252";
     }else if(item.is_done){
       time_style["color"]="#8fa2ff";
-      time_style["fontSize"]=13;
+      //time_style["fontSize"]=13;
     }
+    
+    */
     let time_played= item.time_played>0?item.time_played+"'": item.time_played;
     const match_details = parse_details(item.details);
     let match_nbr = 0;
@@ -146,10 +151,14 @@ class MatchCard extends React.Component {
     }
     const time_status = <>
     {item.is_done==true ? 
-      <Text style={time_style}>{"Finished"}</Text> 
+      <Text style={styles_matches.matche_team_time_status}>{"Finished"}</Text> 
     : null}
     {item.live==1 && time_played? 
-      <Text style={time_style}  >{time_played}</Text>
+      <View style={{flexDirection:"row"}}>
+        <Text style={styles_matches.matche_team_time_live}  >{time_played}</Text>
+        <ActivityIndicator size="small" color={time_style.color} />
+      </View>
+
     : null}
     {match_nbr!==0 ? 
       <Text style={game_nbr}  >M {match_nbr}</Text>

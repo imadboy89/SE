@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
     flexWrap:'wrap', 
     alignSelf:"center",
     justifyContent:"center",
-    width:isBigScreen?400:"98%",
+    width:isBigScreen?400:"90%",
     //backgroundColor:"#a29bfe6b",
     //padding:5,
     //borderColor:"black",
@@ -58,6 +58,9 @@ class FavNews extends React.Component {
         list : [],
       }
     }
+    componentDidMount=()=>{
+      //this.props.onChangeCat();
+    }
     nextPage = ()=>{
       this.end=false;
       this.props.date .setDate(this.props.date .getDate() + 1);
@@ -88,7 +91,7 @@ class FavNews extends React.Component {
                 return selectedItem.name;
                 //alert(this.state.selectedItem)
               }}
-              defaultValue={this.props.selectedItem}
+              defaultValueByIndex={0}
               rowTextForSelection={(item, index) => {
                 return item.name
               }}

@@ -43,12 +43,13 @@ const styles_news = StyleSheet.create({
         width:"99%",
         height:300,
         padding:10,
+        //backgroundColor:"red",
+        minWidth:300
 
     },
     article_img:{
         flex:1,
         width:"100%",
-        contentFit:"repeat"
     },
 
     article_body_t:{

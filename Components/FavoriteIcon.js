@@ -23,7 +23,6 @@ class FavoriteIcon extends React.Component {
     }
     onPress=async ()=>{
         await _Favs.toggle_favorite(this.props.favType, this.item);
-        console.log("status : ",_Favs.is_fav(this.props.favType, this.item));
         if(this.props.onPress){
             this.props.onPress();
         }
@@ -32,7 +31,6 @@ class FavoriteIcon extends React.Component {
     render(){
         this.item = _Favs.format(...this.props?.item);
 
-        console.log(this.props)
         if(this.props.item==undefined){
             return null
         }

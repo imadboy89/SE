@@ -35,7 +35,7 @@ const styles_home = StyleSheet.create({
     },
     matche_container_img:{
 
-      width:"99%",
+      width:"100%",
       flexWrap:'wrap',      
       flex: 1 ,
       height: "99%",
@@ -60,16 +60,14 @@ const styles_home = StyleSheet.create({
       flex:1,
       backgroundColor: theme.match_time_backgroundColor,
       borderTopWidth:1,
+      //backgroundColor:"#00000070",
       borderColor:"#5e5e698a",
       justifyContent: 'center',
       alignItems:'center',
+      paddingBottom:3
 
     },
-    matche_team_time_text:{
-      color:theme.match_time_color,
-      fontWeight: 'bold',
-      textAlign:"right"
-    },
+
     matche_team_logo_image:{
       flex:1,
       //backgroundColor:"yellow",
@@ -101,7 +99,7 @@ const styles_home = StyleSheet.create({
     },
     extra_details_view:{
       flexDirection:'row', 
-      height:20
+      height:40
     },
     home_team_name_view:{
       flex:1,
@@ -131,7 +129,7 @@ const styles_home = StyleSheet.create({
       textAlign:"center",
     },
     team_name_winner:{
-
+      
     },
     team_name_drawer:{
       
@@ -139,14 +137,30 @@ const styles_home = StyleSheet.create({
     team_name_drawer:{
 
     },
+    matche_team_time_text:{
+      color:theme.match_time_color,
+      fontWeight: 'bold',
+      textAlign:"right",
+      fontSize:22,
+    },
     matche_team_time_live:{
       fontWeight:"bold",
-      fontSize:16,
+      fontSize:22,
       color:"#00ff4e",
-      width:"100%",
+      width:"70%",
       textAlign:"center",
       //paddingRight:20,
-      paddingBottom:2
+      paddingBottom:2,
+      //backgroundColor:"red"
+    },
+    matche_team_time_status:{
+      fontWeight:"bold",
+      fontSize:20,
+      color:theme.link_text_color,
+      width:"95%",
+      textAlign:"center",
+      //paddingRight:20,
+      paddingBottom:2,
       //backgroundColor:"red"
     },
   });

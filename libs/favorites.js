@@ -51,7 +51,6 @@ class Favorites {
         return true;
     }
     set_favorite=async (_type, item, add=true)=>{
-        console.log("**",item)
         if(!isNaN(parseInt(item.id)) && parseInt(item.id)==item.id){
             item.id = parseInt(item.id);
         }
@@ -103,27 +102,28 @@ class Favorites {
         return `n3${this.generate_chars(id)}${id}`;
     }
     favorite_news(){
-        let news_fav = [];
+        let news_fav = [{link:"n",name:"Home"}];
         for(let x in this.leagues){
-            console.log("favorite_news",x)
-            news_fav.push({link:_Favs.league_news(x),name:this.leagues[x].name });
+            news_fav.push({link:_Favs.league_news(x),name:this.leagues[x].name ,id:this.leagues[x].id,type:"leagues"});
         }
         for(let x in this.teams){
-            news_fav.push({link:_Favs.team_news(x),name:this.teams[x].name });
+            news_fav.push({link:_Favs.team_news(x),name:this.teams[x].name ,id:this.teams[x].id,type:"teams"});
         }
         for(let x in this.players){
-            news_fav.push({link:_Favs.player_news(x),name:this.players[x].name });
+            news_fav.push({link:_Favs.player_news(x),name:this.players[x].name ,id:this.players[x].id,type:"players"});
         }
 
         return news_fav;
     }
     prioritize_favorites=(_type, data, key)=>{
-        return data;
-        if (!this.check_type(_type)){
+        //return data;
+        if (!this.check_type(_type) || !data || !data.sort){
             return false;
         }
         data = data.sort((a,b)=>{
-            return (this[_type] && a[key] in this[_type] > b[key] in this[_type])?-1:1;
+            const a_val = this[_type] && a[key] in this[_type] ? 1 : 0;
+            const b_val = this[_type] && b[key] in this[_type] ? 1 : 0;
+            return (a_val > b_val)?-1:1;
         });
         return data
     }

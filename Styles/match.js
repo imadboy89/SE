@@ -83,6 +83,81 @@ const styles_home = StyleSheet.create({
       alignItems:'flex-start',
 
     },
+
+    events_container:{
+      height:400,
+      flexDirection:"row",
+      width:"100%",
+    },
+
+    events_side:{
+      flex:1,
+    },
+    events_side_home:{
+
+    },
+    events_side_away:{
+
+    },
+    pullright:{
+      alignSelf:"flex-end",
+    },
+    
+    placeholder:{
+      justifyContent:"center",alignItems:"center",
+      width:50,
+      //backgroundColor:"red",
+      height:40,
+      marginVertical:4,
+      flexDirection:"row"
+      
+    },
+    events_side_row:{
+      justifyContent:"center",alignItems:"center",
+      marginVertical:4,
+      //backgroundColor:"green",
+      //width:20,
+      flexDirection:"row",
+      height:40,
+      //borderWidth:1,
+
+
+    },
+    events_side_row_home:{
+      borderTopLeftRadius:200,
+      borderTopRightRadius:2,
+      borderBottomLeftRadius:200,
+      borderBottomRightRadius:2,
+      backgroundColor:"#00000010",
+
+    },
+    events_side_row_away:{
+      textAlign:"left",
+      borderTopLeftRadius:2,
+      borderTopRightRadius:200,
+      borderBottomLeftRadius:2,
+      borderBottomRightRadius:200,
+      backgroundColor:"#00000010",
+
+    },
+    events_side_row_text:{
+      width:"90%",
+      height:"100%",
+      
+      borderColor:"black",
+      paddingVertical:10,
+      paddingHorizontal:0,
+      //borderTopRightRadius:100,
+
+      //backgroundColor:"red",
+    },
+    events_side_text_home:{
+      textAlign:"right"
+    },
+    events_side_text_away:{
+      textAlign:"left"
+    },
+
   });
 
 export default styles_home;

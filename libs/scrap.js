@@ -51,7 +51,7 @@ class Scrap extends Scrap_tools{
   }
   get_matche_k(resp,date){
     
-    let matche_dets = this.get_matches_k(resp,date,true);
+    let matche_dets = this.get_matches(resp,date,true);
     const league_name = matche_dets && matche_dets.length==1 && matche_dets[0]["title"] ? matche_dets[0]["title"] :"";
     let match_details = matche_dets && matche_dets.length==1 && matche_dets[0]["data"] && matche_dets[0]["data"].length==1 ? matche_dets[0]["data"][0] : false;
     if(match_details==false){return [];}
@@ -122,6 +122,8 @@ class Scrap extends Scrap_tools{
         scorer["time"] = events_dict[key][i][1];
         scorer["type"] = key;
         scorer["player_id"] = events_dict[key][i][2];
+        scorer["player_name"] = events_dict[key][i][3];
+        scorer["team"] = _type;
 
         scorer["time"] = !isNaN(scorer["time"]) ? parseInt(scorer["time"]) : scorer["time"];
 
@@ -134,12 +136,13 @@ class Scrap extends Scrap_tools{
     let scorers = []
     if(events_dict[key] && events_dict[key].length>0){
       for(let i=0;i< events_dict[key].length;i++){
-        let scorer = {"home_card":"", "away_card":"","time":"", "player_id":0};
-        scorer[`${_type}_card`] = events_dict[key][i][3];
+        let scorer = {};
+        scorer[`${_type}_scorer`] = events_dict[key][i][3];
+        scorer["player_name"] = events_dict[key][i][3];
+        scorer["team"] = _type;
         scorer["time"] = events_dict[key][i][1];
         scorer["type"] = key;
         scorer["player_id"] = events_dict[key][i][2];
-
         scorer["time"] = !isNaN(scorer["time"]) ? parseInt(scorer["time"]) : scorer["time"];
         scorers.push(scorer);
       }
@@ -289,7 +292,7 @@ class Scrap extends Scrap_tools{
     }
     return stages;
   }
-  get_matches_k(html,date,is_oneMatch=false,is_only_live=false, ignoreBL=false){
+  get_matches(html,date,is_oneMatch=false,is_only_live=false, ignoreBL=false){
     let json_={"matches_comps":[],"matches_list":[], "headers":[]};
     try{
       json_ = JSON.parse(html);
@@ -566,7 +569,7 @@ class Scrap extends Scrap_tools{
     for (let i=0; i<news.length;i++){
       let line = news[i];
       
-      let img = this.isWeb==false ? line[3].replace("//","https://") : line[3];
+      let img = this.isWeb==false && line[3] && line[3].replace && line[3].slice(0,2)=="//" ? line[3].replace("//","https://") : line[3];
       let date = line[2];
       try {
         date = date && date.slice && date.slice(0,1) =='#' ? this.get_date2(new Date(date.replace("#","") * 1000)) : date ;
