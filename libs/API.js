@@ -402,8 +402,11 @@ class API {
         alert(error)
       }
       if(!channels){
-        _Favs.LS.get_json("cache_live",[]);
+        channels = await _Favs.LS.get_json("cache_live",[]);
+      }else{
+        await _Favs.LS.set("cache_live",channels);;
       }
+
       if(channels && channels.length){
         let id=1;
         channels = channels.map(l=>{
@@ -412,7 +415,6 @@ class API {
           return l;
         });
       }
-      _Favs.LS.set("cache_live",channels);
       channels = _Favs.prioritize_favorites("channels",channels,"name");
       return channels;
     }
