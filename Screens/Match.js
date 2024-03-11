@@ -1,12 +1,15 @@
 import React from "react";
-import { View, TouchableHighlight, Modal, Text, Switch, TouchableOpacity,Image, Dimensions, ScrollView, RefreshControl} from 'react-native';
+import { View, TouchableHighlight, Modal, Text, Switch, TouchableOpacity, Dimensions, ScrollView, RefreshControl, Pressable} from 'react-native';
 import Loading from '../Components/Loader';
 import styles_match from "../Styles/match"
 import MatchCard from '../Components/MatchCard';
 import IconButton from '../Components/iconBtn';
 import BackBtn from "../Components/backBtn";
 import EmptySpace from  '../Components/EmptySpace';
-
+import { Tab, TabView } from '@rneui/themed';
+import { theme } from "../Styles/general";
+import { Image } from "expo-image";
+import {Divider} from "@rneui/base";
 let list = [
 
           ];
@@ -21,21 +24,19 @@ class Matchcreen extends React.Component {
         channel:null,
         matche_details:this.props.route.params,
         loading:true,
+        loading_lineup:true,
         height:"100%",
         is_live_match:false,
 
     };
     this.sub_out = {"home":[],"away":[]};
-    this.id = 0;
-    this.event_symbols = {"g":"⚽", "y":"🟨", "r":"🟥","p":"🥅"};
+    this.event_symbols = {"g":"⚽","o":"⚽", "y":"🟨", "r":"🟥","p":"🥅"};
     this.windowWidth = Dimensions.get('window').width<=1000 ? Dimensions.get('window').width : 1000;
+
   }
   componentDidMount(){
-    this.state.matche_details = this.state.matche_details && this.state.matche_details!="-" ? this.state.matche_details : undefined;
-    //console.log("componentDidMount",this.props.route.params.match_item.id);
-    this.id = this.state.matche_details && this.state.matche_details.id ? this.state.matche_details.id : this.props.route.params.id ;    
     this.render_header();
-
+    
     this.didBlurSubscription = this.props.navigation.addListener(
       'focus',
       payload => {
@@ -44,13 +45,12 @@ class Matchcreen extends React.Component {
           return;
           }
           this.state.matche_details = this.props.route.params&&this.props.route.params.id ? this.props.route.params : undefined;
-          this.id = this.state.matche_details && this.state.matche_details.id ? this.state.matche_details.id : this.props.route.params.id ;
           this.refresh();
       }
       );
   }
   refresh=()=>{
-    this.get_Match(this.id);
+    this.get_Match(this.state.matche_details.id);
   }
   render_header=()=>{
     let title = "";
@@ -75,7 +75,7 @@ class Matchcreen extends React.Component {
       });
   }
   get_Match(id){
-    if(this.id==undefined){
+    if(this.state.matche_details.id==undefined){
       return;
     }
     _API.get_match(id).then(resp=>{
@@ -121,6 +121,54 @@ class Matchcreen extends React.Component {
     subs = subs.sort((a,b)=>{return a.time<b.time?-1:1;});
     return subs;
   }
+  async get_lineup_api(){
+    const _lineup = await _API.get_lineup(this.state.matche_details.id);
+    
+    this.setState({lineup:_lineup,loading_lineup:false});
+  }
+  lineup_player(l,_type="home"){
+    const player_id = l.player_key;
+    const player_name_en = l.lineup_player;
+    const number = <Text style={styles_match.line_row_number}>{l.lineup_number}</Text>;
+    const name = <Text style={styles_match.line_row_name} numberOfLines={1}>{l.lineup_player?l.lineup_player:"-"}</Text>;
+    return <Pressable
+      style={styles_match.lineup_row} 
+      key={l.player_key}
+      onPress={()=>this.props.navigation.navigate("Player",{player_id,player_name_en})}
+      >
+      {_type=="home" ? 
+      <>{number}{name}</>
+      : 
+      <>{name}{number}</>
+      }
+      </Pressable>;
+  }
+  get_lineup(){
+    if(!this.state.lineup || !this.state.lineup.home_lineup || !this.state.lineup.away_lineup){
+      return <Text>Line up for this match is not available!</Text>;
+    }
+    const home_side = this.state.lineup.home_lineup.map(l=>this.lineup_player(l, "home"));
+    const away_side = this.state.lineup.away_lineup.map(l=>this.lineup_player(l, "away"));
+
+    let home_subtitle_side = this.state.lineup.home_substitutions.filter(l=>l.subs_in_time>=0);
+    let away_subtitle_side = this.state.lineup.home_substitutions.filter(l=>l.subs_in_time>=0);
+    home_subtitle_side = home_subtitle_side.map(l=>this.lineup_player(l, "home"));
+    away_subtitle_side = away_subtitle_side.map(l=>this.lineup_player(l, "away"));
+
+    return (<View style={styles_match.events_container}>
+    <View style={[styles_match.events_side,styles_match.events_side_home]}>
+      {home_side}
+      <Divider color="black" style={{marginVertical:10,width:"80%",alignSelf:"flex-end"}}/>
+      {home_subtitle_side}
+    </View>
+    <View style={[styles_match.events_side,styles_match.events_side_away]}>
+      {away_side}
+      <Divider color="black" style={{marginVertical:10,width:"80%",alignSelf:"flex-start"}}/>
+      {away_subtitle_side}
+    </View>
+
+  </View>);
+  }
   get_info(){
     const key2show=[
       {"key":"status","label":"Status","default":"-"},
@@ -137,93 +185,58 @@ class Matchcreen extends React.Component {
       if(!this.state.matche_details[i.key] || this.state.matche_details[i.key]=="" || this.state.matche_details[i.key]=="-"){
         return null;
       }
+      let value = <Text style={styles_match.general_info_value_text}>{this.state.matche_details[i.key]}</Text>;
+      if(i.key=="retour_score" && this.state.matche_details[i.key]){
+        const home_img = <Image style={{height:20,width:20}} source={{uri:this.state.matche_details.home_team_logo}} />;
+        const away_img = <Image style={{height:20,width:20}} source={{uri:this.state.matche_details.away_team_logo}} />;
+        value = <Text style={[styles_match.general_info_value_text,{flex:0,textAlign:"center",textAlignVertical:"center"}]}>{this.state.matche_details[i.key]}</Text>;
+        value = <View style={[styles_match.general_info_value_text,{flexDirection:"row"}]}>{away_img}{value}{home_img}</View>
+      }
       return (
     <View style={styles_match.general_info_row} key={i.key}>
       <Text style={styles_match.general_info_label_text}>{i.label} : </Text>
-      <Text style={styles_match.general_info_value_text}>{this.state.matche_details[i.key]}</Text>
+      {value}
     </View>);
     }) ;
     return(
       <>
-      <View style={styles_match.title_view}><Text style={styles_match.title_text}>Match details </Text></View>
       <View style={styles_match.general_info_container}>
         {attrs}
       </View>
       </>
     );
   }
-  get_eventsLine(){
-    return (<View style={styles_match.stats_view}>
-      <View style={[styles_match.stats_sides_view, styles_match.stats_left_view]}>
-        <Text>test 1</Text>
-      </View>
-      <View style={[styles_match.stats_sides_view, styles_match.stats_right_view]}>
-        <Text style={styles_match.stats_right_text}>test2</Text>
-      </View>
-    </View>);
-  }
-  get_scores(type_="home"){
-    if(type_=="home"){this.scorers_h =[];this.assist_h =[];}
-    else{this.scorers_a =[];this.assist_a =[];}
 
-    let style_class = type_=="home"? styles_match.match_results_team_name_r : styles_match.match_results_team_name_l ;
-    if(this.state.matche_details.goal_scorer){
-      this.state.matche_details.goal_scorer = this.state.matche_details.goal_scorer.sort((a,b)=>{
-        return a.time<b.time?-1:1
-      });
-      let res = this.state.matche_details.goal_scorer.map(elm=>{
-        if(elm[type_+"_scorer"]==undefined || elm[type_+"_scorer"]=="" || elm[type_+"_scorer"]==null) return false;
-        let text = "";
-        if(type_=="away"){
-          text = this.symbol_goal + " " +(elm.time ? elm.time+'"' : "-") +" "+ elm[type_+"_scorer"];
-          /*
-          if(_API.is_ascii(elm[type_+"_scorer"]) == false){
-            text = this.symbol_goal + " " +(elm.time ? elm.time+'"' : "-") +" "+ elm[type_+"_scorer"];
-          }else{
-            text = elm[type_+"_scorer"]+" "+(elm.time ? elm.time+'"' : "-") +" "+this.symbol_goal;
-          }*/
-          this.scorers_a.push(elm[type_+"_scorer"]);
-          this.assist_a.push(elm[type_+"_assist"]);
-          
-        }else{
-          /*
-          if(_API.is_ascii(elm[type_+"_scorer"]) == false){
-            text = elm[type_+"_scorer"] +" "+(elm.time ? elm.time+'"' : "-") +" "+this.symbol_goal;
-          }else{
-            text = this.symbol_goal + " " +(elm.time ? elm.time+'"' : "-") +" " +elm[type_+"_scorer"];
-          }*/
-          text = elm[type_+"_scorer"] +" "+(elm.time ? elm.time+'"' : "-") +" "+this.symbol_goal;
-          this.scorers_h.push(elm[type_+"_scorer"]);
-          this.assist_h.push(elm[type_+"_assist"]);
-        }
-        return <Text style={[style_class,styles_match.match_results_scorer_text]} key={text}>{text}</Text>;
-      });
-      return(
-          <View style={[style_class]}>
-            {res ? res :null}
-          </View>
-      );
-    }
-  }
-  e_format(e){
+  e_format(e,index){
     let c = null;
     const event_symbole = this.event_symbols[e.type]?this.event_symbols[e.type]:e.type;
-    const key = `${e.player_id}_${e.card_type}_${e.time}`;
+    const key = `${e.player_id}_${index}`;
+    const player_id = e.player_id;
+    const player_name_en = e.player_name;
+
     if(e.team=="home"){
-      c = <View key={key} style={[styles_match.events_side_row,styles_match.events_side_row_home]}>
+      c = <Pressable 
+            key={key} 
+            style={[styles_match.events_side_row,styles_match.events_side_row_home]}
+            onPress={()=>this.props.navigation.navigate("Player",{player_id,player_name_en})}
+            >
             <Text style={[styles_match.events_side_row_text,styles_match.events_side_text_home]} numberOfLines={1}>{e.player_name}</Text>
-          </View>;
+          </Pressable>;
     }else{
-      c = <View key={key} style={[styles_match.events_side_row,styles_match.events_side_row_away]}>
+      c = <Pressable 
+            key={key} 
+            style={[styles_match.events_side_row,styles_match.events_side_row_away]}
+            onPress={()=>this.props.navigation.navigate("Player",{player_id,player_name_en})}
+            >
             <Text style={[styles_match.events_side_row_text,styles_match.events_side_text_away]} numberOfLines={1}>{e.player_name}</Text>
-          </View>;
+          </Pressable>;
     }
-    const placeholder_l=<View style={[styles_match.placeholder,styles_match.pullright]}>
+    const placeholder_l=<View key={key+"_l"} style={[styles_match.placeholder,styles_match.pullright]}>
         <Text style={styles_match.events_time}>{e.time}'</Text>
         <Text style={styles_match.events_symbole}>{event_symbole}</Text>
         <View style={styles_match.events_line}><Text> </Text></View>
       </View>;
-    const placeholder_r=<View style={[styles_match.placeholder,]}>
+    const placeholder_r=<View key={key+"_r"} style={[styles_match.placeholder,]}>
         <View style={styles_match.events_line}><Text> </Text></View>
         <Text style={styles_match.events_symbole}>{event_symbole}</Text>
         <Text style={styles_match.events_time}>{e.time}'</Text>
@@ -241,71 +254,29 @@ class Matchcreen extends React.Component {
     events = events.sort((a,b)=>{
       return a.time<b.time?-1:1
     });
+    let index=0;
     for( const e of events){
-      console.log(e)
-      const e_res = this.e_format(e);
+      index+=1;
+      const e_res = this.e_format(e,index);
       home_side.push( e.team=="home" ? e_res[0] : e_res[1] );
       away_side.push( e.team=="away" ? e_res[0] : e_res[2] );
     }
     return <View style={styles_match.events_container}>
       <View style={[styles_match.events_side,styles_match.events_side_home]}>{home_side}</View>
       <View style={[styles_match.events_side,styles_match.events_side_away]}>{away_side}</View>
+
     </View>;
   }
-  get_cards(type_="home"){
-    this.match_events = [];
-    this.ycards_h =[];
-    this.rcards_h =[];
-    this.ycards_a =[];
-    this.rcards_a =[];
 
-    let style_class = type_=="home"? styles_match.match_results_team_name_r : styles_match.match_results_team_name_l ;
-    if(this.state.matche_details.cards){
-      this.state.matche_details.cards = this.state.matche_details.cards.sort((a,b)=>{
-        return a.time<b.time?-1:1
-      });
-      let res = this.state.matche_details.cards.map(elm=>{
-        const __key = type_+"_card";
-        console.log("elm", elm);
-        //if(elm[__key]==undefined || elm[__key]=="" || elm[__key]==null) return false;
-        let text = "";
-        const card_type = elm.type=="r" ? this.symbol_redcard : this.symbol_yallowcard ;
-        if(elm.team=="away"){
-          text = card_type + " " + (elm.time ? elm.time+'"' : "-") +" "+ elm.player_name;
-          if(elm.type=="r"){
-            this.rcards_a.push(elm);
-          }else{
-            this.ycards_a.push(elm);
-          }
-          
-          
-        }else{
-          text = elm.player_name +" "+(elm.time ? elm.time+'"' : "-") + " " + card_type;
-          if(elm.type=="r"){
-            this.rcards_h.push(elm);
-          }else{
-            this.ycards_h.push(elm);
-          }
-        }
-        return <Text style={[style_class,styles_match.match_results_scorer_text]} key={text}>{text}</Text>;
-      });
-      return(
-          <View style={[style_class]}>
-            {res ? res :null}
-          </View>
-      );
-    }
-  }
-  
   render() {
     //render_match(item, time_status,home_team_name,away_team_name,league_img)
     return (
-      <ScrollView style={styles_match.container}
+      <View style={styles_match.container}
         contentContainerStyle={styles_match.container_container}
         refreshControl={
           <RefreshControl
             refreshing={this.state.loading}
-            onRefresh={()=>this.get_Match(this.id)}
+            onRefresh={()=>this.get_Match(this.state.matche_details.id)}
           />}
       >
         <View style={{height:250,width:"95%"}}>
@@ -317,10 +288,74 @@ class Matchcreen extends React.Component {
             />
         </View>
         
-        {this.state.loading ? null : this.get_events()}
-        {this.state.loading ? <Loading /> : this.get_info()}
-        <EmptySpace />
-      </ScrollView>
+
+          
+      <Tab
+        value={this.state.tab_index}
+        onChange={(e) => {
+          this.setState({tab_index:e});
+          if(e==2 && !this.state.lineup){
+            this.get_lineup_api();
+            
+          }
+        }}
+        indicatorStyle={{
+          backgroundColor: theme.buttons_color,
+          height: 3,
+        }}
+        containerStyle={{backgroundColor:theme.headerStyle_backgroundColor}}
+        variant="primary"
+      >
+        <Tab.Item
+          title="Details"
+          titleStyle={{ fontSize: 12 }}
+          icon={{ name: 'newspaper-outline', type: 'ionicon', color: 'white' }}
+        />
+        <Tab.Item
+          title="Events"
+          titleStyle={{ fontSize: 12 }}
+          icon={{ name: 'list-circle-outline', type: 'ionicon', color: 'white' }}
+        />
+
+        <Tab.Item
+          title="Line Up"
+          titleStyle={{ fontSize: 12 }}
+          icon={{ name: 'apps-outline', type: 'ionicon', color: 'white' }}
+        />
+      </Tab>
+      {this.state.loading ? <Loading /> : 
+        <TabView 
+          style={{backgroundColor:"green",flex:1,height:50}}
+          value={this.state.tab_index} 
+          onChange={(e) => {
+            this.setState({tab_index:e});
+            
+          }}
+          animationType="timing"
+
+          >
+          <TabView.Item style={{ flex:1 , }}>
+            <ScrollView style={{flex:1,backgroundColor:theme.matche_container_backgroundColor}}>
+              {this.get_info()}
+              <EmptySpace/>
+            </ScrollView>
+          </TabView.Item>
+          <TabView.Item style={{ width: '100%', flex:1}}>
+           <ScrollView style={{flex:1,backgroundColor:theme.matche_container_backgroundColor}}>
+              {this.get_events()}
+              <EmptySpace/>
+            </ScrollView>
+          </TabView.Item>
+          <TabView.Item  style={{ width: '100%', flex:1}}>
+            <ScrollView style={{flex:1,backgroundColor:theme.matche_container_backgroundColor}}>
+              {this.state.loading_lineup==false? this.get_lineup() :<Loading/>}
+              <EmptySpace/>
+            </ScrollView>
+          </TabView.Item>
+        </TabView>
+        }
+        
+      </View>
     );
   }
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import {  View, Pressable  } from 'react-native';
+import {  View, Pressable, StyleSheet  } from 'react-native';
 import { Text } from 'react-native';
 import { Image,ImageBackground } from 'expo-image';
 
@@ -149,6 +149,7 @@ class MatchCard extends React.Component {
     if(match_details && match_details.mn && match_details.mn.length>0 && match_details.mn[0].length>0){
       match_nbr = match_details.mn[0][1];
     }
+
     const time_status = <>
     {item.is_done==true ? 
       <Text style={styles_matches.matche_team_time_status}>{"Finished"}</Text> 
@@ -156,7 +157,7 @@ class MatchCard extends React.Component {
     {item.live==1 && time_played? 
       <View style={{flexDirection:"row"}}>
         <Text style={styles_matches.matche_team_time_live}  >{time_played}</Text>
-        <ActivityIndicator size="small" color={time_style.color} />
+        <ActivityIndicator size="small" color={styles_matches.matche_team_time_live.color} />
       </View>
 
     : null}

@@ -12,7 +12,7 @@ class EmptySpace extends React.Component {
 
     render(){
         return (
-            <View style={{width:'100%',height:100}}></View>
+            <View style={{width:'100%',height:100,}}></View>
         );
     }
 }

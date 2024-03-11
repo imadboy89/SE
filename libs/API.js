@@ -23,6 +23,7 @@ class API {
         this.kooora_match   = `https://www.${this.main_domain}/?ajax=1&m=[id]`;
         this.kooora_team    = `https://m.${this.main_domain}/?team=[id]`;
         this.kooora_player  = `https://m.${this.main_domain}/?player=[id]`;
+        this.kooora_squads  = `https://m.${this.main_domain}/?squads=[id]`;
         this.usingproxy = Platform.OS == 'web';
         this.isWeb = Platform.OS == 'web';
         if(this.isWeb){
@@ -313,7 +314,7 @@ class API {
             scrap.isWeb = this.isWeb;
             let matches = [];
             try {
-            matches = scrap.get_matche_k(resp,false,true);
+            matches = scrap.get_matche(resp,false,true);
             } catch (e) {}
             return matches
         });
@@ -378,8 +379,31 @@ class API {
       scrap.isWeb = this.isWeb;
       return scrap.get_player(resp);
     }
+    async get_lineup(id){
+      //https://www.kooora.com/?m=2469218&ajax=true
+      let url = this.kooora_squads.replace("[id]",id);
+      const resp = await this.http(url,"GET",null,{});
+      let scrap = new Scrap();
+      scrap.isWeb = this.isWeb;
+      let lineup = [];
+      try {
+        lineup = scrap.get_lineup(resp);
+      } catch (e) {}
+      return lineup
+
+    }
+  
     async get_live_list(){
-      let channels = await this.http(this.url_live_list,"GET",null,{},true);
+      let channels
+      try {
+        channels = await this.http(this.url_live_list,"GET",null,{},true); 
+        console.log("channels",channels)
+      } catch (error) {
+        alert(error)
+      }
+      if(!channels){
+        _Favs.LS.get_json("cache_live",[]);
+      }
       if(channels && channels.length){
         let id=1;
         channels = channels.map(l=>{
@@ -388,6 +412,7 @@ class API {
           return l;
         });
       }
+      _Favs.LS.set("cache_live",channels);
       channels = _Favs.prioritize_favorites("channels",channels,"name");
       return channels;
     }

@@ -49,7 +49,7 @@ class Scrap extends Scrap_tools{
 
     return article;
   }
-  get_matche_k(resp,date){
+  get_matche(resp,date){
     
     let matche_dets = this.get_matches(resp,date,true);
     const league_name = matche_dets && matche_dets.length==1 && matche_dets[0]["title"] ? matche_dets[0]["title"] :"";
@@ -99,6 +99,7 @@ class Scrap extends Scrap_tools{
       const cards_away = this.get_cards("away",away_players_events_dict,key_);
       cards = cards.concat(cards_home).concat(cards_away);
     }
+    
     match_details["goal_scorer"] = scorers;
     match_details["cards"] = cards;
     match_details["round"] = details_dict["o"] && details_dict["o"].length>0 ? "الجولة "+details_dict["o"][0][1] : "-" ;
@@ -106,12 +107,73 @@ class Scrap extends Scrap_tools{
     match_details["phase"] = details_dict["e"] && details_dict["e"].length>0 ? details_dict["e"][0][2] : "-" ;
     match_details["group"] = details_dict["sl"] && details_dict["sl"].length>0 ? details_dict["sl"][0][1] : "-" ;
 
-    match_details["retour_score"] = details_dict["sl"] && details_dict["sl"].length>0 ? 
+    match_details["retour_score"] = details_dict["sl"][0][2] + " - " +details_dict["sl"][0][1]
+    match_details["retour_score_full"] = details_dict["sl"] && details_dict["sl"].length>0 ? 
     match_details["away_team"]+" "+details_dict["sl"][0][2] + " - " +details_dict["sl"][0][1]+" "+match_details["home_team"] : "-" ;
+
     if(details_dict["no"] && details_dict["no"][0] && details_dict["no"][0][1]){
       match_details["desc"] = details_dict["no"][0][1];
     }
     return match_details;
+  }
+  get_lineup(html){
+    let json_={"match_squads":[]};
+    try{
+      json_ = JSON.parse(html);
+    }catch(err){
+      console.log(err);
+      return [];
+    }
+    let lineups = {"home_lineup":[],"away_lineup":[],"home_substitutions":[],"away_substitutions":[]};
+    if(json_ && json_["match_squads"] && JSON.stringify(json_["match_squads"])==JSON.stringify([-1]) ){
+      console.log("empty");
+      return lineups;
+    }
+    const lineup_header = [
+                          "team",
+                          "player_key",
+                          "lineup_position",
+                          "lineup_number",
+                          "lineup_player",
+                          "player_is_subs",
+                          "subs_in_time",
+                          "subs_out_time",
+                          "info_1",
+                          "info_2",
+                          "info_3",
+                          "info_4",
+                          "info_5",
+                          "info_6",
+                          "info_7",
+                          "info_8",
+                          "info_9",
+                          "info_10",
+                          "info_11",
+                          "info_12",
+                          "info_13",
+                          "info_14",
+                          "info_15",
+                          "info_16",
+                          "info_17",]
+    let h =0;
+    let player = {};
+    try{
+    for(let i=0;i< json_["match_squads"].length;i++){
+      player [ lineup_header[h] ] = json_["match_squads"][i];
+      h++;
+      if(h==lineup_header.length){
+        player["subs_in_time"] = parseInt(player["subs_in_time"])
+        player["time"] = player["subs_in_time"]!=-1 ? player["subs_in_time"] : "";
+        let type = player["team"]==1 ? "home_lineup" : "away_lineup";
+        type = type.replace("lineup", player["player_is_subs"]=="s" ? "lineup" : "substitutions");
+        lineups[type].push(player);
+        h=0;
+        player={};
+      }
+      
+    }
+    }catch(err){console.log(err)}
+    return lineups;
   }
   get_scorers_details(_type,events_dict,key){
     let scorers = []

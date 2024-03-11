@@ -243,6 +243,9 @@ class ItemsList extends React.Component {
         </>);
       }
       const ListToRender =this.props.type=="matches"?SectionList:FlatList;
+      if(!this.list || this.list.length==0){
+        return <Text>Empty, Please Check later!</Text>;
+      }
       return (
         <View style={styles_list.list_container}>
             <ListToRender

@@ -4,6 +4,8 @@ import styles_article from "../Styles/article";
 import Loader from "../Components/Loader";
 import EmptySpace from  '../Components/EmptySpace';
 import BackBtn from "../Components/backBtn";
+import { Divider } from '@rneui/themed';
+
 //import {ImageBackground} from "expo-image";
 
 const kooora_domain="domain.com"
@@ -94,7 +96,6 @@ class ArticleScreen extends React.Component {
 
   render() {
     const article_img = this.state.article && this.state.article.img ? this.state.article.img : null;
-    console.log("article_img", article_img)
     const article_body = this.state.article && this.state.article.body ? this.state.article.body : "";
     const body_composed = article_body && article_body.split ? article_body.split("IMG**").map(o=>{
       if(o.trim()==""){
@@ -139,7 +140,8 @@ class ArticleScreen extends React.Component {
             </View>
             : null}
             <Text style={styles_article.article_title_t}>{this.state.article && this.state.article.title_news ? this.state.article.title_news : ""}</Text>
-            
+            <Divider inset={true} insetType="middle" style={{marginVertical:10}} />
+
             {this.state.loading ? <Loader/> : body_composed  }
             <EmptySpace />
           </View>

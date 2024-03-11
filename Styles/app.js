@@ -111,4 +111,5 @@ const screen_option = {
   
 }
 
+
 export {tabBarOptions, headerTitleStyle, header_styler, tarballLabel_style, bottomTab, screenOptions, screen_baricon_secondary, screen_baricon_main, screen_option };

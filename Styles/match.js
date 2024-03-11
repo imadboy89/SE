@@ -13,7 +13,7 @@ const styles_home = StyleSheet.create({
     container_container:{
       justifyContent:"center",
       alignContent:"center",
-
+      flexGrow: 1
     },
     stats_view:{
       backgroundColor: theme.matche_container_backgroundColor,
@@ -55,18 +55,18 @@ const styles_home = StyleSheet.create({
       textAlign:"right",
     },
     general_info_container:{
-      margin:5,
+      //margin:5,
       backgroundColor: theme.matche_container_backgroundColor,
       padding:20,
       flex:1,
     },
     general_info_row:{
-      height:50,
+      height:30,
       flex:1,
       flexDirection:"row",
     },
     general_info_label_text:{
-      height:50,
+      height:30,
       padding:5,
       flex:2,
 
@@ -76,7 +76,7 @@ const styles_home = StyleSheet.create({
 
     },
     general_info_value_text:{
-      height:50,
+      height:30,
       padding:5,
       flex:3,
       textAlign:"left",
@@ -85,7 +85,9 @@ const styles_home = StyleSheet.create({
     },
 
     events_container:{
-      height:400,
+      backgroundColor:theme.matche_container_backgroundColor,
+      flex:1,
+      //height:6000,
       flexDirection:"row",
       width:"100%",
     },
@@ -94,7 +96,7 @@ const styles_home = StyleSheet.create({
       flex:1,
     },
     events_side_home:{
-
+      borderRightWidth:1,
     },
     events_side_away:{
 
@@ -158,6 +160,22 @@ const styles_home = StyleSheet.create({
       textAlign:"left"
     },
 
+    lineup_container:{
+      backgroundColor:theme.matche_container_backgroundColor,
+    },
+    lineup_row:{
+      flexDirection:"row"
+    },
+    line_row_number:{
+      paddingVertical:5,
+      paddingHorizontal:5,
+      width:30,
+    },
+    line_row_name:{
+      padding:5,
+      flex:1,
+
+    },
   });
 
 export default styles_home;
