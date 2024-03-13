@@ -16,7 +16,6 @@ class Scrap extends Scrap_tools{
         "2":"Canceled", 
         "3":"Stopped"
     };
-
   }
   get_article(html){
     
@@ -107,9 +106,14 @@ class Scrap extends Scrap_tools{
     match_details["phase"] = details_dict["e"] && details_dict["e"].length>0 ? details_dict["e"][0][2] : "-" ;
     match_details["group"] = details_dict["sl"] && details_dict["sl"].length>0 ? details_dict["sl"][0][1] : "-" ;
 
-    match_details["retour_score"] = details_dict["sl"][0][2] + " - " +details_dict["sl"][0][1]
-    match_details["retour_score_full"] = details_dict["sl"] && details_dict["sl"].length>0 ? 
-    match_details["away_team"]+" "+details_dict["sl"][0][2] + " - " +details_dict["sl"][0][1]+" "+match_details["home_team"] : "-" ;
+    try {
+      match_details["retour_score"] = details_dict["sl"][0][2] + " - " +details_dict["sl"][0][1]  
+    } catch (error) {}
+    try {
+      match_details["retour_score_full"] = details_dict["sl"] && details_dict["sl"].length>0 ? 
+      match_details["away_team"]+" "+details_dict["sl"][0][2] + " - " +details_dict["sl"][0][1]+" "+match_details["home_team"] : "-" ;
+    } catch (error) {}
+
 
     if(details_dict["no"] && details_dict["no"][0] && details_dict["no"][0][1]){
       match_details["desc"] = details_dict["no"][0][1];

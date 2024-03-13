@@ -59,12 +59,14 @@ class FavoriteIcon extends React.Component {
                 onPress={this.onPress}
                 style={[styles.container,extra_styles,this.props.style]}
                 >
-                <Icon 
-                    style={styles.icon}
-                    name={this.icons[isFav]} 
-                    size={size} 
-                    color={color}
-                     />
+                {this.icons[isFav] && this.icons[isFav]!="" ?
+                    <Icon 
+                        style={styles.icon}
+                        name={this.icons[isFav]} 
+                        size={size} 
+                        color={color}
+                        />
+                    : null}
             </Pressable>
         );
     }

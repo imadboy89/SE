@@ -126,6 +126,7 @@ class Teamcreen extends React.Component {
           </>;
   }
   get_info(){
+    console.log(this.state.team_details)
     const key2show=[
       {"key":"team_country","label":"Country","default":"-"},
       {"key":"team_type","label":"Type","default":"-"},

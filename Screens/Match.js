@@ -83,7 +83,9 @@ class Matchcreen extends React.Component {
         resp.home_team_logo = this.state.matche_details.home_team_logo;
         resp.away_team_logo = this.state.matche_details.away_team_logo;
         this.state.matche_details = resp;
-        this.state.matche_details.round = this.state.matche_details.round.replace("الأسبوع","Week")
+        if(this.state.matche_details.round){
+          this.state.matche_details.round = this.state.matche_details.round.replace("الأسبوع","Week")
+        }
         this.home_team_ar = this.state.matche_details.home_team_ar ? this.state.matche_details.home_team_ar : this.state.matche_details.home_team;
         this.away_team_ar = this.state.matche_details.away_team_ar ? this.state.matche_details.away_team_ar : this.state.matche_details.away_team; 
         this.render_header();
@@ -249,8 +251,13 @@ class Matchcreen extends React.Component {
   get_events(){
     let home_side = [];
     let away_side = [];
-    
-    let events = [...this.state.matche_details.cards, ...this.state.matche_details.goal_scorer]
+    let events
+    try {
+      events = [...this.state.matche_details.cards, ...this.state.matche_details.goal_scorer]      
+    } catch (error) {
+      events=[]
+    }
+
     events = events.sort((a,b)=>{
       return a.time<b.time?-1:1
     });

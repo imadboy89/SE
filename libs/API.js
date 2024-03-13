@@ -193,46 +193,40 @@ class API {
         return small ? this.cc_url_small.replace("[cc]",flag) : this.cc_url.replace("[cc]",flag) ; 
     }
 
-    get_news(news_id=0, page=0, ){
+    async get_news(news_id=0, page=0, ){
 
         this.scrap = new Scrap();
         let url = this.kooora_news.replace("[cat]",news_id).replace("[pg]",page);
         url = this.scraping_pages ? "scarp_"+url : url;
-        if(!this.running_calls_check(url)){return [];}
-        return this.http(url,"GET",null,{})
-        .then(resp=>{
-          if(resp==undefined || !resp){
-            this.running_calls_remove(url);
+        let resp = await _Cache.get_api(url,"news");
+
+        let scrap = new Scrap();
+        scrap.isWeb = this.isWeb;
+        let list = undefined;
+        if(this.scraping_pages){
+          try {
+            list = JSON.parse(resp);
+            list = scrap.get_news(resp, list.news);
+            //list = list.news.map(line=>{ return {link:line[1], date:line[2], img:line[3].replace("//","https://"), title_news:line[4], desc:line[5],}; });
+          } catch (error) {
+            console.log(error);
             return [];
           }
-          let scrap = new Scrap();
-          scrap.isWeb = this.isWeb;
-          let list = undefined;
-          if(this.scraping_pages){
-            try {
-              list = JSON.parse(resp);
-              list = scrap.get_news(resp, list.news);
-              //list = list.news.map(line=>{ return {link:line[1], date:line[2], img:line[3].replace("//","https://"), title_news:line[4], desc:line[5],}; });
-            } catch (error) {
-              console.log(error);
-              return [];
+        }else{
+          list = scrap.get_news(resp);
+        }
+        if(url.includes("kooora.com")){
+          let exist_list = [];
+          list = list.filter(o=>{
+            if(exist_list.includes(o.link) ){
+              return false;
             }
-          }else{
-            list = scrap.get_news(resp);
-          }
-          if(url.includes("kooora.com")){
-            let exist_list = [];
-            list = list.filter(o=>{
-              if(exist_list.includes(o.link) ){
-                return false;
-              }
-              exist_list.push(o.link);
-              return true;
-            });
-          }
-          this.running_calls_remove(url);
-          return list;
-        });
+            exist_list.push(o.link);
+            return true;
+          });
+        }
+        this.running_calls_remove(url);
+        return list;
       }
     
 
@@ -288,7 +282,7 @@ class API {
         url +=date_obj.getDate()+"&mm="+(date_obj.getMonth()+1)+"&yy="+date_obj.getFullYear()+"&arabic&ajax=1";
 
         if(!this.running_calls_check(url)){return [];}
-        return this.http(url,"GET",null,null)
+        return this.http(url,"GET",null,{})
         .then(resp=>{
           //console.log(resp)
           let scrap = new Scrap();
@@ -315,7 +309,7 @@ class API {
             let matches = [];
             try {
             matches = scrap.get_matche(resp,false,true);
-            } catch (e) {}
+            } catch (e) {console.log(e)}
             return matches
         });
     }
