@@ -230,24 +230,22 @@ class API {
       }
     
 
-    get_article(link){
+    async get_article(link){
       if(link==undefined || link == null){
         return;
       }
-        const url = this.kooora_article.replace("[article_id]",link);
-        return this.http(url,"GET",null,{})
-        .then(html=>{
-            try{
-            let scrap = new Scrap();
-            scrap.isWeb = this.isWeb;
-            let article  = {};
-            try {
-                article  = scrap.get_article(html) ;
-            } catch (error) {console.log(error)}
-            return article;
-            }catch(err){console.log(err);}
-
-        });
+      const url = this.kooora_article.replace("[article_id]",link);
+      let resp = await _Cache.get_api(url,"article");
+      try{
+        let scrap = new Scrap();
+        scrap.isWeb = this.isWeb;
+        let article  = {};
+        try {
+          article  = scrap.get_article(resp) ;
+        } catch (error) {console.log(error)}
+        return article;
+      }catch(err){console.log(err);}
+      return []
 
     }
     add_favorite_teams_section(data){
@@ -276,42 +274,37 @@ class API {
       data = fav_list.data.length>0 ? [fav_list,].concat(data) : data ;
       return data;
     }
-    get_matches(date_obj, is_only_live, area=0){
-        let url = this.kooora_matches.replace("[area]",area);
-        url = is_only_live ? this.kooora_matches_live: url;
-        url +=date_obj.getDate()+"&mm="+(date_obj.getMonth()+1)+"&yy="+date_obj.getFullYear()+"&arabic&ajax=1";
+    async get_matches(date_obj, is_only_live, area=0){
+      let url = this.kooora_matches.replace("[area]",area);
+      url = is_only_live ? this.kooora_matches_live: url;
+      url +=date_obj.getDate()+"&mm="+(date_obj.getMonth()+1)+"&yy="+date_obj.getFullYear()+"&arabic&ajax=1";
+      let resp = await _Cache.get_api(url,"matches");
 
-        if(!this.running_calls_check(url)){return [];}
-        return this.http(url,"GET",null,{})
-        .then(resp=>{
-          //console.log(resp)
-          let scrap = new Scrap();
-          scrap.isWeb = this.isWeb;
-          let matches = [];
-          //is_only_live = false;
-          try {
-            matches = scrap.get_matches(resp,date_obj,false, is_only_live);    
-          } catch (e) { console.log(e);}
-          this.running_calls_remove(url);
-          matches = _Favs.prioritize_favorites("leagues",matches,"id");
-          matches = this.add_favorite_teams_section(matches);
-          return matches;//this.set_logos(matches);
-        });
+      let scrap = new Scrap();
+      scrap.isWeb = this.isWeb;
+      let matches = [];
+      //is_only_live = false;
+      try {
+        matches = scrap.get_matches(resp,date_obj,false, is_only_live);    
+      } catch (e) { console.log(e);}
+      matches = _Favs.prioritize_favorites("leagues",matches,"id");
+      matches = this.add_favorite_teams_section(matches);
+      return matches;//this.set_logos(matches);
+
       }
     
-    get_match(id){
+    async get_match(id){
         id = (""+id).replace("fav_","")
         const url = this.kooora_match.replace("[id]",id);
-        return this.http(url,"GET",null,{})
-        .then(resp=>{
-            let scrap = new Scrap();
-            scrap.isWeb = this.isWeb;
-            let matches = [];
-            try {
-            matches = scrap.get_matche(resp,false,true);
-            } catch (e) {console.log(e)}
-            return matches
-        });
+        let resp = await _Cache.get_api(url,"match");
+        let scrap = new Scrap();
+        scrap.isWeb = this.isWeb;
+        let match = [];
+        try {
+          match = scrap.get_matche(resp,false,true);
+        } catch (e) {console.log(e)}
+        return match
+
     }
     
 
@@ -319,50 +312,47 @@ class API {
     async get_team(team_id){
       let url = this.kooora_team.replace("[id]", team_id);
       url = this.scraping_pages ? "scarp_"+url : url;
-      return this.http(url,"GET",null,{})
-      .then(resp=>{
-        let res = [];
-        if(this.scraping_pages){
-          try {
-            res = JSON.parse(resp);
-          } catch (error) {
-            console.log(error);
-            return [];
-          }
-        }else{
-          let scrap = new Scrap();
-          scrap.isWeb = this.isWeb;
-          res = scrap.get_team(resp);
+      let resp = await _Cache.get_api(url,"team");
+      let res = [];
+      if(this.scraping_pages){
+        try {
+          res = JSON.parse(resp);
+        } catch (error) {
+          console.log(error);
+          return [];
         }
-        let img_uri = res && res.team_group_photo ? res.team_group_photo : false;
-        let img_logo_uri = res && res.team_logo ? res.team_logo : false;
-        img_uri = img_uri && img_uri.slice(0,2)=="//" ? img_uri.replace("//","https://") : img_uri;
-        img_logo_uri = img_logo_uri && img_logo_uri.slice(0,2)=="//" ? img_logo_uri.replace("//","https://") : img_logo_uri;
-        img_logo_uri=res && res.team_type && res.team_type==2? this.get_cc_img(res.team_flag) : img_logo_uri;
-        res.team_group_photo = img_uri;
-        res.team_logo = img_logo_uri;
-        if(img_logo_uri && img_logo_uri.split && img_logo_uri.split("?").length==2){
-          res.l = "?"+img_logo_uri.split("?")[1];
-        }
-        res.team_country;
-        if(res && (res.team_name_ar || res.team_name_en) ){
-          //this.setTeam_logo_k(res,save_db);
-          
-        }else{
-          console.log("not valide",res);
-        }
-        return res;
-      }).catch(error=>this.showMsg(error,"danger"));
+      }else{
+        let scrap = new Scrap();
+        scrap.isWeb = this.isWeb;
+        res = scrap.get_team(resp);
+      }
+      let img_uri = res && res.team_group_photo ? res.team_group_photo : false;
+      let img_logo_uri = res && res.team_logo ? res.team_logo : false;
+      img_uri = img_uri && img_uri.slice(0,2)=="//" ? img_uri.replace("//","https://") : img_uri;
+      img_logo_uri = img_logo_uri && img_logo_uri.slice(0,2)=="//" ? img_logo_uri.replace("//","https://") : img_logo_uri;
+      img_logo_uri=res && res.team_type && res.team_type==2? this.get_cc_img(res.team_flag) : img_logo_uri;
+      res.team_group_photo = img_uri;
+      res.team_logo = img_logo_uri;
+      if(img_logo_uri && img_logo_uri.split && img_logo_uri.split("?").length==2){
+        res.l = "?"+img_logo_uri.split("?")[1];
+      }
+      res.team_country;
+      if(res && (res.team_name_ar || res.team_name_en) ){
+        //this.setTeam_logo_k(res,save_db);
+        
+      }else{
+        console.log("not valide",res);
+      }
+      return res;
     }
     async get_player(player_id){
       let url = this.kooora_player.replace("[id]",player_id);
       url = this.scraping_pages ? "scarp_"+url : url;
-      const resp =await this.http(url,"GET",null,{});
+      let resp = await _Cache.get_api(url,"player");
       if(this.scraping_pages){
         try {
           const player = JSON.parse(resp) ;
           player["player_position"] = player["player_position"] in this.player_positions ? this.player_positions[player["player_position"]] : player["player_position"];
-          
           return player;
         } catch (error) {
           console.log(error);
@@ -376,7 +366,7 @@ class API {
     async get_lineup(id){
       //https://www.kooora.com/?m=2469218&ajax=true
       let url = this.kooora_squads.replace("[id]",id);
-      const resp = await this.http(url,"GET",null,{});
+      let resp = await _Cache.get_api(url,"match");
       let scrap = new Scrap();
       scrap.isWeb = this.isWeb;
       let lineup = [];
@@ -391,7 +381,6 @@ class API {
       let channels
       try {
         channels = await this.http(this.url_live_list,"GET",null,{},true); 
-        console.log("channels",channels)
       } catch (error) {
         alert(error)
       }

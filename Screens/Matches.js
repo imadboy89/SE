@@ -60,7 +60,11 @@ export default class MatchesScreen extends React.Component {
       this.refresh();
       this.render_header();
       if(!_API.isWeb){
-        this.Tm.init_first().then(()=>this.setState({}))
+        this.Tm.init_first().then(inserted=>{
+          if(inserted){
+            this.refresh();
+          }
+        })
       }
     }
     toggle_liveonly(){

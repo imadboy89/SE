@@ -21,7 +21,6 @@ class Teamcreen extends React.Component {
 
     };
     this.id = this.props.route?.params?.team_id ;
-    console.log(this.props.route.params)
   }
   componentDidMount(){
     this._isMounted=true;
@@ -126,7 +125,6 @@ class Teamcreen extends React.Component {
           </>;
   }
   get_info(){
-    console.log(this.state.team_details)
     const key2show=[
       {"key":"team_country","label":"Country","default":"-"},
       {"key":"team_type","label":"Type","default":"-"},

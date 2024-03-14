@@ -30,12 +30,13 @@ export default class Teams {
         }
         const SQLite = require('expo-sqlite');
         this.sqlDB = SQLite.openDatabase(this.db_name,this.db_version, this.db_displayname, this.db_size);
-
+        //this.emptying();
     }
     async init_first(){
         if(_API.isWeb){
-            return;
+            return false;
         }
+        
         const create_table_sql = 'CREATE TABLE IF NOT EXISTS '+this.table_name+' ('+this.fields_defenition_str+')' ;
         //this.executeSql(create_table_sql,[])
         await this.sqlDB.transactionAsync(async tx => {
@@ -48,19 +49,23 @@ export default class Teams {
             }, false);
         if(length_items>100){
             console.log("DB ready!")
-            return;
+            return false;
         }
         console.log("DB init ... !")
 
         const teams_dict = require("./teams_logos_db.js");
 
-
+        let count = 0;
         for(k in teams_dict.default){
+            count+=1;
+            if(count%2000 == 0){
+                console.log("DB init .... "+count);
+            }
             k = parseInt(k);
             await this.addTeams(k,teams_dict.default[k]);
         }
         console.log("DB init ... done");
-        
+        return true;
 
     }
     async addTeams(id,logo){
@@ -83,7 +88,6 @@ export default class Teams {
         const readOnly = false;
         return await this.sqlDB.transactionAsync(async tx => {
             const result = await tx.executeSqlAsync(sqlQuery, [id,logo]);
-            console.log("updateTeams : ",result);
             return true
             }, false);
 
@@ -123,7 +127,7 @@ export default class Teams {
 
     }
     async emptying(){
-        const sqlQuery = `DELETE * FROM ${this.table_name}`;
+        const sqlQuery = `DELETE FROM ${this.table_name}`;
         await this.sqlDB.transactionAsync(async tx => {
           const result = await tx.executeSqlAsync(sqlQuery, [],null, null);
 

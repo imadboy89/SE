@@ -198,10 +198,7 @@ class ItemsList extends React.Component {
   }
 
   render_list() {
-    
-    /*let is_new = JSON.stringify(this.list_origin) != JSON.stringify(this.props.list);
-    is_new = is_new && (this.props.ListHeaderComponent!= this.ListHeaderComponent || this.props.ListFooterComponent!=this.ListFooterComponent);
-    */
+
     let list_n;
     const list_o = this.list_origin ? JSON.parse(JSON.stringify(this.list_origin)).map(o=>{ delete o["data"];return o}) : [];
     try {

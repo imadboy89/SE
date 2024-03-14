@@ -135,7 +135,7 @@ class Matchcreen extends React.Component {
     const name = <Text style={styles_match.line_row_name} numberOfLines={1}>{l.lineup_player?l.lineup_player:"-"}</Text>;
     return <Pressable
       style={styles_match.lineup_row} 
-      key={l.player_key}
+      key={l.player_key+"_"+l.lineup_player}
       onPress={()=>this.props.navigation.navigate("Player",{player_id,player_name_en})}
       >
       {_type=="home" ? 
@@ -174,6 +174,7 @@ class Matchcreen extends React.Component {
   get_info(){
     const key2show=[
       {"key":"status","label":"Status","default":"-"},
+      {"key":"datetime","label":"Date & Time","default":"-"},
       {"key":"league","label":"League","default":"-"},
       {"key":"phase","label":"Phase","default":"-"},
       {"key":"group","label":"Group","default":"-"},
@@ -189,9 +190,9 @@ class Matchcreen extends React.Component {
       }
       let value = <Text style={styles_match.general_info_value_text}>{this.state.matche_details[i.key]}</Text>;
       if(i.key=="retour_score" && this.state.matche_details[i.key]){
-        const home_img = <Image style={{height:20,width:20}} source={{uri:this.state.matche_details.home_team_logo}} />;
-        const away_img = <Image style={{height:20,width:20}} source={{uri:this.state.matche_details.away_team_logo}} />;
-        value = <Text style={[styles_match.general_info_value_text,{flex:0,textAlign:"center",textAlignVertical:"center"}]}>{this.state.matche_details[i.key]}</Text>;
+        const home_img = <Image style={{height:30,width:30}} source={{uri:this.state.matche_details.home_team_logo}} />;
+        const away_img = <Image style={{height:30,width:30}} source={{uri:this.state.matche_details.away_team_logo}} />;
+        value = <Text style={[styles_match.general_info_value_text,{flex:0,textAlign:"center",textAlignVertical:"center",fontSize:16,}]}>{this.state.matche_details[i.key]}</Text>;
         value = <View style={[styles_match.general_info_value_text,{flexDirection:"row"}]}>{away_img}{value}{home_img}</View>
       }
       return (

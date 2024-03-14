@@ -17,7 +17,6 @@ class BackBtn extends React.Component {
         this.props.favType
         this.props.favId
         await _Favs.toggle_favorite(this.props.favType, this.props.favId);
-        console.log("status : ",_Favs.is_fav(this.props.favType, this.props.favId));
         if(this.props.onPress){
             this.props.onPress();
         }
