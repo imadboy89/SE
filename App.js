@@ -46,8 +46,6 @@ if(isWeb){
   
 }
 
-
-
 const navigationOptions =  (IconName='', routeName='') => {
   const options = {
       headerStyle: header_styler,
