@@ -29,6 +29,8 @@ export default class MatchesScreen extends React.Component {
           this.setState({loading:false,list:[]});
           return
         }
+        //console.log(data[0])
+        console.log(data.map(m=>m.country));
         let ids=[];
         data.map(l=>{
           l.data.map(m=>{
@@ -39,7 +41,7 @@ export default class MatchesScreen extends React.Component {
         //.home_team_logo
         //console.log(data);
         if(!_API.isWeb){
-          const res = await this.Tm.get_teams_logo(ids)
+          const res = this.Tm.is_db_loaded ? await this.Tm.get_teams_logo(ids) : [];
           let teams_logos={};
           for(const r of res){
             teams_logos[r.id]=r.logo;
@@ -56,6 +58,7 @@ export default class MatchesScreen extends React.Component {
       });
 
     }
+
     componentDidMount(){ 
       this.refresh();
       this.render_header();

@@ -366,7 +366,7 @@ class Scrap extends Scrap_tools{
     const date_str = date ? this.get_date2(date): false;
     //parse matches_comps
     const FILTERING = this.filtering;
-    const blacklisted_comps = is_oneMatch || FILTERING==false ? [] : ["الدرجة الثانية","الدرجة الثالثة","الهواة","سيدات","الدرجة الخامسة","الدرجة الرابعة","رديف","جنوب",
+    const blacklisted_comps = is_oneMatch || FILTERING==false ? [] : ["Second Division","Third Division","amateurs","سيدات","الدرجة الخامسة","الدرجة الرابعة","رديف","جنوب",
     " الثاني","تحت ","شمال","الثالث"," A ", " B ", " C "," D ","الدرجة D","الدرجة C","الدرجة B",
     "الدوري النرويجي الدرجة"
   ]
@@ -510,7 +510,7 @@ class Scrap extends Scrap_tools{
               "id":matche["league_id"],
               "img":comp_match["comp_logo"].replace("//","https://"), 
               "data":[],
-              "country":comp_match["country"],
+              "country":comp_match["country"]?comp_match["country"]:comp_match["comp_name"].trim(),
               "is_koora":true,
               "options" : comp_match["options"],
             };
@@ -574,8 +574,45 @@ class Scrap extends Scrap_tools{
     }
     matches = Object.values(matches) ;
     matches_bl = Object.values(matches_bl) ;
-    const periority_cc= ["AFRICA","MA","US","NL","DE","FR","ES","IT","EN","EURO"];
-    matches = matches.sort((a,b)=>{return periority_cc.indexOf(a["country"]) >= periority_cc.indexOf(b["country"])? -1 : 1;});
+    //const periority_cc= ["AFRICA","US","NL","DE","FR","ES","","IT","EN","EURO"];
+    //matches = matches.sort((a,b)=>{return periority_cc.indexOf(a["country"]) >= periority_cc.indexOf(b["country"])? -1 : 1;});
+    const periority_cc= [
+      'UEFA Champions League',
+      'UEFA Europa League',
+      'UEFA Europa Conference League',
+
+      'EURO', 'EN', 'IT', 'ES', 'FR', 'DE', 'NL', "PT",'US', 'BE','AFRICA',
+      'AFC Champions League',
+
+    ];
+
+
+  matches = matches.sort((a, b) => {
+    const indexA = periority_cc.indexOf(a["country"]);
+    const indexB = periority_cc.indexOf(b["country"]);
+    let compared = 0 ;
+    // If both countries are in periority_cc list
+    if (indexA !== -1 && indexB !== -1) {
+      compared = indexA - indexB;
+      if(compared<0){
+        compared = -1;
+      }else if(compared>0){
+        compared=1
+      }else{
+        compared=0
+      }
+    } else if (indexA !== -1) {
+      compared = -1; // Place defined country 'a' at higher priority
+    } else if (indexB !== -1) {
+      compared = 1; // Place defined country 'b' at higher priority
+    } else {
+      compared = 0; // Maintain original order for undefined countries
+    }
+    //console.log(a["country"],b["country"], compared)
+    return compared
+});
+  
+  
     //matches = matches.sort((a,b)=>{return a["country"]=="MA"? -1 : 1;});
     return matches;
   }

@@ -29,6 +29,7 @@ import Favorites from "./libs/favorites";
 import Cache from "./libs/cache";
 
 
+
 global.isWeb = Platform.OS == 'web';
 global.isIOS = Platform.OS == 'ios';
 global._API  = new API();
