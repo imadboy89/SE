@@ -55,7 +55,6 @@ class PlayerSreen extends React.Component {
       return;
     }
     const resp = await _API.get_player(this.state.player_details.player_id)
-    console.log(resp)
     if(resp ){
     //resp.home_team_logo = this.state.player_details.home_team_logo;
     //resp.away_team_logo = this.state.player_details.away_team_logo;

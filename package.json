@@ -3,7 +3,8 @@
   "version": "1",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "npx expo start --tunnel --go",
+    "start": "npx expo start --go",
+    "tunnel": "npx expo start --tunnel --go",
     "android": "npx expo start --android",
     "ios": "npx expo start --ios",
     "web": "npx expo start --web"
@@ -21,6 +22,7 @@
     "expo-application": "^5.8.3",
     "expo-av": "^13.10.5",
     "expo-dev-client": "~3.3.9",
+    "expo-file-system": "^16.0.8",
     "expo-image": "~1.10.6",
     "expo-sqlite": "^13.3.0",
     "expo-status-bar": "~1.11.1",
@@ -35,7 +37,8 @@
     "react-native-select-dropdown": "^3.4.0",
     "react-native-vector-icons": "^10.0.3",
     "react-native-web": "^0.19.10",
-    "react-native-webview": "13.6.4"
+    "react-native-webview": "13.6.4",
+    "expo-asset": "~9.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.24.0"
