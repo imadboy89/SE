@@ -597,42 +597,6 @@ class Scrap extends Scrap_tools{
       }
       new_data.push(__league);
     }
-    //add the rest
-
-    /*
-
-        for(const __league of matches){
-      const is_exist = new_data.filter(e=>e.cc==__league.country);
-      if(is_exist.length){return }
-      new_data.push(__league);
-    }
-
-  matches = matches.sort((a, b) => {
-    const indexA = periority_cc.indexOf(a["country"]);
-    const indexB = periority_cc.indexOf(b["country"]);
-    let compared = 0 ;
-    // If both countries are in periority_cc list
-    if (indexA !== -1 && indexB !== -1) {
-      compared = indexA - indexB;
-      if(compared<0){
-        compared = -1;
-      }else if(compared>0){
-        compared=1
-      }else{
-        compared=0
-      }
-    } else if (indexA !== -1) {
-      compared = -1; // Place defined country 'a' at higher priority
-    } else if (indexB !== -1) {
-      compared = 1; // Place defined country 'b' at higher priority
-    } else {
-      compared = 0; // Maintain original order for undefined countries
-    }
-    //console.log(a["country"],b["country"], compared)
-    return compared
-});
-  */
-  
     //matches = matches.sort((a,b)=>{return a["country"]=="MA"? -1 : 1;});
     return new_data;
   }

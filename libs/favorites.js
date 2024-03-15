@@ -135,7 +135,7 @@ class Favorites {
             new_data.push(__elem);
         }
         return new_data;
-
+        /*
         if (!this.check_type(_type) || !data || !data.sort){
             return false;
         }
@@ -145,6 +145,7 @@ class Favorites {
             return (a_val > b_val)?-1:1;
         });
         return data
+        */
     }
 
 }
