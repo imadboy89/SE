@@ -46,7 +46,7 @@ export default class LiveLinkScreen extends React.Component {
     this.props.navigation.navigate('LiveLink',this.props.route.params);
   }
   render_header=()=>{
-    let title = this.state.live && this.state.live.title ? this.state.live.title : "";
+    let title = this.props.route.params && this.props.route.params.title ? this.props.route.params.title : "";
     this.props.navigation.setOptions({title: title,
       headerLeft: (props) => (
         <BackBtn  {...props} navigation={this.props.navigation}/>
@@ -57,10 +57,13 @@ export default class LiveLinkScreen extends React.Component {
           name='refresh'
           onPress={this.refresh}
         />
-        <IconButton
-          name='safari'
-          onPress={this.go_ifram}
-        />
+        {this.props.route.params && this.props.route.params.iframe?
+                <IconButton
+                name='safari'
+                onPress={this.go_ifram}
+              />
+        :null}
+
     </View>
     )
     });
@@ -70,11 +73,12 @@ export default class LiveLinkScreen extends React.Component {
   }
 
   render() {
+    //if(this.state.live)
     return (
       <View  style={styles_live.container}>
-        {this.state.live && this.state.live.url  && !this.state.loading?
+        {this.props.route.params && this.props.route.params.url  && !this.state.loading?
           <HSL
-          link={this.state.live.url}
+          link={this.props.route.params.url}
           navigation={this.props.navigation}
           />
           :null}

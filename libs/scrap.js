@@ -43,7 +43,9 @@ class Scrap extends Scrap_tools{
     article.related_news = article.related_news.map(n=> {return {related_news_id:n[0],related_news_title:n[1]} });
     article.related_images = article.related_images.map(n=> {return {img_link:n[0].replace(/^\/\//,"https://"),img_desc:n[1]} });
     //article.news =this.get_var_array(html, "news");
+    article.body = article.body.replace(/<\/p>/gi,"\r\n\r\n");
     article.body = this.decodeEntities(article.body);
+    
     
     article.date = article.date && article.date.slice && article.date.slice(0,1) =='#' ? this.get_date2(new Date(article.date.replace("#","") * 1000)) : article.date ;
 

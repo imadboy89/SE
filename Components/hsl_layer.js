@@ -1,6 +1,7 @@
 import React from 'react';
-import { View , StyleSheet,Button} from 'react-native';
+import { View , StyleSheet} from 'react-native';
 import { Video, ResizeMode } from 'expo-av';
+import Loader from './Loader';
 
 
 
@@ -35,7 +36,7 @@ export default class Hsl extends React.Component {
 
     render(){
       return (
-        <View style={{flex:1,backgroundColor:'black',width:'100%',maxHeight:'80%'}}>
+        <View style={{flex:1,backgroundColor:'black',width:'101%',maxHeight:'80%',marginLeft:-1}}>
             <Video
             ref={ref=>{this.video=ref;}}
             style={styles.video}
@@ -47,7 +48,11 @@ export default class Hsl extends React.Component {
             resizeMode={ResizeMode.CONTAIN}
             isLooping
             onPlaybackStatusUpdate={this.statusUpdate}
+            onLoadStart={() => this.setState({loading:true})}
+            onReadyForDisplay={() => this.setState({loading:false})}
+
         />
+        {this.state.loading ? <Loader size="large" /> : null}
 
 
 
