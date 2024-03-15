@@ -16,6 +16,7 @@ class Scrap extends Scrap_tools{
         "2":"Canceled", 
         "3":"Stopped"
     };
+    this.filtering=true;
   }
   get_article(html){
     
@@ -365,20 +366,21 @@ class Scrap extends Scrap_tools{
     }catch(err){return -1;}
     const date_str = date ? this.get_date2(date): false;
     //parse matches_comps
-    const FILTERING = this.filtering;
-    const blacklisted_comps = is_oneMatch || FILTERING==false ? [] : ["Second Division","Third Division","amateurs","سيدات","الدرجة الخامسة","الدرجة الرابعة","رديف","جنوب",
-    " الثاني","تحت ","شمال","الثالث"," A ", " B ", " C "," D ","الدرجة D","الدرجة C","الدرجة B",
-    "الدوري النرويجي الدرجة"
-  ]
-    const hidden_leagues = is_oneMatch || FILTERING==false ? [] : [];
-    const blacklisted_countries = is_oneMatch || FILTERING==false ? [] :  ["SA","BH","KW","IQ","PS","ND","AR","BR","CO","JO","SS","VN","ZA","TR","UZ"];
+    const blacklisted_comps = is_oneMatch || this.filtering==false ? [] : [
+      "Second Division","Third Division","amateurs"," A ", " B ", " C "," D ",
+      "2nd Division","Division B","3rd Division","4rd Division","5rd Division","League National","Division 2 ",
+      "Erovnuli Liga","second division","Amateur",
+      "3 Division","2 Division","4 Division",
+    ];
+    const hidden_leagues = is_oneMatch || this.filtering==false ? [] : [];
+    const blacklisted_countries = is_oneMatch || this.filtering==false ? [] :  ["SA","BH","KW","IQ","PS","ND","AR","BR","CO","JO","SS","VN","ZA","TR","UZ"];
     const exceptions = ["افريقيا","مباريات دولية ودية"];
     let compititions = {};
     let compititions_bl = {};
     let compitition = {"country":""};
     
     const comp_header = ["divider","league_id","comp_name","comp_logo","comp_id_news","options"];
-    const MIN_ALLOWED_OPTIONS = is_oneMatch || FILTERING==false ? 1 : 3;
+    const MIN_ALLOWED_OPTIONS = is_oneMatch || this.filtering==false ? 1 : 3;
     let k = 0;
     if(json_==undefined || json_["matches_comps"] == undefined ){
       return false;
@@ -395,7 +397,7 @@ class Scrap extends Scrap_tools{
       if(comp_header.length==k){
         let is_allowed = true;
         for(let x=0;x<blacklisted_comps.length;x++){
-          if(compitition["comp_name"].toLocaleLowerCase().indexOf(blacklisted_comps[x].toLocaleLowerCase())>=0){
+          if(compitition["comp_name"].toLocaleLowerCase().includes(blacklisted_comps[x].toLocaleLowerCase())){
             is_allowed = false;
           }
         }
@@ -418,9 +420,7 @@ class Scrap extends Scrap_tools{
           is_allowed = false;
         }
         const league_id = parseInt(compitition["league_id"]) ;
-        const is_league_hidden = hidden_leagues.includes(league_id);
-        is_allowed = is_allowed && !is_league_hidden;
-        is_allowed = is_allowed || ("MA"==compitition["country"] && !is_league_hidden) || FILTERING==false ;
+        is_allowed = is_allowed || this.filtering==false ;
         if(is_allowed){
           compititions[compitition["league_id"]] = compitition;
         }else{
@@ -558,8 +558,10 @@ class Scrap extends Scrap_tools{
               */
             }
             if(is_bl){
+
               matches_bl[ matche["league_id"] ]["data"].push(matche);
             }else{
+
               matches[ matche["league_id"] ]["data"].push(matche);
             }
           }
@@ -581,7 +583,7 @@ class Scrap extends Scrap_tools{
       'AFRICA', 'BE', 'US', 'PT', 'NL', 'DE','IT', 'FR', 'ES', 'EN', 
       'EURO', 'UEFA Europa Conference League', 'UEFA Europa League', 'UEFA Champions League'];
     
-    new_data = []
+    let new_data = []
     //add the prerioritazed leagues first
     for(const _country of periority_cc){
       const _league = matches.filter(e=>e.country==_country);

@@ -30,7 +30,7 @@ export default class MatchesScreen extends React.Component {
           return
         }
         //console.log(data[0])
-        console.log(data.map(m=>m.country));
+        console.log(data.map(m=>m.country+" "+m.title));
         let ids=[];
         data.map(l=>{
           l.data.map(m=>{
