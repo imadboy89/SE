@@ -577,15 +577,35 @@ class Scrap extends Scrap_tools{
     //const periority_cc= ["AFRICA","US","NL","DE","FR","ES","","IT","EN","EURO"];
     //matches = matches.sort((a,b)=>{return periority_cc.indexOf(a["country"]) >= periority_cc.indexOf(b["country"])? -1 : 1;});
     const periority_cc= [
-      'UEFA Champions League',
-      'UEFA Europa League',
-      'UEFA Europa Conference League',
+      'AFC Champions League', 
+      'AFRICA', 'BE', 'US', 'PT', 'NL', 'DE','IT', 'FR', 'ES', 'EN', 
+      'EURO', 'UEFA Europa Conference League', 'UEFA Europa League', 'UEFA Champions League'];
+    
+    new_data = []
+    //add the prerioritazed leagues first
+    for(const _country of periority_cc){
+      const _league = matches.filter(e=>e.country==_country);
+      if(_league.length==0){
+        continue;
+      }
+      new_data = [..._league,...new_data];
+    }
+    for(const __league of matches){
+      const is_exist = new_data.filter(e=>e.country==__league.country);
+      if(is_exist && is_exist.length){
+        continue ;
+      }
+      new_data.push(__league);
+    }
+    //add the rest
 
-      'EURO', 'EN', 'IT', 'ES', 'FR', 'DE', 'NL', "PT",'US', 'BE','AFRICA',
-      'AFC Champions League',
+    /*
 
-    ];
-
+        for(const __league of matches){
+      const is_exist = new_data.filter(e=>e.cc==__league.country);
+      if(is_exist.length){return }
+      new_data.push(__league);
+    }
 
   matches = matches.sort((a, b) => {
     const indexA = periority_cc.indexOf(a["country"]);
@@ -611,10 +631,10 @@ class Scrap extends Scrap_tools{
     //console.log(a["country"],b["country"], compared)
     return compared
 });
-  
+  */
   
     //matches = matches.sort((a,b)=>{return a["country"]=="MA"? -1 : 1;});
-    return matches;
+    return new_data;
   }
   get_scorers(html,scorers=undefined){
     let scorers_details = [];

@@ -116,7 +116,26 @@ class Favorites {
         return news_fav;
     }
     prioritize_favorites=(_type, data, key)=>{
-        //return data;
+        if (!this.check_type(_type) || !data || !data.sort || !this[_type]){
+            return data;
+        }
+        let new_data = [];
+        for(const _id of Object.keys(this[_type])){
+            const _ele = data.filter(e=>e[key]==_id);
+            if(_ele.length==0){
+              continue;
+            }
+            new_data = [..._ele,...new_data];
+          }
+        for(const __elem of data){
+            const is_exist = new_data.filter(e=>e[key]==__elem[key]);
+            if(is_exist && is_exist.length){
+              continue ;
+            }
+            new_data.push(__elem);
+        }
+        return new_data;
+
         if (!this.check_type(_type) || !data || !data.sort){
             return false;
         }
