@@ -373,16 +373,18 @@ class Scrap extends Scrap_tools{
       "2nd Division","Division B","3rd Division","4rd Division","5rd Division","League National","Division 2 ",
       "Erovnuli Liga","second division","Amateur",
       "3 Division","2 Division","4 Division",
+      "Serie C", "Serie D","4'th division","3'th division","2'th division","5'th division",
+      "Div. 2","Div. 3","Div. 4","liga de honra"
     ];
     const hidden_leagues = is_oneMatch || this.filtering==false ? [] : [];
     const blacklisted_countries = is_oneMatch || this.filtering==false ? [] :  ["SA","BH","KW","IQ","PS","ND","AR","BR","CO","JO","SS","VN","ZA","TR","UZ"];
-    const exceptions = ["افريقيا","مباريات دولية ودية"];
+    const exceptions = ["افريقيا","Friendlies  National"];
     let compititions = {};
     let compititions_bl = {};
     let compitition = {"country":""};
     
     const comp_header = ["divider","league_id","comp_name","comp_logo","comp_id_news","options"];
-    const MIN_ALLOWED_OPTIONS = is_oneMatch || this.filtering==false ? 1 : 3;
+    const MIN_ALLOWED_OPTIONS = is_oneMatch || this.filtering==false ? 1 : 2;
     let k = 0;
     if(json_==undefined || json_["matches_comps"] == undefined ){
       return false;

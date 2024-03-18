@@ -188,11 +188,12 @@ class Teamcreen extends React.Component {
           style={{position: 'absolute',top:2,right:2, zIndex:999}}
           />
         <View style={{height:250,width:"98%",alignItems:"center",justifyContent:"center",alignContent:"center", flex:1}}>
-            <Image
+            {this.state.team_details && this.state.team_details.team_logo ? <Image
                 source={{uri:this.state.team_details.team_logo}}
                 style={{width:150,height:150}}
                 contentFit="contain"
             />
+            :null}
           <Text style={{width:"80%",textAlign:"center",margin:10,fontSize:18,fontWeight:"bold"}}>{this.state.team_details.team_name_en}</Text>
 
         </View>
