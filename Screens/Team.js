@@ -58,9 +58,9 @@ class Teamcreen extends React.Component {
       return;
     }
     const resp = await _API.get_team(this.id)
-    if(resp && resp.team_id && resp.team_logo){
-      const tm = new Team();
-      tm.updateTeams(resp.team_id,resp.team_logo);
+    if(resp && resp.team_id && resp.team_logo && this.state.team_details.team_logo!=resp.team_logo){
+      alert("upd")
+      _Teams.updateTeams(resp.team_id,resp.team_logo);
     }
     if(resp ){
     //resp.home_team_logo = this.state.team_details.home_team_logo;

@@ -1,12 +1,12 @@
 import React from "react";
-import {  View, Dimensions,ScrollView , Text,ImageBackground, Image} from 'react-native';
+import {  View, Dimensions,ScrollView , Text, Image} from 'react-native';
 import styles_article from "../Styles/article";
 import Loader from "../Components/Loader";
 import EmptySpace from  '../Components/EmptySpace';
 import BackBtn from "../Components/backBtn";
 import { Divider } from '@rneui/themed';
 
-//import {ImageBackground} from "expo-image";
+import {ImageBackground} from "expo-image";
 
 const kooora_domain="domain.com"
 
@@ -125,6 +125,7 @@ class ArticleScreen extends React.Component {
             <ImageBackground 
             key={"article_backgrnd"} 
             style={styles_article.article_img} 
+            imageStyle={styles_article.article_img}
             source={{uri: article_img, headers: { 'Accept': 'image/*'}}}
             contentFit="contain">
             </ImageBackground>

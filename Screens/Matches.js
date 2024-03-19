@@ -17,9 +17,6 @@ export default class MatchesScreen extends React.Component {
           date:new Date(),
           only_live:false,
       };
-      if(!_API.isWeb){
-        this.Tm = new Teams();
-      }
 
     }
     refresh=async (live_only=false)=>{
@@ -41,7 +38,7 @@ export default class MatchesScreen extends React.Component {
         //.home_team_logo
         //console.log(data);
         if(!_API.isWeb){
-          const res = this.Tm.is_db_loaded ? await this.Tm.get_teams_logo(ids) : [];
+          const res = _Teams.is_db_loaded ? await _Teams.get_teams_logo(ids) : [];
           let teams_logos={};
           for(const r of res){
             teams_logos[r.id]=r.logo;
@@ -63,7 +60,7 @@ export default class MatchesScreen extends React.Component {
       this.refresh();
       this.render_header();
       if(!_API.isWeb){
-        this.Tm.init_first().then(inserted=>{
+        _Teams.init_first().then(inserted=>{
           if(inserted){
             this.refresh();
           }

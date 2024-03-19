@@ -27,7 +27,7 @@ import LiveLinkScreen from './Screens/LiveLink';
 
 import Favorites from "./libs/favorites";
 import Cache from "./libs/cache";
-
+import Teams from "./libs/teams"
 
 
 global.isWeb = Platform.OS == 'web';
@@ -35,7 +35,7 @@ global.isIOS = Platform.OS == 'ios';
 global._API  = new API();
 global._Favs  = new Favorites();
 global._Cache  = new Cache();
-
+global._Teams = new Teams();
 
 global.adUnitId_banner_ios = "ca-app-pub-3940256099942544/9214589741";//not used
 global.adUnitId_inters_ios = "ca-app-pub-3940256099942544/1033173712";
