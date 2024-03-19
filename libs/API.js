@@ -1,6 +1,7 @@
 import { Platform } from 'react-native';
 import Scrap from "./scrap.js";
 import {Base64} from "react-native-essential-tools";
+import getUserAgent from './userAgent';
 
 //const Platform = {OS:"ios"};
 
@@ -37,20 +38,14 @@ class API {
         this.cc_url = `https://o.${this.main_koora_domain}/f/big/[cc].png`;
         this.cc_url_small = `https://o.${this.main_koora_domain}/f/[cc].png`;
         this.scraping_pages=false
-        this.user_agents = {
-            "Windows 10":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.72 Safari/537.36",
-            "Windows 7":"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.72 Safari/537.36",
-            "Android 10" : "Mozilla/5.0 (Linux; Android 10) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.72 Mobile Safari/537.36",
-            "Android 11":"Mozilla/5.0 (Linux; Android 11) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.72 Mobile Safari/537.36",
-            "Linux" : "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36",
-            "iPhone":"Mozilla/5.0 (iPhone; CPU iPhone OS 14_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/87.0.4280.77 Mobile/15E148 Safari/604.1",
-            "iPad" : "Mozilla/5.0 (iPad; CPU OS 14_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/87.0.4280.77 Mobile/15E148 Safari",
-          }
-        const default_ua = this.user_agents["Linux"];
+        this.default_ua = "Mozilla/5.0 (iPhone14,3; U; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) Version/10.0 Mobile/19A346 Safari/602.1	";
+        try {
+          this.default_ua = getUserAgent();
+        } catch (error) {console.log(error)}
         this.headers = {
           'Accept': 'application/json',
           'Content-Type': 'application/json; charset=utf-8',
-          'User-Agent': default_ua
+          'User-Agent': this.default_ua
         }
         this.player_positions={
           0:"Manager",
@@ -117,10 +112,11 @@ class API {
     
     async fetch(resource, options) {
         const { timeout = 8000 } = options;
-        
+        if(options && options.headers && options.headers["User-Agent"]==undefined){
+          options.headers["User-Agent"]=this.default_ua;
+        }
         const controller = new AbortController();
         const id = setTimeout(() => controller.abort(), timeout);
-      
         const response = await fetch(resource, {
           ...options,
           signal: controller.signal
