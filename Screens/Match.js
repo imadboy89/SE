@@ -32,7 +32,7 @@ class Matchcreen extends React.Component {
     this.sub_out = {"home":[],"away":[]};
     this.event_symbols = {"g":"⚽","o":"⚽", "y":"🟨", "r":"🟥","p":"🥅"};
     this.windowWidth = Dimensions.get('window').width<=1000 ? Dimensions.get('window').width : 1000;
-
+    console.log(this.props.route.params)
   }
   componentDidMount(){
     this.render_header();

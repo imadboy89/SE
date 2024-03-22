@@ -21,7 +21,7 @@ class MatchCard extends React.Component {
       list : [],
     }
   }
-  render_start=(item, time_status,home_team_name,away_team_name,league_img,home_team_style ,away_team_style )=>{
+  render_start=(item, time_status,home_team_name,away_team_name,league_img,home_team_style ,away_team_style,match_nbr )=>{
     const shadow_style = isWeb ? styles_matches.shadow_3  : styles_matches.shadow_1;
     const match_live = item.live ? styles_matches.matche_container_live : {};
     const palceholder_logo = require('../assets/placeholder.png');
@@ -45,6 +45,8 @@ class MatchCard extends React.Component {
                   style={styles_matches.matche_team_logo_image} 
                   source={home_team_logo}
                   contentFit="contain"
+                  placeholder={palceholder_logo}
+                  placeholderContentFit="contain"
                   /> 
                   : <Text>-</Text>}
             </Pressable>
@@ -60,12 +62,13 @@ class MatchCard extends React.Component {
           <View style={styles_matches.home_team_view}>
             <FavoriteIcon favType="teams" favId={item.away_team_id} pullRight item={[item.away_team_id,away_team_name,item.away_team_logo]}/>
             <Pressable style={styles_matches.matche_team_logo_view} onPress={()=>this.onPressTeam(item.away_team_id)}>
-              { away_team_logo ? 
               <Image 
                 style={styles_matches.matche_team_logo_image} 
                 source={away_team_logo} 
                 contentFit="contain"
-                /> : <Text>-</Text>}
+                placeholder={palceholder_logo}
+                placeholderContentFit="contain"
+                />
             </Pressable>
             <Pressable style={styles_matches.home_team_name_view} onPress={()=>this.onPressTeam(item.away_team_id)}>
               <Text style={styles_matches.team_name_text} numberOfLines={1}>{away_team_name}</Text>
@@ -78,7 +81,9 @@ class MatchCard extends React.Component {
         </View>
 
         <View style={styles_matches.extra_details_view}>
-          <View style={styles_matches.matche_team_time_view}></View>
+          <View style={styles_matches.matche_team_time_view}>
+            {match_nbr}
+          </View>
           <View style={styles_matches.matche_team_time_view}>
             <Text style={styles_matches.matche_team_time_text} noFonts={true}>{item.time}</Text>
           </View>
@@ -150,23 +155,28 @@ class MatchCard extends React.Component {
       match_nbr = match_details.mn[0][1];
     }
 
-    const time_status = <>
-    {item.is_done==true ? 
-      <Text style={styles_matches.matche_team_time_status}>{"Finished"}</Text> 
-    : null}
-    {item.live==1 && time_played? 
-      <View style={{flexDirection:"row"}}>
-        <Text style={styles_matches.matche_team_time_live}  >{time_played}</Text>
+    
+    match_nbr = match_nbr ? <Text style={game_nbr}  >M {match_nbr}</Text> : null;
+    let time_status = null;
+    if(item.is_done){
+      time_status = <Text style={styles_matches.matche_team_time_status}>{"Finished"}</Text> ;
+    }else if(item.soon){
+      time_status = <View style={{flexDirection:"row"}}>
+        <Text style={styles_matches.matche_team_time_live}  >Soon</Text>
         <ActivityIndicator size="small" color={styles_matches.matche_team_time_live.color} />
-      </View>
+      </View>;
+    }else if(item.live){
+      let extra_styles={};
+      if(isNaN(time_played) && typeof(time_played)!="number"){
+        extra_styles["fontSize"] = 14
+      }
+      time_status = <View style={{flexDirection:"row"}}>
+        { !isNaN(time_played) || typeof(time_played)!="number" ? <Text style={[styles_matches.matche_team_time_live,extra_styles]}  >{time_played}</Text> :null}
+        <ActivityIndicator size="small" color={styles_matches.matche_team_time_live.color} />
+      </View>;
+    }
 
-    : null}
-    {match_nbr!==0 ? 
-      <Text style={game_nbr}  >M {match_nbr}</Text>
-    : null}
-    </>;
-
-    return this.render_start(item, time_status,home_team_name,away_team_name,league_img);
+    return this.render_start(item, time_status,home_team_name,away_team_name,league_img, match_nbr);
 }
 
 }

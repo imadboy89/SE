@@ -463,7 +463,7 @@ class Scrap extends Scrap_tools{
     let matche = {};
     let j = 0;
     let is_ok = true;
-    let live = 0, is_done=0;
+    let live = 0, is_done=0,soon=0;
     let time_playerd=0;
     for(let f=0;f< json_["matches_list"].length;f++){
       matche[ mat_header[j] ] = json_["matches_list"][f].trim ? json_["matches_list"][f].trim() : json_["matches_list"][f];
@@ -471,7 +471,9 @@ class Scrap extends Scrap_tools{
       if(mat_header[j]=="time"){
         //is_ok = matche[ mat_header[j] ].indexOf("$f")>=0 ? false : true;
         matche[ "time_old" ] = matche[ mat_header[j] ];
-        live = matche[ mat_header[j] ].indexOf("@")>=0 || matche[ mat_header[j] ].indexOf("تبدأ قريبا")>=0  ? 1 : 0;
+        soon = matche[ mat_header[j] ].indexOf("تبدأ قريبا")>=0 || matche[ mat_header[j] ].indexOf("Starting soon")>=0;
+
+        live = matche[ mat_header[j] ].indexOf("@")>=0 || soon ? 1 : 0;
         is_done = matche[ mat_header[j] ].indexOf("$f")>=0 ? 1 : 0;
         matche[ mat_header[j] ] = matche[ mat_header[j] ].replace(/[^0-9\:]/g,"");
         matche[ mat_header[j] ] = matche[ mat_header[j] ].slice(0,5)
@@ -486,12 +488,16 @@ class Scrap extends Scrap_tools{
           time_playerd = matche[ "time_old" ].split("'").length==2 && matche[ "time_old" ].split("'")[0].length<=2 
             ? parseInt(matche[ "time_old" ].split("'")[0])
             : _time_playerd;
+          if(matche[ "time_old" ].split("'").length==1 && matche[ "time_old" ].split("(").length==2){
+            time_playerd = matche[ "time_old" ].split("(")[1].split(")")[0];
+          }
           //time_playerd = live==0 && parseInt(time_playerd)>0 && parseInt(time_playerd)<90 ? 45 : time_playerd;
           //live = (time_playerd+"").toLocaleLowerCase()=="half" || (parseInt(time_playerd)>=-30 && parseInt(time_playerd)<95) ? 1 : live;
 
           if(live==1 && time_playerd!=false && is_done==0){
             matche["time_played"] = matche[ "time_old" ].includes("$p") ? "Pen" :time_playerd;
             matche["live"] = live;
+            matche["soon"] = soon;
           }else if( is_done &&  live==0){
             matche["is_done"] = true;
           }
